@@ -58,13 +58,7 @@ export default function App() {
   return (
     <div style={{ background: 'var(--c-black)', minHeight: '100vh', paddingBottom: '0' }}>
       <Navbar />
-      <Hero
-        headline={landingData?.headline}
-        subheadline={landingData?.subheadline}
-        ctaText={landingData?.ctaText}
-        heroImage={landingData?.heroImage}
-        badge={landingData?.badge}
-      />
+      <Hero />
       <Services />
       <BeforeAfterSlider />
       <PortfolioGallery />

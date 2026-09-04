@@ -21,7 +21,7 @@
 
   /* Typography */
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Poppins', system-ui, -apple-system, sans-serif;
+  --font-body:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
   /* Easing */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
