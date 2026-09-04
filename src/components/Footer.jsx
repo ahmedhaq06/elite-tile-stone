@@ -38,6 +38,19 @@ export default function Footer({ onOpenPrivacy }) {
         {/* Left — contact block */}
         <div className="reveal" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
+            {/* Logo image */}
+            <img
+              src="/assets/Logo.jpeg"
+              alt="Elite Tile & Stone Logo"
+              style={{
+                height: '46px',
+                width: 'auto',
+                marginBottom: '1.2rem',
+                borderRadius: '4px',
+                objectFit: 'contain',
+              }}
+            />
+
             {/* Eyebrow label */}
             <div
               style={{

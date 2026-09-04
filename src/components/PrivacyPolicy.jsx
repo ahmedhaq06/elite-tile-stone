@@ -58,16 +58,23 @@ export default function PrivacyPolicy({ onBack }) {
           ← Return to Main Site
         </button>
 
-        <span
-          style={{
-            fontSize: '0.7rem',
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'rgba(196, 185, 173, 0.5)',
-          }}
-        >
-          {BUSINESS_INFO.name}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          <img
+            src="/assets/Logo.jpeg"
+            alt="Logo"
+            style={{ height: '36px', width: 'auto', borderRadius: '4px', objectFit: 'contain' }}
+          />
+          <span
+            style={{
+              fontSize: '0.7rem',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: 'rgba(196, 185, 173, 0.5)',
+            }}
+          >
+            {BUSINESS_INFO.name}
+          </span>
+        </div>
       </div>
 
       {/* Main content container */}

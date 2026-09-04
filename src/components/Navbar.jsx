@@ -47,36 +47,27 @@ export default function Navbar() {
           transition:     'background 0.45s ease, border-color 0.45s ease',
         }}
       >
-        {/* Wordmark */}
+        {/* Wordmark & Logo */}
         <a
           href="#"
           aria-label="Elite Tile & Stone — home"
           style={{
             display:    'flex',
             alignItems: 'center',
-            gap:        '0.7rem',
+            gap:        '0.75rem',
+            textDecoration: 'none',
           }}
         >
-          {/* Tiny diamond glyph — gold as micro-accent */}
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            aria-hidden="true"
-            style={{ flexShrink: 0 }}
-          >
-            <polygon
-              points="6,0.5 11.5,6 6,11.5 0.5,6"
-              fill="none"
-              stroke="#C4A052"
-              strokeWidth="1.1"
-            />
-            <polygon
-              points="6,3.5 8.5,6 6,8.5 3.5,6"
-              fill="#C4A052"
-            />
-          </svg>
+          <img
+            src="/assets/Logo.jpeg"
+            alt="Elite Tile & Stone Logo"
+            style={{
+              height: '42px',
+              width: 'auto',
+              borderRadius: '4px',
+              objectFit: 'contain',
+            }}
+          />
           <span
             style={{
               fontFamily:    'var(--font-display)',
@@ -88,7 +79,7 @@ export default function Navbar() {
               lineHeight:    1,
             }}
           >
-            Elite Tile & Stone
+            Elite Tile &amp; Stone
           </span>
         </a>
 
