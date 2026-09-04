@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BUSINESS_INFO } from '../data/tilesData';
 import { useReveal, useParallax } from '../hooks/useReveal';
 
-export default function Hero() {
+export default function Hero({ headline, subheadline, ctaText, heroImage, badge }) {
   const [ready, setReady] = useState(false);
   const sectionRef = useReveal();
   const parallaxRef = useParallax(0.12);
@@ -16,6 +16,11 @@ export default function Hero() {
     ready
       ? { animation: `heroSlideUp 0.95s cubic-bezier(0.16,1,0.3,1) ${delay}s both` }
       : { opacity: 0 };
+
+  const displayHeadline = headline || "Your Vision,\nBuilt to Last.";
+  const displaySubheadline = subheadline || "Turn your daily routine into a resort experience. Complimentary on-site measurement included.";
+  const displayCta = ctaText || "Get My Free Estimate";
+  const displayImage = heroImage || "/assets/after.jpeg";
 
   return (
     <section
@@ -33,8 +38,8 @@ export default function Hero() {
       <div className="hero-photo-panel">
         <img
           ref={parallaxRef}
-          src="/assets/after.jpeg"
-          alt="Elite Tile & Stone — precision master suite installation, Las Vegas"
+          src={displayImage}
+          alt="Elite Tile & Stone — master installation"
           className={`reveal-img ${ready ? 'is-visible' : ''}`}
           style={{
             width:          '100%',
@@ -45,7 +50,7 @@ export default function Hero() {
             willChange:     'transform',
           }}
         />
-        {/* Left-side dark fade — lets headline read across the boundary */}
+        {/* Left-side dark fade */}
         <div
           aria-hidden="true"
           style={{
@@ -65,7 +70,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* Mobile: heavier overlay so text is always readable */}
+      {/* Mobile: heavier overlay */}
       <style>{`
         @media (max-width: 768px) {
           .hero-photo-panel {
@@ -91,93 +96,72 @@ export default function Hero() {
           padding:       '0 var(--pad-x)',
         }}
       >
-        {/* Spacer — pushes content down */}
+        {/* Spacer */}
         <div style={{ flex: 1 }} />
 
         {/* Bottom-anchored block */}
         <div style={{ paddingBottom: 'clamp(3.5rem, 8vh, 6rem)' }}>
 
-          {/*
-            License / location — moved here as a subtle footnote above the CTA,
-            not as the first thing a visitor reads.
-          */}
+          {/* Badge / License info */}
           <div
             style={{
-              marginBottom: '1.6rem',
+              marginBottom: '1.4rem',
               ...anim(0.18),
             }}
           >
             <span
               style={{
                 fontFamily:    'var(--font-body)',
-                fontSize:      '0.62rem',
-                fontWeight:    '500',
-                letterSpacing: '0.2em',
+                fontSize:      '0.7rem',
+                fontWeight:    '600',
+                letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                color:         'rgba(196,185,173,0.45)',
+                color:         'var(--c-gold)',
+                background:    'rgba(201, 150, 47, 0.12)',
+                padding:       '0.3rem 0.8rem',
+                borderRadius:  '4px',
+                border:        '1px solid rgba(201, 150, 47, 0.3)',
               }}
             >
-              Las Vegas, NV&nbsp;&nbsp;·&nbsp;&nbsp;{BUSINESS_INFO.license}
+              {badge || `Las Vegas, NV · ${BUSINESS_INFO.license}`}
             </span>
           </div>
 
-          {/* H1 — benefit-driven: Gold headline */}
+          {/* H1 Headline */}
           <h1
-            aria-label="Your Vision, Built to Last."
+            aria-label={displayHeadline}
             style={{
               fontFamily:    'var(--font-display)',
-              fontSize:      'clamp(3.5rem, 7.5vw, 8.5rem)',
+              fontSize:      'clamp(2.5rem, 5.5vw, 6.5rem)',
               fontWeight:    '700',
-              lineHeight:    0.94,
-              letterSpacing: '-0.02em',
+              lineHeight:    1.02,
+              letterSpacing: '-0.01em',
               color:         'var(--c-gold)',
-              maxWidth:      '68vw',
-              marginBottom:  'clamp(1.2rem, 2.5vh, 2rem)',
+              maxWidth:      '22ch',
+              marginBottom:  'clamp(1rem, 2vh, 1.6rem)',
             }}
           >
             <span style={{ display: 'block', overflow: 'hidden' }}>
               <span style={{ display: 'block', ...anim(0.3) }}>
-                Your Vision,
-              </span>
-            </span>
-            <span style={{ display: 'block', overflow: 'hidden' }}>
-              <span style={{ display: 'block', ...anim(0.44) }}>
-                Built to Last.
+                {displayHeadline}
               </span>
             </span>
           </h1>
 
-          {/* Subtitle */}
+          {/* Subheadline */}
           <p
             style={{
               fontFamily:    'var(--font-body)',
-              fontSize:      'clamp(1rem, 1.5vw, 1.35rem)',
-              fontWeight:    '400',
-              lineHeight:    1.4,
-              color:         'var(--c-grey)',
-              maxWidth:      '40ch',
-              marginBottom:  '0.6rem',
-              ...anim(0.56),
-            }}
-          >
-            Natural stone &amp; large-format porcelain,<br />
-            precision-set across Southern Nevada.
-          </p>
-
-          {/* Emotional hook line */}
-          <p
-            style={{
-              fontFamily:    'var(--font-body)',
-              fontSize:      'clamp(0.85rem, 1.1vw, 1rem)',
+              fontSize:      'clamp(1rem, 1.4vw, 1.25rem)',
               fontWeight:    '400',
               lineHeight:    1.5,
               color:         'var(--c-white)',
-              maxWidth:      '45ch',
+              maxWidth:      '42ch',
               marginBottom:  'clamp(1.5rem, 3.5vh, 2.5rem)',
-              ...anim(0.58),
+              ...anim(0.56),
             }}
           >
-            Turn your daily routine into a resort experience. Complimentary on-site measurement included.
+            {displaySubheadline}
           </p>
 
           <div
@@ -189,7 +173,7 @@ export default function Hero() {
               ...anim(0.6),
             }}
           >
-            {/* Primary CTA — Gold Button */}
+            {/* Primary CTA */}
             <a
               href="#contact"
               style={{
@@ -209,10 +193,10 @@ export default function Hero() {
               onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--c-gold)'; }}
             >
-              Get My Free Estimate
+              {displayCta}
             </a>
 
-            {/* Secondary — phone */}
+            {/* Secondary Phone */}
             <a
               href={`tel:${BUSINESS_INFO.phoneRaw}`}
               style={{

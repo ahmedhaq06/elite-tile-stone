@@ -8,43 +8,60 @@ import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import SectionCounter from './components/SectionCounter';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import { LANDING_PAGES } from './data/landingPages';
+
+function getActiveRoute() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  const hash = window.location.hash.replace(/^#\/?/, '/').replace(/\/$/, '');
+
+  if (LANDING_PAGES[path]) return { type: 'landing', data: LANDING_PAGES[path] };
+  if (LANDING_PAGES['/' + hash]) return { type: 'landing', data: LANDING_PAGES['/' + hash] };
+  if (hash === 'privacy' || hash === 'privacy-policy' || path === '/privacy') return { type: 'privacy' };
+
+  return { type: 'home' };
+}
 
 export default function App() {
-  const [currentView, setCurrentView] = useState(() => {
-    return window.location.hash === '#privacy' || window.location.hash === '#privacy-policy' ? 'privacy' : 'home';
-  });
+  const [routeState, setRouteState] = useState(getActiveRoute);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash === '#privacy' || hash === '#privacy-policy') {
-        setCurrentView('privacy');
-      } else if (currentView === 'privacy') {
-        setCurrentView('home');
-      }
+    const handleNavigation = () => {
+      setRouteState(getActiveRoute());
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [currentView]);
+    window.addEventListener('popstate', handleNavigation);
+    window.addEventListener('hashchange', handleNavigation);
+    return () => {
+      window.removeEventListener('popstate', handleNavigation);
+      window.removeEventListener('hashchange', handleNavigation);
+    };
+  }, []);
 
   const openPrivacy = () => {
     window.location.hash = 'privacy';
-    setCurrentView('privacy');
+    setRouteState({ type: 'privacy' });
   };
 
   const closePrivacy = () => {
     window.location.hash = '';
-    setCurrentView('home');
+    setRouteState({ type: 'home' });
   };
 
-  if (currentView === 'privacy') {
+  if (routeState.type === 'privacy') {
     return <PrivacyPolicy onBack={closePrivacy} />;
   }
+
+  const landingData = routeState.type === 'landing' ? routeState.data : null;
 
   return (
     <div style={{ background: 'var(--c-black)', minHeight: '100vh', paddingBottom: '0' }}>
       <Navbar />
-      <Hero />
+      <Hero
+        headline={landingData?.headline}
+        subheadline={landingData?.subheadline}
+        ctaText={landingData?.ctaText}
+        heroImage={landingData?.heroImage}
+        badge={landingData?.badge}
+      />
       <Services />
       <BeforeAfterSlider />
       <PortfolioGallery />
