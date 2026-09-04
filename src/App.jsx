@@ -8,14 +8,15 @@ import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import SectionCounter from './components/SectionCounter';
 import PrivacyPolicy from './components/PrivacyPolicy';
-import { LANDING_PAGES } from './data/landingPages';
+import CampaignLandingPage from './components/CampaignLandingPage';
+import { CAMPAIGN_ANGLES } from './data/campaignData';
 
 function getActiveRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/';
   const hash = window.location.hash.replace(/^#\/?/, '/').replace(/\/$/, '');
 
-  if (LANDING_PAGES[path]) return { type: 'landing', data: LANDING_PAGES[path] };
-  if (LANDING_PAGES['/' + hash]) return { type: 'landing', data: LANDING_PAGES['/' + hash] };
+  if (CAMPAIGN_ANGLES[path]) return { type: 'campaign', data: CAMPAIGN_ANGLES[path] };
+  if (CAMPAIGN_ANGLES['/' + hash]) return { type: 'campaign', data: CAMPAIGN_ANGLES['/' + hash] };
   if (hash === 'privacy' || hash === 'privacy-policy' || path === '/privacy') return { type: 'privacy' };
 
   return { type: 'home' };
@@ -50,7 +51,9 @@ export default function App() {
     return <PrivacyPolicy onBack={closePrivacy} />;
   }
 
-  const landingData = routeState.type === 'landing' ? routeState.data : null;
+  if (routeState.type === 'campaign') {
+    return <CampaignLandingPage angle={routeState.data} onOpenPrivacy={openPrivacy} />;
+  }
 
   return (
     <div style={{ background: 'var(--c-black)', minHeight: '100vh', paddingBottom: '0' }}>
