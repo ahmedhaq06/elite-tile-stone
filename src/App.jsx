@@ -51,22 +51,18 @@ export default function App() {
     return <PrivacyPolicy onBack={closePrivacy} />;
   }
 
-  const campaign = routeState.type === 'campaign' ? routeState.data : null;
+  if (routeState.type === 'campaign') {
+    return <CampaignLandingPage angle={routeState.data} onOpenPrivacy={openPrivacy} />;
+  }
 
   return (
     <div style={{ background: 'var(--c-black)', minHeight: '100vh', paddingBottom: '0' }}>
       <Navbar />
-      <Hero
-        headline={campaign?.headline}
-        subheadline={campaign?.subheadline}
-        ctaText={campaign?.ctaText}
-        heroImage={campaign?.heroImage}
-        badge={campaign?.badge}
-      />
+      <Hero />
       <Services />
       <BeforeAfterSlider />
       <PortfolioGallery />
-      <ContactSection initialService={campaign?.preselectedService} />
+      <ContactSection />
       <Footer onOpenPrivacy={openPrivacy} />
 
       {/* Sticky editorial section counter — desktop only */}

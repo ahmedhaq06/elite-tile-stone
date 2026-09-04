@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Phone, CheckCircle, ShieldCheck, Clock, AlertTriangle, Award, Star, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Phone, CheckCircle, ShieldCheck, Clock, AlertTriangle, Award, Star, ArrowRight, Sparkles, Check, ChevronRight } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/tilesData';
 
 export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
   const [submitted, setSubmitted] = useState(false);
+  const [sliderPos, setSliderPos] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   const [form, setForm] = useState({
     firstName:   '',
     phone:       '',
@@ -15,6 +17,15 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
     notes:       '',
     consent:     false,
   });
+
+  // Reset form pre-selection when route angle changes
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      lookingToDo: angle.preselectedService || 'Shower remodel',
+    }));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [angle]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,17 +43,25 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleSliderMove = (e) => {
+    if (!isDragging && e.type !== 'click') return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+    const percent = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    setSliderPos(percent);
+  };
+
   return (
     <div style={{ background: '#0D0D0D', color: '#FFFFFF', minHeight: '100vh', fontFamily: "'Poppins', sans-serif" }}>
 
-      {/* ── Top Announcement Ticker ── */}
+      {/* ── Announcement Bar ── */}
       <div
         style={{
           background:    '#C9962F',
           color:         '#0D0D0D',
           textAlign:     'center',
-          padding:       '0.5rem 1rem',
-          fontSize:      '0.76rem',
+          padding:       '0.55rem 1rem',
+          fontSize:      '0.78rem',
           fontWeight:    '700',
           letterSpacing: '0.04em',
         }}
@@ -50,17 +69,17 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         ⚡ Southern Nevada Paid Campaign Offer: Free On-Site Measurement &amp; Itemized Estimate Included
       </div>
 
-      {/* ── Distraction-Free Header ── */}
+      {/* ── Subpage Header ── */}
       <header
         style={{
           padding:         '0.9rem var(--pad-x)',
-          background:      'rgba(13, 13, 13, 0.92)',
-          borderBottom:    '1px solid rgba(255, 255, 255, 0.08)',
+          background:      'rgba(13, 13, 13, 0.94)',
+          borderBottom:    '1px solid #222222',
           position:        'sticky',
           top:             0,
           zIndex:          100,
-          backdropFilter:  'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
+          backdropFilter:  'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
           display:         'flex',
           justifyContent:  'space-between',
           alignItems:      'center',
@@ -73,20 +92,10 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
             style={{ height: '42px', width: 'auto', borderRadius: '4px', objectFit: 'contain' }}
           />
           <div>
-            <div
-              style={{
-                fontFamily:    "'Cormorant Garamond', Georgia, serif",
-                fontSize:      '1.15rem',
-                fontWeight:    '700',
-                color:         '#FFFFFF',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                lineHeight:    1,
-              }}
-            >
+            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', lineHeight: 1 }}>
               Elite Tile &amp; Stone
             </div>
-            <div style={{ fontSize: '0.66rem', color: '#8A8A8A', marginTop: '0.15rem' }}>
+            <div style={{ fontSize: '0.66rem', color: '#8A8A8A', marginTop: '0.2rem' }}>
               Las Vegas, NV · {BUSINESS_INFO.license}
             </div>
           </div>
@@ -97,16 +106,14 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
           style={{
             display:        'inline-flex',
             alignItems:     'center',
-            gap:            '0.5rem',
-            background:     'rgba(201, 150, 47, 0.12)',
-            border:         '1px solid rgba(201, 150, 47, 0.4)',
-            color:          '#C9962F',
+            background:     '#C9962F',
+            color:          '#0D0D0D',
             padding:        '0.55rem 1.1rem',
             borderRadius:   '6px',
             fontWeight:     '700',
             fontSize:       '0.82rem',
             textDecoration: 'none',
-            transition:     'all 0.2s ease',
+            transition:     'background 0.2s ease',
           }}
         >
           <Phone size={15} />
@@ -114,14 +121,14 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </a>
       </header>
 
-      {/* ── Editorial Cinematic Hero ── */}
+      {/* ── Subpage Hero Section ── */}
       <section
         style={{
           position:   'relative',
-          padding:    'clamp(3rem, 6vw, 6rem) var(--pad-x)',
+          padding:    'clamp(3rem, 6vw, 6.5rem) var(--pad-x)',
           overflow:   'hidden',
-          background: 'linear-gradient(180deg, #0D0D0D 0%, #141414 100%)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          background: 'radial-gradient(circle at 80% 20%, rgba(201, 150, 47, 0.08) 0%, transparent 60%), #0D0D0D',
+          borderBottom: '1px solid #222222',
         }}
       >
         <div
@@ -129,43 +136,41 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
             maxWidth: '1280px',
             margin: '0 auto',
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, 1fr)',
-            gap: 'clamp(2rem, 4vw, 4rem)',
+            gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, 1fr)',
+            gap: 'clamp(2.5rem, 5vw, 5rem)',
             alignItems: 'center',
           }}
-          className="campaign-hero-grid"
+          className="subpage-hero-grid"
         >
-          {/* Left Editorial Copy */}
+          {/* Left Angle Copy */}
           <div>
             <div
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.4rem',
-                background: 'rgba(201, 150, 47, 0.12)',
-                border: '1px solid rgba(201, 150, 47, 0.35)',
+                background: 'rgba(201, 150, 47, 0.15)',
+                border: '1px solid rgba(201, 150, 47, 0.4)',
                 color: '#C9962F',
-                fontSize: '0.72rem',
+                fontSize: '0.75rem',
                 fontWeight: '700',
                 textTransform: 'uppercase',
-                letterSpacing: '0.12em',
+                letterSpacing: '0.1em',
                 padding: '0.4rem 0.9rem',
                 borderRadius: '4px',
                 marginBottom: '1.4rem',
               }}
             >
-              <Award size={14} />
+              <Sparkles size={14} />
               <span>{angle.badge}</span>
             </div>
 
-            {/* Cormorant Garamond Serif Headline */}
             <h1
               style={{
-                fontFamily:    "'Cormorant Garamond', Georgia, serif",
-                fontSize:      'clamp(2.6rem, 5.2vw, 4.8rem)',
-                fontWeight:    '700',
+                fontSize:      'clamp(2.4rem, 5vw, 4.5rem)',
+                fontWeight:    '800',
                 color:         '#C9962F',
-                lineHeight:    1.04,
+                lineHeight:    1.08,
                 letterSpacing: '-0.01em',
                 marginBottom:  '1.4rem',
               }}
@@ -175,65 +180,78 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
 
             <p
               style={{
-                fontSize:      'clamp(1rem, 1.25vw, 1.2rem)',
-                color:         'rgba(255, 255, 255, 0.9)',
+                fontSize:      'clamp(1rem, 1.3vw, 1.25rem)',
+                color:         '#FFFFFF',
                 lineHeight:    1.65,
-                marginBottom:  '2rem',
                 maxWidth:      '48ch',
               }}
             >
               {angle.subheadline}
             </p>
 
-            {/* Bullet Checklist */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2.2rem' }}>
+            {/* Checklist */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', marginBottom: '2.2rem' }}>
               {[
-                'Licensed NV Contractor #0095105 · Insured & Bonded',
-                '100% Waterproof Schluter-Kerdi Pan Guarantee',
+                'Licensed Nevada Contractor #0095105 · Insured & Bonded',
+                '100% Waterproof Schluter-Kerdi Shower Pan Guarantee',
                 'Laser-Leveled Mortar Beds & Hand-Mitered 45° Edges',
               ].map((item) => (
-                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.9rem', color: '#8A8A8A' }}>
+                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', fontSize: '0.9rem', color: '#8A8A8A' }}>
                   <CheckCircle size={18} style={{ color: '#C9962F', flexShrink: 0 }} />
                   <span>{item}</span>
                 </div>
               ))}
             </div>
 
-            {/* CTA Button */}
-            <button
-              onClick={scrollToForm}
-              className="btn"
-              style={{
-                width: '100%',
-                maxWidth: '400px',
-                background: '#C9962F',
-                color: '#0D0D0D',
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: '700',
-                fontSize: '0.95rem',
-                padding: '1.05rem 2rem',
-                borderRadius: '6px',
-                boxShadow: '0 6px 20px rgba(201, 150, 47, 0.35)',
-                transition: 'transform 0.2s ease, background 0.2s ease',
-              }}
-            >
-              Get Free Instant Estimate ↓
-            </button>
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+              <button
+                onClick={scrollToForm}
+                className="btn"
+                style={{
+                  background: '#C9962F',
+                  color: '#0D0D0D',
+                  fontWeight: '700',
+                  fontSize: '0.95rem',
+                  padding: '1.05rem 2.2rem',
+                  borderRadius: '6px',
+                  boxShadow: '0 6px 20px rgba(201, 150, 47, 0.35)',
+                }}
+              >
+                Get Free Estimate ↓
+              </button>
+
+              <a
+                href={`tel:${BUSINESS_INFO.phoneRaw}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  color: '#8A8A8A',
+                  fontSize: '0.88rem',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                }}
+              >
+                <Phone size={15} style={{ color: '#C9962F' }} />
+                <span>Call {BUSINESS_INFO.phone}</span>
+              </a>
+            </div>
             
-            <div style={{ fontSize: '0.76rem', color: '#8A8A8A', marginTop: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <div style={{ fontSize: '0.76rem', color: '#8A8A8A', marginTop: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <Clock size={14} style={{ color: '#C9962F' }} />
-              <span>Takes 30 seconds · Complimentary on-site measurement</span>
+              <span>Takes 30 seconds · Free on-site measurement included</span>
             </div>
           </div>
 
-          {/* Right Showcase Image Card */}
+          {/* Right Hero Image Card */}
           <div style={{ position: 'relative' }}>
             <div
               style={{
                 position: 'relative',
                 borderRadius: '12px',
                 overflow: 'hidden',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                border: '1px solid #262626',
                 boxShadow: '0 20px 48px rgba(0,0,0,0.8)',
               }}
             >
@@ -245,31 +263,23 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
               <div
                 style={{
                   position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.2) 60%, transparent 100%)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
                   bottom: 0,
                   left: 0,
                   right: 0,
                   padding: '1.5rem',
+                  background: 'linear-gradient(to top, rgba(13,13,13,0.95) 0%, transparent 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '1rem',
                 }}
               >
-                <div style={{ color: '#C9962F', fontSize: '1.2rem', letterSpacing: '0.1em' }}>
-                  ★★★★★
-                </div>
+                <div style={{ color: '#C9962F', fontSize: '1.2rem', letterSpacing: '0.1em' }}>★★★★★</div>
                 <div>
                   <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#FFFFFF' }}>
-                    150+ Nevada Master Bathroom Projects
+                    150+ Master Projects Completed
                   </div>
                   <div style={{ fontSize: '0.75rem', color: '#8A8A8A' }}>
-                    Las Vegas · Henderson · Summerlin · MacDonald Highlands
+                    Las Vegas · Summerlin · Henderson · MacDonald Highlands
                   </div>
                 </div>
               </div>
@@ -278,23 +288,15 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </div>
       </section>
 
-      {/* ── Problem vs. Solution Section ── */}
-      <section style={{ background: '#0D0D0D', padding: '4.5rem var(--pad-x)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+      {/* ── Problem vs Solution Matrix ── */}
+      <section style={{ background: '#141414', padding: '4.5rem var(--pad-x)', borderBottom: '1px solid #222222' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span style={{ color: '#8A8A8A', fontSize: '0.72rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.2em' }}>
-              The Master Difference
+            <span style={{ color: '#8A8A8A', fontSize: '0.75rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+              The Master Craftsman Standard
             </span>
-            <h2
-              style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: 'clamp(2.2rem, 3.8vw, 3.5rem)',
-                color: '#C9962F',
-                fontWeight: '700',
-                marginTop: '0.4rem',
-              }}
-            >
-              Why Shortcuts Fail vs. The Elite Standard
+            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 3.2rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem' }}>
+              Why Shortcuts Fail vs. The Elite Solution
             </h2>
           </div>
 
@@ -304,13 +306,13 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
               gridTemplateColumns: '1fr 1fr',
               gap: '2.5rem',
             }}
-            className="campaign-comparison-grid"
+            className="subpage-comparison-grid"
           >
-            {/* Common Unlicensed Failures */}
+            {/* Common Failures */}
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.02)',
-                border: '1px solid rgba(229, 62, 62, 0.3)',
+                background: '#1A1414',
+                border: '1px solid #3A2222',
                 padding: '2.2rem',
                 borderRadius: '10px',
               }}
@@ -321,7 +323,7 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                 {angle.painPoints.map((pt) => (
-                  <div key={pt} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.55 }}>
+                  <div key={pt} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.9rem', color: '#E2E8F0', lineHeight: 1.55 }}>
                     <span style={{ color: '#E53E3E', fontWeight: 'bold' }}>✕</span>
                     <span>{pt}</span>
                   </div>
@@ -329,11 +331,11 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
               </div>
             </div>
 
-            {/* The Elite Tile Standard */}
+            {/* The Elite Solution */}
             <div
               style={{
-                background: 'rgba(201, 150, 47, 0.04)',
-                border: '1px solid rgba(201, 150, 47, 0.4)',
+                background: '#161914',
+                border: '1px solid #223822',
                 padding: '2.2rem',
                 borderRadius: '10px',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
@@ -356,13 +358,206 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </div>
       </section>
 
-      {/* ── Trust & Authority Credentials Bar ── */}
-      <section style={{ padding: '3rem var(--pad-x)', background: '#141414', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+      {/* ── Interactive Before / After Visual Showcase ── */}
+      <section style={{ padding: '4.5rem var(--pad-x)', background: '#0D0D0D', borderBottom: '1px solid #222222' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <span style={{ color: '#C9962F', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              Real Southern Nevada Transformation
+            </span>
+            <h2 style={{ fontSize: 'clamp(1.8rem, 3.2vw, 3rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem' }}>
+              Drag To Reveal The Transformation
+            </h2>
+            <p style={{ color: '#8A8A8A', fontSize: '0.92rem', marginTop: '0.4rem' }}>
+              Drag the slider to compare subfloor preparation vs finished master suite installation.
+            </p>
+          </div>
+
+          {/* Interactive Slider Container */}
+          <div
+            onClick={handleSliderMove}
+            onMouseMove={handleSliderMove}
+            onTouchMove={handleSliderMove}
+            onMouseDown={() => setIsDragging(true)}
+            onMouseUp={() => setIsDragging(false)}
+            onTouchStart={() => setIsDragging(true)}
+            onTouchEnd={() => setIsDragging(false)}
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: 'clamp(320px, 50vw, 540px)',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              userSelect: 'none',
+              cursor: 'ew-resize',
+              border: '1px solid #262626',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.7)',
+            }}
+          >
+            {/* After Image (Background) */}
+            <img
+              src={angle.beforeAfterImage || '/assets/after.jpeg'}
+              alt="After Master Installation"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'rgba(201, 150, 47, 0.9)',
+                color: '#0D0D0D',
+                padding: '0.35rem 0.8rem',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                fontWeight: '700',
+                zIndex: 10,
+              }}
+            >
+              AFTER: Master Installation
+            </div>
+
+            {/* Before Image (Clipped overlay) */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: `${sliderPos}%`,
+                overflow: 'hidden',
+                borderRight: '2px solid #C9962F',
+              }}
+            >
+              <img
+                src={angle.heroImage || '/assets/before.jpeg'}
+                alt="Before Subfloor Prep"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', maxWidth: 'none' }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  background: 'rgba(13, 13, 13, 0.85)',
+                  color: '#FFFFFF',
+                  padding: '0.35rem 0.8rem',
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  fontWeight: '600',
+                  zIndex: 10,
+                }}
+              >
+                BEFORE: Prep &amp; Subfloor
+              </div>
+            </div>
+
+            {/* Handle Bar */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: `${sliderPos}%`,
+                transform: 'translateX(-50%)',
+                width: '4px',
+                background: '#C9962F',
+                pointerEvents: 'none',
+                zIndex: 20,
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  background: '#C9962F',
+                  color: '#0D0D0D',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  boxShadow: '0 0 12px rgba(0,0,0,0.8)',
+                  fontSize: '0.8rem',
+                }}
+              >
+                ↔
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Value Pillars Grid ── */}
+      <section style={{ background: '#141414', padding: '4.5rem var(--pad-x)', borderBottom: '1px solid #222222' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem, 3.2vw, 3rem)', color: '#C9962F', fontWeight: '700' }}>
+              The 4 Pillars Of Elite Craftsmanship
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: '1.8rem',
+            }}
+          >
+            {[
+              {
+                title: '100% Waterproof Pan',
+                desc: 'Dual-layer Schluter-Kerdi membrane preventing water penetration into lower floors forever.',
+                icon: ShieldCheck,
+              },
+              {
+                title: 'Hand-Mitered 45° Edges',
+                desc: 'Custom mitered corners for continuous stone elegance without plastic or metal trim.',
+                icon: Sparkles,
+              },
+              {
+                title: 'Laser-Leveled Mortar',
+                desc: 'Mortar beds leveled with millimetric accuracy guaranteeing zero tile lippage or cracking.',
+                icon: Award,
+              },
+              {
+                title: 'Clean Containment Guarantee',
+                desc: 'HEPA dust containment during prep keeping your home immaculate throughout construction.',
+                icon: CheckCircle,
+              },
+            ].map((pillar) => (
+              <div
+                key={pillar.title}
+                style={{
+                  background: '#181818',
+                  border: '1px solid #262626',
+                  padding: '1.8rem',
+                  borderRadius: '8px',
+                  transition: 'border-color 0.2s ease',
+                }}
+              >
+                <pillar.icon size={28} style={{ color: '#C9962F', marginBottom: '1rem' }} />
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#FFFFFF', marginBottom: '0.6rem' }}>
+                  {pillar.title}
+                </h3>
+                <p style={{ fontSize: '0.88rem', color: '#8A8A8A', lineHeight: 1.6 }}>
+                  {pillar.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Authority Trust Signals ── */}
+      <section style={{ padding: '3rem var(--pad-x)', background: '#0D0D0D', borderBottom: '1px solid #222222' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ color: '#C9962F', fontSize: '1.5rem', letterSpacing: '0.1em' }}>★★★★★</div>
-            <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#FFFFFF', marginTop: '0.2rem' }}>5.0 Rating on Google</div>
-            <div style={{ fontSize: '0.78rem', color: '#8A8A8A' }}>150+ Satisfied Homeowners</div>
+            <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#FFFFFF', marginTop: '0.2rem' }}>5.0 Google Star Rating</div>
+            <div style={{ fontSize: '0.78rem', color: '#8A8A8A' }}>150+ Nevada Homeowners Served</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{ color: '#C9962F', fontWeight: '700', fontSize: '1.3rem' }}>{BUSINESS_INFO.license}</div>
@@ -377,26 +572,17 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </div>
       </section>
 
-      {/* ── Dedicated Qualification Form Section ── */}
-      <section id="estimate-form" style={{ background: '#0D0D0D', padding: '5rem var(--pad-x)' }}>
+      {/* ── 11-Step Qualification & Lead Form ── */}
+      <section id="estimate-form" style={{ background: '#141414', padding: '5rem var(--pad-x)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <span style={{ color: '#8A8A8A', fontSize: '0.72rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.2em' }}>
-              Complimentary Consultation
+            <span style={{ color: '#C9962F', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+              Free On-Site Estimate Request
             </span>
-            <h2
-              style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: 'clamp(2.4rem, 4vw, 3.8rem)',
-                color: '#C9962F',
-                fontWeight: '700',
-                marginTop: '0.3rem',
-                marginBottom: '0.6rem',
-              }}
-            >
+            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem', marginBottom: '0.6rem' }}>
               {angle.offerTitle}
             </h2>
-            <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.98rem' }}>
+            <p style={{ color: '#8A8A8A', fontSize: '0.95rem' }}>
               {angle.offerDesc}
             </p>
           </div>
@@ -404,19 +590,19 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
           {submitted ? (
             <div
               style={{
-                background: 'rgba(201, 150, 47, 0.06)',
-                border: '1px solid rgba(201, 150, 47, 0.4)',
+                background: '#181818',
+                border: '1px solid #262626',
                 padding: '3.5rem 2rem',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 textAlign: 'center',
               }}
             >
               <CheckCircle size={52} style={{ color: '#C9962F', marginBottom: '1.2rem' }} />
-              <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '2.4rem', color: '#C9962F', fontWeight: '700', marginBottom: '0.8rem' }}>
-                Qualification Submitted!
+              <h3 style={{ fontSize: '2rem', color: '#C9962F', fontWeight: '700', marginBottom: '0.8rem' }}>
+                Estimate Request Received!
               </h3>
-              <p style={{ fontSize: '1rem', color: '#FFFFFF', lineHeight: 1.65, marginBottom: '1.8rem', maxWidth: '40ch', margin: '0 auto 1.8rem auto' }}>
-                Thank you, <strong>{form.firstName}</strong>. A master tile contractor will review your project details and reach out to <strong>{form.phone}</strong> within 24 hours.
+              <p style={{ fontSize: '0.98rem', color: '#FFFFFF', lineHeight: 1.6, marginBottom: '1.8rem' }}>
+                Thank you, <strong>{form.firstName}</strong>. A master contractor will review your project details and reach out to <strong>{form.phone}</strong> within 24 hours.
               </p>
               <button
                 onClick={() => setSubmitted(false)}
@@ -430,10 +616,10 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
             <form
               onSubmit={handleSubmit}
               style={{
-                background: '#141414',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: '#181818',
+                border: '1px solid #262626',
                 padding: 'clamp(1.8rem, 3.5vw, 3rem)',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
               }}
             >
@@ -441,9 +627,9 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                 
                 {/* 1. First name */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="campaign-first-name">First Name *</label>
+                  <label className="form-label" htmlFor="sub-first-name">First Name *</label>
                   <input
-                    id="campaign-first-name"
+                    id="sub-first-name"
                     type="text"
                     required
                     placeholder="Enter your first name"
@@ -455,9 +641,9 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
 
                 {/* 2. Phone */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="campaign-phone">Phone Number *</label>
+                  <label className="form-label" htmlFor="sub-phone">Phone Number *</label>
                   <input
-                    id="campaign-phone"
+                    id="sub-phone"
                     type="tel"
                     required
                     placeholder="702-334-1707"
@@ -469,9 +655,9 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
 
                 {/* 3. Email */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="campaign-email">Email Address *</label>
+                  <label className="form-label" htmlFor="sub-email">Email Address *</label>
                   <input
-                    id="campaign-email"
+                    id="sub-email"
                     type="email"
                     required
                     placeholder="name@example.com"
@@ -483,9 +669,9 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
 
                 {/* 4. What are you looking to do? */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="campaign-looking">What are you looking to do? *</label>
+                  <label className="form-label" htmlFor="sub-looking">What are you looking to do? *</label>
                   <select
-                    id="campaign-looking"
+                    id="sub-looking"
                     value={form.lookingToDo}
                     onChange={update('lookingToDo')}
                     className="form-select"
@@ -510,12 +696,11 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                           padding: '0.85rem',
                           borderRadius: '6px',
                           border: form.homeOwner === opt ? '2px solid #C9962F' : '1px solid #333333',
-                          background: form.homeOwner === opt ? 'rgba(201, 150, 47, 0.18)' : '#181818',
+                          background: form.homeOwner === opt ? 'rgba(201, 150, 47, 0.18)' : '#121212',
                           color: form.homeOwner === opt ? '#C9962F' : '#FFFFFF',
                           fontWeight: form.homeOwner === opt ? '700' : '400',
                           fontSize: '0.9rem',
                           cursor: 'pointer',
-                          transition: 'all 0.2s ease',
                         }}
                       >
                         {opt}
@@ -526,9 +711,9 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
 
                 {/* 6. When are you looking to start? */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="campaign-timeline">When are you looking to start? *</label>
+                  <label className="form-label" htmlFor="sub-timeline">When are you looking to start? *</label>
                   <select
-                    id="campaign-timeline"
+                    id="sub-timeline"
                     value={form.timeline}
                     onChange={update('timeline')}
                     className="form-select"
@@ -542,9 +727,9 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
 
                 {/* 7. What's your budget range? */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="campaign-budget">What's your budget range? *</label>
+                  <label className="form-label" htmlFor="sub-budget">What's your budget range? *</label>
                   <select
-                    id="campaign-budget"
+                    id="sub-budget"
                     value={form.budget}
                     onChange={update('budget')}
                     className="form-select"
@@ -559,9 +744,9 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
 
                 {/* 8. Anything else we should know? */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="campaign-notes">Anything else we should know? (Optional)</label>
+                  <label className="form-label" htmlFor="sub-notes">Anything else we should know? (Optional)</label>
                   <textarea
-                    id="campaign-notes"
+                    id="sub-notes"
                     rows={3}
                     placeholder="Share any special material requests, square footage, or project goals…"
                     value={form.notes}
@@ -617,7 +802,6 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                     borderRadius: '6px',
                     padding: '1.15rem',
                     boxShadow: '0 6px 20px rgba(201, 150, 47, 0.35)',
-                    transition: 'background 0.2s ease',
                   }}
                 >
                   Get My Free Estimate
@@ -645,11 +829,11 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </div>
       </section>
 
-      {/* ── Standalone Footer ── */}
+      {/* ── Subpage Footer ── */}
       <footer
         style={{
           background: '#080808',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          borderTop: '1px solid #1F1F1F',
           padding: '2.5rem var(--pad-x)',
           textAlign: 'center',
           fontSize: '0.78rem',
@@ -677,13 +861,13 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </button>
       </footer>
 
-      {/* Responsive Media Query Styles */}
+      {/* Responsive Styles */}
       <style>{`
         @media (max-width: 860px) {
-          .campaign-hero-grid {
+          .subpage-hero-grid {
             grid-template-columns: 1fr !important;
           }
-          .campaign-comparison-grid {
+          .subpage-comparison-grid {
             grid-template-columns: 1fr !important;
           }
         }
