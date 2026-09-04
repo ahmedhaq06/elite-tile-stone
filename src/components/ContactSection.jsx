@@ -3,13 +3,13 @@ import { Phone, Instagram, CheckCircle, Clock, ShieldCheck } from 'lucide-react'
 import { BUSINESS_INFO } from '../data/tilesData';
 import { useReveal, useCountUp } from '../hooks/useReveal';
 
-export default function ContactSection() {
+export default function ContactSection({ initialService }) {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     firstName:     '',
     phone:         '',
     email:         '',
-    lookingToDo:   'Shower remodel',
+    lookingToDo:   initialService || 'Shower remodel',
     homeOwner:     'Yes',
     timeline:      'As soon as possible',
     budget:        '$5,000–$10,000',

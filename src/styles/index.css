@@ -19,9 +19,9 @@
   --c-warm-white:   #0D0D0D;   /* Contact section dark background */
   --c-off-white:    #FFFFFF;
 
-  /* Typography */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  /* Typography — Poppins */
+  --font-display: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-body:    'Poppins', system-ui, -apple-system, sans-serif;
 
   /* Easing */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
