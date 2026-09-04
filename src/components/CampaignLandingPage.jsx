@@ -358,134 +358,90 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </div>
       </section>
 
-      {/* ── Interactive Before / After Visual Showcase ── */}
+      {/* ── Client Testimonials / Reviews Section ── */}
       <section style={{ padding: '4.5rem var(--pad-x)', background: '#0D0D0D', borderBottom: '1px solid #222222' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <span style={{ color: '#C9962F', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-              Real Southern Nevada Transformation
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span style={{ color: '#C9962F', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+              VERIFIED SOUTHERN NEVADA REVIEWS
             </span>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.2vw, 3rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem' }}>
-              Drag To Reveal The Transformation
+            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 3.2rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem', marginBottom: '0.6rem' }}>
+              What Our Clients Say
             </h2>
-            <p style={{ color: '#8A8A8A', fontSize: '0.92rem', marginTop: '0.4rem' }}>
-              Drag the slider to compare subfloor preparation vs finished master suite installation.
+            <p style={{ color: '#8A8A8A', fontSize: '0.95rem', maxWidth: '48ch', margin: '0 auto' }}>
+              Over 150+ Las Vegas, Henderson &amp; Summerlin homeowners trust Elite Tile &amp; Stone for their custom bathrooms &amp; tile flooring.
             </p>
           </div>
 
-          {/* Interactive Slider Container */}
+          {/* Testimonial Cards Grid */}
           <div
-            onClick={handleSliderMove}
-            onMouseMove={handleSliderMove}
-            onTouchMove={handleSliderMove}
-            onMouseDown={() => setIsDragging(true)}
-            onMouseUp={() => setIsDragging(false)}
-            onTouchStart={() => setIsDragging(true)}
-            onTouchEnd={() => setIsDragging(false)}
             style={{
-              position: 'relative',
-              width: '100%',
-              height: 'clamp(320px, 50vw, 540px)',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              userSelect: 'none',
-              cursor: 'ew-resize',
-              border: '1px solid #262626',
-              boxShadow: '0 16px 40px rgba(0,0,0,0.7)',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '2rem',
             }}
           >
-            {/* After Image (Background) */}
-            <img
-              src={angle.beforeAfterImage || '/assets/after.jpeg'}
-              alt="After Master Installation"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                top: '1rem',
-                right: '1rem',
-                background: 'rgba(201, 150, 47, 0.9)',
-                color: '#0D0D0D',
-                padding: '0.35rem 0.8rem',
-                borderRadius: '4px',
-                fontSize: '0.75rem',
-                fontWeight: '700',
-                zIndex: 10,
-              }}
-            >
-              AFTER: Master Installation
-            </div>
-
-            {/* Before Image (Clipped overlay) */}
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: `${sliderPos}%`,
-                overflow: 'hidden',
-                borderRight: '2px solid #C9962F',
-              }}
-            >
-              <img
-                src={angle.heroImage || '/assets/before.jpeg'}
-                alt="Before Subfloor Prep"
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', maxWidth: 'none' }}
-              />
+            {[
+              {
+                quote: "After a rotted shower pan caused leaks in our downstairs ceiling, Ahmed and his team completely tore out the mess and rebuilt it with Schluter waterproofing. The Calacatta porcelain miters are razor-sharp. Outstanding craftsmanship.",
+                author: "Robert & Elena M.",
+                location: "The Ridges, Summerlin",
+                project: "Master Suite Shower & Waterproofing Rebuild",
+              },
+              {
+                quote: "We converted our old 90s bathtub into a zero-threshold walk-in tile shower before moving into our new home. Zero dust outside the bathroom and finished right on budget. They are true master setters.",
+                author: "David K.",
+                location: "MacDonald Highlands, Henderson",
+                project: "Tub-to-Walk-In Shower Conversion",
+              },
+              {
+                quote: "Tiled over 1,800 sq ft of post-tension slab concrete flooring. Laser leveled everything perfectly with no lippage anywhere. Worth every penny for precision natural stone work.",
+                author: "Marcus & Sarah T.",
+                location: "Green Valley Ranch, NV",
+                project: "Full Estate Porcelain & Stone Flooring",
+              },
+            ].map((review) => (
               <div
+                key={review.author}
                 style={{
-                  position: 'absolute',
-                  top: '1rem',
-                  left: '1rem',
-                  background: 'rgba(13, 13, 13, 0.85)',
-                  color: '#FFFFFF',
-                  padding: '0.35rem 0.8rem',
-                  borderRadius: '4px',
-                  fontSize: '0.75rem',
-                  fontWeight: '600',
-                  zIndex: 10,
-                }}
-              >
-                BEFORE: Prep &amp; Subfloor
-              </div>
-            </div>
-
-            {/* Handle Bar */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: `${sliderPos}%`,
-                transform: 'translateX(-50%)',
-                width: '4px',
-                background: '#C9962F',
-                pointerEvents: 'none',
-                zIndex: 20,
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  background: '#C9962F',
-                  color: '#0D0D0D',
+                  background: '#141414',
+                  border: '1px solid #262626',
+                  padding: '2rem',
+                  borderRadius: '10px',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 'bold',
-                  boxShadow: '0 0 12px rgba(0,0,0,0.8)',
-                  fontSize: '0.8rem',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
                 }}
               >
-                ↔
+                <div>
+                  {/* Stars & Verified Badge */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
+                    <div style={{ color: '#C9962F', fontSize: '1.1rem', letterSpacing: '0.1em' }}>
+                      ★★★★★
+                    </div>
+                    <span style={{ fontSize: '0.68rem', color: '#C9962F', background: 'rgba(201, 150, 47, 0.12)', border: '1px solid rgba(201, 150, 47, 0.3)', padding: '0.25rem 0.6rem', borderRadius: '4px', fontWeight: '600' }}>
+                      Google Verified Review
+                    </span>
+                  </div>
+
+                  {/* Review Text */}
+                  <p style={{ fontSize: '0.92rem', color: '#FFFFFF', lineHeight: 1.65, fontStyle: 'italic', marginBottom: '1.5rem' }}>
+                    "{review.quote}"
+                  </p>
+                </div>
+
+                {/* Author Info */}
+                <div style={{ borderTop: '1px solid #222222', paddingTop: '1rem' }}>
+                  <div style={{ fontWeight: '700', fontSize: '0.92rem', color: '#C9962F' }}>
+                    {review.author}
+                  </div>
+                  <div style={{ fontSize: '0.76rem', color: '#8A8A8A', marginTop: '0.15rem' }}>
+                    {review.location} · <span style={{ color: '#CCCCCC' }}>{review.project}</span>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
