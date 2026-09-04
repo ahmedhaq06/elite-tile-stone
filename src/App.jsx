@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -7,20 +7,40 @@ import PortfolioGallery from './components/PortfolioGallery';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import SectionCounter from './components/SectionCounter';
-
-/*
-  Page rhythm (background / visual grammar):
-
-  Navbar         — fixed overlay, transparent → dark on scroll
-  Hero           — #0C0B0A  | photography-dominant, full viewport
-  Services       — #141210  | typography-dominant, hover photography
-  Before/After   — #0C0B0A  | two-column: copy + vertical slider
-  Portfolio      — #0C0B0A  | asymmetric image grid, image-dominant
-  Contact        — #F2EDE8  | LIGHT — tonal break, editorial form
-  Footer         — #0C0B0A  | giant wordmark close
-*/
+import PrivacyPolicy from './components/PrivacyPolicy';
 
 export default function App() {
+  const [currentView, setCurrentView] = useState(() => {
+    return window.location.hash === '#privacy' || window.location.hash === '#privacy-policy' ? 'privacy' : 'home';
+  });
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#privacy' || hash === '#privacy-policy') {
+        setCurrentView('privacy');
+      } else if (currentView === 'privacy') {
+        setCurrentView('home');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [currentView]);
+
+  const openPrivacy = () => {
+    window.location.hash = 'privacy';
+    setCurrentView('privacy');
+  };
+
+  const closePrivacy = () => {
+    window.location.hash = '';
+    setCurrentView('home');
+  };
+
+  if (currentView === 'privacy') {
+    return <PrivacyPolicy onBack={closePrivacy} />;
+  }
+
   return (
     <div style={{ background: 'var(--c-black)', minHeight: '100vh', paddingBottom: '0' }}>
       <Navbar />
@@ -29,7 +49,7 @@ export default function App() {
       <BeforeAfterSlider />
       <PortfolioGallery />
       <ContactSection />
-      <Footer />
+      <Footer onOpenPrivacy={openPrivacy} />
 
       {/* Sticky editorial section counter — desktop only */}
       <SectionCounter />

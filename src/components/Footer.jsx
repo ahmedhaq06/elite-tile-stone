@@ -7,10 +7,11 @@ const NAV_LINKS = [
   { href: '#before-after', label: 'Before & After' },
   { href: '#portfolio', label: 'Projects' },
   { href: '#contact', label: 'Contact' },
+  { href: '#privacy', label: 'Privacy Policy' },
   { href: 'https://www.google.com/search?q=Elite+Tile+%26+Stone+Las+Vegas', label: 'Reviews (5.0★)', target: '_blank' },
 ];
 
-export default function Footer() {
+export default function Footer({ onOpenPrivacy }) {
   const ref = useReveal();
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -149,6 +150,12 @@ export default function Footer() {
               <a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => {
+                  if (link.href === '#privacy' && onOpenPrivacy) {
+                    e.preventDefault();
+                    onOpenPrivacy();
+                  }
+                }}
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(1.2rem, 2vw, 2.2rem)',
@@ -233,17 +240,41 @@ export default function Footer() {
         >
           © {new Date().getFullYear()} Elite Tile & Stone · {BUSINESS_INFO.license} · {BUSINESS_INFO.licenseText}
         </span>
-        <span
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.62rem',
-            letterSpacing: '0.06em',
-            color: 'rgba(255,255,255,0.18)',
-          }}
-        >
-          Las Vegas, Nevada
-        </span>
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.62rem',
+              letterSpacing: '0.06em',
+              color: 'rgba(255,255,255,0.18)',
+            }}
+          >
+            Las Vegas, Nevada
+          </span>
+          <a
+            href="#privacy"
+            onClick={(e) => {
+              if (onOpenPrivacy) {
+                e.preventDefault();
+                onOpenPrivacy();
+              }
+            }}
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.62rem',
+              letterSpacing: '0.06em',
+              color: 'rgba(255,255,255,0.4)',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              transition: 'color 0.2s ease',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-off-white)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}
+          >
+            Privacy Policy
+          </a>
         </div>
+      </div>
 
       {/* Responsive */}
       <style>{`
