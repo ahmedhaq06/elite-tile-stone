@@ -119,11 +119,11 @@ export default function Services() {
                   <div
                     style={{
                       fontFamily:    'var(--font-display)',
-                      fontSize:      'clamp(1.5rem, 2.2vw, 2.4rem)',
-                      fontWeight:    '400',
+                      fontSize:      'clamp(1.4rem, 2vw, 2.2rem)',
+                      fontWeight:    '700',
                       letterSpacing: '-0.01em',
-                      lineHeight:    1.05,
-                      color:         activeIndex === i ? 'var(--c-off-white)' : 'rgba(250,248,245,0.75)',
+                      lineHeight:    1.1,
+                      color:         'var(--c-gold)',
                       transition:    'color 0.3s ease',
                       marginBottom:  '0.3rem',
                     }}
@@ -133,9 +133,9 @@ export default function Services() {
                   <div
                     style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize:   '0.8rem',
+                      fontSize:   '0.85rem',
                       lineHeight: 1.55,
-                      color:      activeIndex === i ? 'var(--c-stone-light)' : 'var(--c-stone-mid)',
+                      color:      'var(--c-grey)',
                       transition: 'color 0.3s ease',
                     }}
                   >

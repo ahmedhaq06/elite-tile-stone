@@ -1,109 +1,111 @@
 import React, { useState } from 'react';
-import { Phone, Instagram, CheckCircle } from 'lucide-react';
+import { Phone, Instagram, CheckCircle, Clock, ShieldCheck } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/tilesData';
 import { useReveal, useCountUp } from '../hooks/useReveal';
-
-/*
-  Contact section uses a LIGHT background (#F2EDE8) — intentional tonal break
-  from the dark sections above. This is the exhale moment of the page.
-
-  All text colors are dark (inverted from the rest of the site).
-  Form fields use bottom-border only — no box inputs, no glass panels.
-*/
 
 export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
-    name:        '',
-    phone:       '',
-    email:       '',
-    projectType: 'Master Bathroom Suite',
-    notes:       '',
+    firstName:     '',
+    phone:         '',
+    email:         '',
+    lookingToDo:   'Shower remodel',
+    homeOwner:     'Yes',
+    timeline:      'As soon as possible',
+    budget:        '$5,000–$10,000',
+    notes:         '',
+    consent:       false,
   });
 
   const sectionRef = useReveal();
 
-  // Count-up hooks
-  const count150  = useCountUp(150, 1600, '+');
-  const count15   = useCountUp(15, 1400, '+');
-  const count100  = useCountUp(100, 1800, '%');
+  // Count-up stats
+  const count150 = useCountUp(150, 1600, '+');
+  const count15  = useCountUp(15, 1400, '+');
+  const count100 = useCountUp(100, 1800, '%');
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!form.consent) return;
     setSubmitted(true);
   };
 
-  const update = (field) => (e) =>
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const update = (field) => (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const setHomeOwnerValue = (val) => {
+    setForm((prev) => ({ ...prev, homeOwner: val }));
+  };
 
   return (
     <section
       id="contact"
       ref={sectionRef}
       style={{
-        background: 'var(--c-warm-white)',
-        padding:    'clamp(3.5rem, 6vw, 8rem) var(--pad-x)',
-        color:      'var(--c-black)',
+        background: '#0D0D0D',
+        padding:    'clamp(3.5rem, 6vw, 7rem) var(--pad-x)',
+        color:      '#FFFFFF',
+        fontFamily: "'Poppins', sans-serif",
       }}
     >
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
 
-        {/* ── Oversized section headline — the conversion moment ── */}
+        {/* ── Section Header ── */}
         <div
           className="reveal"
           style={{
-            borderBottom: '1px solid rgba(12,11,10,0.1)',
+            borderBottom: '1px solid #222222',
             paddingBottom: 'clamp(1.5rem, 2.5vw, 2.5rem)',
             marginBottom:  'clamp(1.5rem, 3vw, 3rem)',
           }}
         >
-          {/* Section ID */}
           <div
             style={{
               display:       'flex',
               alignItems:    'baseline',
               gap:           '1.4rem',
-              marginBottom:  '1rem',
+              marginBottom:  '0.8rem',
             }}
           >
             <span
               className="t-eyebrow"
-              style={{ color: 'rgba(12,11,10,0.35)' }}
+              style={{ color: '#8A8A8A' }}
             >
               05
             </span>
             <span
               className="t-eyebrow"
-              style={{ color: 'rgba(12,11,10,0.55)' }}
+              style={{ color: '#C9962F' }}
             >
-              Start Your Project
+              Get Your Free Estimate
             </span>
           </div>
 
           <h2
             style={{
-              fontFamily:    'var(--font-display)',
-              fontSize:      'clamp(2rem, 3.8vw, 4.5rem)',
-              fontWeight:    '400',
-              lineHeight:    0.97,
-              letterSpacing: '-0.02em',
-              color:         'var(--c-black)',
-              maxWidth:      '18ch',
+              fontFamily:    "'Poppins', sans-serif",
+              fontSize:      'clamp(2.2rem, 4.2vw, 4.5rem)',
+              fontWeight:    '700',
+              lineHeight:    1.08,
+              letterSpacing: '-0.01em',
+              color:         '#C9962F',
+              maxWidth:      '20ch',
             }}
           >
-            Ready To Transform
-            <br />
-            Your Space?
-            <br />
-            <em
-              style={{
-                fontStyle: 'italic',
-                color:     'rgba(12,11,10,0.35)',
-              }}
-            >
-              Let's Discuss.
-            </em>
+            Ready To Remodel Your Stone &amp; Tile?
           </h2>
+          <p
+            style={{
+              color: '#8A8A8A',
+              fontSize: 'clamp(0.95rem, 1.2vw, 1.15rem)',
+              marginTop: '0.8rem',
+              fontWeight: '400',
+            }}
+          >
+            Turn your daily routine into a resort experience. Complimentary on-site measurement included.
+          </p>
         </div>
 
         {/* ── Count-up stats bar ── */}
@@ -112,9 +114,11 @@ export default function ContactSection() {
             display:             'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap:                 '0',
-            borderTop:    '1px solid rgba(12,11,10,0.08)',
-            borderBottom: '1px solid rgba(12,11,10,0.08)',
-            marginBottom: '2rem',
+            borderTop:    '1px solid #222222',
+            borderBottom: '1px solid #222222',
+            marginBottom: '2.5rem',
+            background:   '#141414',
+            borderRadius: '8px',
           }}
         >
           {[
@@ -125,19 +129,18 @@ export default function ContactSection() {
             <div
               key={label}
               style={{
-                padding:       '1.2rem 0',
+                padding:       '1.2rem 0.5rem',
                 textAlign:     'center',
-                borderRight:   i < 2 ? '1px solid rgba(12,11,10,0.08)' : 'none',
+                borderRight:   i < 2 ? '1px solid #222222' : 'none',
               }}
             >
               <div
                 ref={refHook}
                 style={{
-                  fontFamily:    'var(--font-display)',
-                  fontSize:      'clamp(1.8rem, 2.8vw, 2.6rem)',
-                  fontWeight:    '400',
-                  letterSpacing: '-0.02em',
-                  color:         'var(--c-black)',
+                  fontFamily:    "'Poppins', sans-serif",
+                  fontSize:      'clamp(1.6rem, 2.8vw, 2.5rem)',
+                  fontWeight:    '700',
+                  color:         '#C9962F',
                   lineHeight:    1,
                 }}
               >
@@ -145,13 +148,13 @@ export default function ContactSection() {
               </div>
               <div
                 style={{
-                  fontFamily:    'var(--font-body)',
-                  fontSize:      '0.62rem',
-                  fontWeight:    '600',
-                  letterSpacing: '0.15em',
+                  fontFamily:    "'Poppins', sans-serif",
+                  fontSize:      '0.68rem',
+                  fontWeight:    '500',
+                  letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  color:         'rgba(12,11,10,0.4)',
-                  marginTop:     '0.3rem',
+                  color:         '#8A8A8A',
+                  marginTop:     '0.4rem',
                 }}
               >
                 {label}
@@ -160,199 +163,153 @@ export default function ContactSection() {
           ))}
         </div>
 
-        {/* ── Two-column layout: contact info / form ── */}
+        {/* ── Main Two-Column Layout ── */}
         <div className="contact-main-grid">
 
-          {/* Col 1 — body copy + contact links + social proof */}
+          {/* Left Column: Direct Call & Info */}
           <div>
             <p
               className="reveal"
               style={{
-                fontFamily:   'var(--font-body)',
-                fontSize:     '0.92rem',
-                lineHeight:   1.75,
-                color:        'rgba(12,11,10,0.7)',
-                marginBottom: '1.5rem',
+                fontFamily:   "'Poppins', sans-serif",
+                fontSize:     '0.95rem',
+                lineHeight:   1.7,
+                color:        '#FFFFFF',
+                marginBottom: '1.8rem',
               }}
             >
-              Schedule a complimentary on-site measurement, design consultation,
-              or custom stone slab estimation with Las Vegas' premier licensed
-              tile contractors.
+              Get a custom, itemized estimate for your luxury tile installation or bathroom remodel in Las Vegas, Summerlin, &amp; Henderson.
             </p>
 
-            {/* Social Proof Block — 5-star Google reviews */}
+            {/* Direct Call Box */}
             <div
               className="reveal stagger-1"
               style={{
-                background:    'rgba(12,11,10,0.04)',
-                border:        '1px solid rgba(12,11,10,0.08)',
-                padding:       '1rem 1.2rem',
+                background:    '#141414',
+                border:        '1px solid #262626',
+                padding:       '1.4rem',
+                borderRadius:  '8px',
                 marginBottom:  '1.8rem',
-                display:       'flex',
-                flexDirection: 'column',
-                gap:           '0.3rem',
               }}
             >
-              <div style={{ color: '#D4AF37', fontSize: '0.85rem', letterSpacing: '0.1em' }}>
-                ★★★★★ <span style={{ color: 'var(--c-black)', fontWeight: '600', fontSize: '0.75rem', marginLeft: '0.4rem' }}>5.0 Rating</span>
-              </div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'rgba(12,11,10,0.75)', lineHeight: 1.4 }}>
-                Join 150+ Las Vegas homeowners who trust us with their most valuable asset.
-              </p>
-            </div>
-
-            {/* Direct call */}
-            <div className="reveal stagger-2" style={{ marginBottom: '1.8rem' }}>
               <div
                 style={{
-                  fontFamily:    'var(--font-body)',
-                  fontSize:      '0.62rem',
+                  fontSize:      '0.72rem',
                   fontWeight:    '600',
-                  letterSpacing: '0.18em',
+                  letterSpacing: '0.12em',
                   textTransform: 'uppercase',
-                  color:         'rgba(12,11,10,0.4)',
-                  marginBottom:  '0.4rem',
+                  color:         '#8A8A8A',
+                  marginBottom:  '0.5rem',
                 }}
               >
-                Direct Line
+                Prefer to talk right now?
               </div>
               <a
                 href={`tel:${BUSINESS_INFO.phoneRaw}`}
                 style={{
-                  fontFamily:    'var(--font-display)',
-                  fontSize:      'clamp(1.5rem, 2.5vw, 2.2rem)',
-                  fontWeight:    '400',
-                  color:         'var(--c-black)',
-                  letterSpacing: '-0.01em',
-                  display:       'block',
-                  transition:    'opacity 0.2s ease',
+                  display:       'flex',
+                  alignItems:    'center',
+                  gap:           '0.6rem',
+                  fontSize:      'clamp(1.4rem, 2.2vw, 1.9rem)',
+                  fontWeight:    '700',
+                  color:         '#C9962F',
+                  textDecoration: 'none',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.6'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
               >
+                <Phone size={22} style={{ color: '#C9962F' }} />
                 {BUSINESS_INFO.phone}
               </a>
+              <p style={{ fontSize: '0.8rem', color: '#8A8A8A', marginTop: '0.4rem' }}>
+                Direct contractor line · Available Mon–Sat
+              </p>
+            </div>
+
+            {/* Social Proof & Rating */}
+            <div
+              className="reveal stagger-2"
+              style={{
+                background:    '#141414',
+                border:        '1px solid #262626',
+                padding:       '1.2rem',
+                borderRadius:  '8px',
+                marginBottom:  '1.8rem',
+                display:       'flex',
+                alignItems:    'center',
+                gap:           '1rem',
+              }}
+            >
+              <div style={{ fontSize: '1.4rem', color: '#C9962F' }}>★★★★★</div>
+              <div>
+                <div style={{ fontWeight: '600', fontSize: '0.9rem', color: '#FFFFFF' }}>5.0 Star Rating</div>
+                <div style={{ fontSize: '0.78rem', color: '#8A8A8A' }}>Licensed, Insured &amp; Bonded · {BUSINESS_INFO.license}</div>
+              </div>
             </div>
 
             {/* Instagram */}
             <div className="reveal stagger-3">
-              <div
-                style={{
-                  fontFamily:    'var(--font-body)',
-                  fontSize:      '0.62rem',
-                  fontWeight:    '600',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color:         'rgba(12,11,10,0.4)',
-                  marginBottom:  '0.4rem',
-                }}
-              >
-                Instagram
-              </div>
               <a
                 href={BUSINESS_INFO.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display:       'flex',
+                  display:       'inline-flex',
                   alignItems:    'center',
-                  gap:           '0.5rem',
-                  fontFamily:    'var(--font-body)',
-                  fontSize:      '0.88rem',
-                  fontWeight:    '500',
-                  color:         'rgba(12,11,10,0.65)',
+                  gap:           '0.6rem',
+                  fontSize:      '0.85rem',
+                  color:         '#8A8A8A',
+                  textDecoration: 'none',
                   transition:    'color 0.2s ease',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-black)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(12,11,10,0.65)'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#C9962F'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = '#8A8A8A'; }}
               >
-                <Instagram size={15} />
-                {BUSINESS_INFO.instagramHandle}
+                <Instagram size={18} />
+                Follow {BUSINESS_INFO.instagramHandle} on Instagram
               </a>
-            </div>
-
-            {/* License & Family Owned Note */}
-            <div
-              className="reveal stagger-4"
-              style={{
-                marginTop:    '2.5rem',
-                paddingTop:   '1.5rem',
-                borderTop:    '1px solid rgba(12,11,10,0.08)',
-                fontFamily:   'var(--font-body)',
-                fontSize:     '0.72rem',
-                lineHeight:   1.6,
-                color:        'rgba(12,11,10,0.45)',
-              }}
-            >
-              Family-owned and operated since 2012.
-              <br />
-              {BUSINESS_INFO.license} · {BUSINESS_INFO.licenseText}
-              <br />
-              Serving Las Vegas, Summerlin, Henderson &amp; MacDonald Highlands
             </div>
           </div>
 
-          {/* Col 2 — the form */}
+          {/* Right Column: Lead Form */}
           <div className="reveal stagger-2">
-
-            {/* Scarcity / Lead Time Banner */}
-            <div
-              style={{
-                background:    '#0C0B0A',
-                color:         '#FAF8F5',
-                padding:       '0.75rem 1rem',
-                fontSize:      '0.72rem',
-                fontFamily:    'var(--font-body)',
-                letterSpacing: '0.04em',
-                marginBottom:  '1.5rem',
-                display:       'flex',
-                alignItems:    'center',
-                gap:           '0.6rem',
-              }}
-            >
-              <span style={{ color: 'var(--c-gold)', fontWeight: 'bold' }}>•</span>
-              <span><strong>Current Lead Time:</strong> 6–8 weeks for custom slab fabrication. Secure your installation date now.</span>
-            </div>
 
             {submitted ? (
               <div
                 style={{
-                  padding:    '3rem 0',
-                  borderTop:  '1px solid rgba(12,11,10,0.12)',
+                  padding:      '3rem 2rem',
+                  background:   '#141414',
+                  border:       '1px solid #262626',
+                  borderRadius: '10px',
+                  textAlign:    'center',
                 }}
               >
                 <CheckCircle
-                  size={28}
-                  style={{ color: 'var(--c-black)', marginBottom: '1rem', opacity: 0.5 }}
+                  size={42}
+                  style={{ color: '#C9962F', marginBottom: '1.2rem' }}
                 />
                 <h3
                   style={{
-                    fontFamily:   'var(--font-display)',
-                    fontSize:     'clamp(1.6rem, 2.5vw, 2.2rem)',
-                    fontWeight:   '400',
-                    color:        'var(--c-black)',
+                    fontSize:     '1.8rem',
+                    fontWeight:   '700',
+                    color:        '#C9962F',
                     marginBottom: '0.8rem',
-                    lineHeight:   1.1,
                   }}
                 >
-                  Consultation Request Sent
+                  Estimate Request Received!
                 </h3>
                 <p
                   style={{
-                    fontFamily:   'var(--font-body)',
-                    fontSize:     '0.88rem',
-                    lineHeight:   1.7,
-                    color:        'rgba(12,11,10,0.55)',
-                    marginBottom: '2rem',
+                    fontSize:     '0.95rem',
+                    lineHeight:   1.6,
+                    color:        '#FFFFFF',
+                    marginBottom: '1.5rem',
                   }}
                 >
-                  Thank you, {form.name}. A contractor will review your project
-                  and reach out to {form.phone || 'you'} shortly.
+                  Thank you, <strong>{form.firstName}</strong>. A specialist will call you at <strong>{form.phone}</strong> within 24 hours to schedule your complimentary measurement.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
                   className="btn btn-outline-dark"
-                  style={{ fontSize: '0.72rem' }}
+                  style={{ fontSize: '0.8rem' }}
                 >
                   Submit Another Request
                 </button>
@@ -361,130 +318,242 @@ export default function ContactSection() {
               <form
                 onSubmit={handleSubmit}
                 style={{
-                  borderTop: '1px solid rgba(12,11,10,0.12)',
-                  paddingTop: '0.5rem',
+                  background:   '#141414',
+                  border:       '1px solid #262626',
+                  padding:      'clamp(1.5rem, 3vw, 2.5rem)',
+                  borderRadius: '10px',
                 }}
               >
                 <div
                   style={{
                     display:       'flex',
                     flexDirection: 'column',
-                    gap:           '1.6rem',
+                    gap:           '1.4rem',
                   }}
                 >
-                  {/* Name */}
+                  {/* 1. First name — text */}
                   <div className="form-field">
-                    <label className="form-label" htmlFor="contact-name">
-                      Full Name *
+                    <label className="form-label" htmlFor="first-name">
+                      First Name *
                     </label>
                     <input
-                      id="contact-name"
+                      id="first-name"
                       type="text"
                       required
-                      placeholder="Enter your full name"
-                      value={form.name}
-                      onChange={update('name')}
+                      placeholder="Enter your first name"
+                      value={form.firstName}
+                      onChange={update('firstName')}
                       className="form-input"
                     />
                   </div>
 
-                  {/* Phone + Email — 2 cols */}
-                  <div
-                    style={{
-                      display:             'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap:                 '1.5rem',
-                    }}
-                  >
-                    <div className="form-field">
-                      <label className="form-label" htmlFor="contact-phone">
-                        Phone Number *
-                      </label>
-                      <input
-                        id="contact-phone"
-                        type="tel"
-                        required
-                        placeholder="702-334-1707"
-                        value={form.phone}
-                        onChange={update('phone')}
-                        className="form-input"
-                      />
-                    </div>
-                    <div className="form-field">
-                      <label className="form-label" htmlFor="contact-email">
-                        Email Address
-                      </label>
-                      <input
-                        id="contact-email"
-                        type="email"
-                        placeholder="name@example.com"
-                        value={form.email}
-                        onChange={update('email')}
-                        className="form-input"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Project Type */}
+                  {/* 2. Phone — text */}
                   <div className="form-field">
-                    <label className="form-label" htmlFor="contact-type">
-                      Project Type
+                    <label className="form-label" htmlFor="form-phone">
+                      Phone Number *
                     </label>
-                    <div style={{ position: 'relative' }}>
-                      <select
-                        id="contact-type"
-                        value={form.projectType}
-                        onChange={update('projectType')}
-                        className="form-select"
-                      >
-                        <option value="Master Bathroom Suite">Master Bathroom Suite & Curbless Shower</option>
-                        <option value="Chef's Kitchen Backsplash">Chef's Kitchen Backsplash & Waterfall Island</option>
-                        <option value="Large Format Slab Wall">Large Format Porcelain / Marble Slab Wall</option>
-                        <option value="Exterior Patio & Pool Deck">Exterior Patio, Pool Deck & Outdoor Kitchen</option>
-                        <option value="Full Estate Flooring">Full Estate Tile Flooring Installation</option>
-                      </select>
-                      {/* Custom arrow */}
-                      <span
-                        aria-hidden="true"
-                        style={{
-                          position:       'absolute',
-                          right:          '0.2rem',
-                          top:            '50%',
-                          transform:      'translateY(-50%)',
-                          pointerEvents:  'none',
-                          fontSize:       '0.7rem',
-                          color:          'rgba(12,11,10,0.4)',
-                        }}
-                      >
-                        ↓
-                      </span>
+                    <input
+                      id="form-phone"
+                      type="tel"
+                      required
+                      placeholder="702-334-1707"
+                      value={form.phone}
+                      onChange={update('phone')}
+                      className="form-input"
+                    />
+                  </div>
+
+                  {/* 3. Email — text */}
+                  <div className="form-field">
+                    <label className="form-label" htmlFor="form-email">
+                      Email Address *
+                    </label>
+                    <input
+                      id="form-email"
+                      type="email"
+                      required
+                      placeholder="name@example.com"
+                      value={form.email}
+                      onChange={update('email')}
+                      className="form-input"
+                    />
+                  </div>
+
+                  {/* 4. What are you looking to do? — dropdown */}
+                  <div className="form-field">
+                    <label className="form-label" htmlFor="form-looking-to-do">
+                      What are you looking to do? *
+                    </label>
+                    <select
+                      id="form-looking-to-do"
+                      value={form.lookingToDo}
+                      onChange={update('lookingToDo')}
+                      className="form-select"
+                    >
+                      <option value="Shower remodel">Shower remodel</option>
+                      <option value="Floor installation">Floor installation</option>
+                      <option value="Both">Both</option>
+                      <option value="Something else">Something else</option>
+                    </select>
+                  </div>
+
+                  {/* 5. Do you own the home? — Yes / No */}
+                  <div className="form-field">
+                    <label className="form-label">
+                      Do you own the home? *
+                    </label>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '0.8rem',
+                      }}
+                    >
+                      {['Yes', 'No'].map((opt) => (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => setHomeOwnerValue(opt)}
+                          style={{
+                            padding: '0.75rem',
+                            borderRadius: '6px',
+                            border: form.homeOwner === opt ? '2px solid #C9962F' : '1px solid #333333',
+                            background: form.homeOwner === opt ? 'rgba(201, 150, 47, 0.15)' : '#181818',
+                            color: form.homeOwner === opt ? '#C9962F' : '#FFFFFF',
+                            fontWeight: form.homeOwner === opt ? '700' : '400',
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: '0.9rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                          }}
+                        >
+                          {opt}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Notes */}
+                  {/* 6. When are you looking to start? — dropdown */}
                   <div className="form-field">
-                    <label className="form-label" htmlFor="contact-notes">
-                      Project Details &amp; Dimensions
+                    <label className="form-label" htmlFor="form-timeline">
+                      When are you looking to start? *
+                    </label>
+                    <select
+                      id="form-timeline"
+                      value={form.timeline}
+                      onChange={update('timeline')}
+                      className="form-select"
+                    >
+                      <option value="As soon as possible">As soon as possible</option>
+                      <option value="Within 1–3 months">Within 1–3 months</option>
+                      <option value="3–6 months">3–6 months</option>
+                      <option value="Just researching">Just researching</option>
+                    </select>
+                  </div>
+
+                  {/* 7. What's your budget range? — dropdown */}
+                  <div className="form-field">
+                    <label className="form-label" htmlFor="form-budget">
+                      What's your budget range? *
+                    </label>
+                    <select
+                      id="form-budget"
+                      value={form.budget}
+                      onChange={update('budget')}
+                      className="form-select"
+                    >
+                      <option value="Under $5,000">Under $5,000</option>
+                      <option value="$5,000–$10,000">$5,000–$10,000</option>
+                      <option value="$10,000–$20,000">$10,000–$20,000</option>
+                      <option value="$20,000+">$20,000+</option>
+                      <option value="Not sure yet">Not sure yet</option>
+                    </select>
+                  </div>
+
+                  {/* 8. Anything else we should know? — optional text box */}
+                  <div className="form-field">
+                    <label className="form-label" htmlFor="form-notes">
+                      Anything else we should know? (Optional)
                     </label>
                     <textarea
-                      id="contact-notes"
+                      id="form-notes"
                       rows={3}
-                      placeholder="Preferred materials, dimensions, estimated timeline…"
+                      placeholder="Share any special material requests, square footage, or details…"
                       value={form.notes}
                       onChange={update('notes')}
                       className="form-textarea"
                     />
                   </div>
 
-                  {/* Submit */}
+                  {/* 9. Consent checkbox, required */}
+                  <div style={{ marginTop: '0.4rem' }}>
+                    <label
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '0.75rem',
+                        cursor: 'pointer',
+                        fontSize: '0.78rem',
+                        color: '#8A8A8A',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        required
+                        checked={form.consent}
+                        onChange={update('consent')}
+                        style={{
+                          marginTop: '0.2rem',
+                          accentColor: '#C9962F',
+                          width: '18px',
+                          height: '18px',
+                          cursor: 'pointer',
+                          flexShrink: 0,
+                        }}
+                      />
+                      <span>
+                        I agree to be contacted by phone, text, or email about my project, including by automated means.
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* 10. Button: Get My Free Estimate */}
                   <button
                     type="submit"
-                    className="btn btn-dark"
-                    style={{ alignSelf: 'flex-start', marginTop: '0.5rem' }}
+                    className="btn"
+                    style={{
+                      width: '100%',
+                      marginTop: '0.6rem',
+                      background: '#C9962F',
+                      color: '#0D0D0D',
+                      fontWeight: '700',
+                      fontSize: '0.95rem',
+                      borderRadius: '6px',
+                      padding: '1.05rem',
+                      boxShadow: '0 4px 14px rgba(201, 150, 47, 0.3)',
+                    }}
                   >
-                    Request a Consultation
-                    <span aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
+                    Get My Free Estimate
                   </button>
+
+                  {/* 11. Below the button notice */}
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      fontSize: '0.8rem',
+                      color: '#8A8A8A',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.4rem',
+                      marginTop: '0.2rem',
+                    }}
+                  >
+                    <Clock size={15} style={{ color: '#C9962F' }} />
+                    <span>A specialist will call you within 24 hours.</span>
+                  </div>
+
                 </div>
               </form>
             )}

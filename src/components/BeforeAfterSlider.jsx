@@ -51,15 +51,17 @@ export default function BeforeAfterSlider() {
             <h2
               className="reveal t-display stagger-1"
               style={{
-                fontSize:     'clamp(2.4rem, 4vw, 4rem)',
-                lineHeight:   1.05,
+                fontSize:     'clamp(2.2rem, 3.8vw, 3.8rem)',
+                fontWeight:   '700',
+                lineHeight:   1.08,
+                color:        'var(--c-gold)',
                 marginBottom: '2.5rem',
               }}
             >
               Subfloor<br />
-              <em style={{ fontStyle: 'italic', color: 'rgba(250,248,245,0.5)' }}>
+              <span style={{ color: 'var(--c-white)' }}>
                 to Showroom.
-              </em>
+              </span>
             </h2>
 
             {/* Body copy removed — instructional filler. The slider speaks. */}

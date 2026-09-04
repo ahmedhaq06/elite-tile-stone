@@ -99,20 +99,20 @@ export default function App() {
           href="#contact"
           style={{
             fontFamily:     'var(--font-body)',
-            fontSize:       '0.72rem',
-            fontWeight:     '600',
-            letterSpacing:  '0.08em',
+            fontSize:       '0.75rem',
+            fontWeight:     '700',
+            letterSpacing:  '0.06em',
             textTransform:  'uppercase',
-            color:          'var(--c-black)',
-            background:     'var(--c-off-white)',
-            padding:        '0.6rem 1rem',
+            color:          '#0D0D0D',
+            background:     'var(--c-gold)',
+            padding:        '0.65rem 1rem',
             borderRadius:   '4px',
             textDecoration: 'none',
             textAlign:      'center',
             flex:           1,
           }}
         >
-          Request Consultation
+          Get Free Estimate
         </a>
       </div>
 

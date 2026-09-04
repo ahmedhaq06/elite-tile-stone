@@ -108,19 +108,26 @@ export default function Navbar() {
             </a>
           ))}
 
-          {/* Phone — gold micro-accent, always readable */}
+          {/* Free Estimate CTA Button */}
           <a
-            href={`tel:${BUSINESS_INFO.phoneRaw}`}
+            href="#contact"
             style={{
               fontFamily:    'var(--font-body)',
               fontSize:      '0.75rem',
-              fontWeight:    '600',
-              letterSpacing: '0.07em',
-              color:         'var(--c-gold)',
+              fontWeight:    '700',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color:         '#0D0D0D',
+              background:    'var(--c-gold)',
+              padding:       '0.55rem 1.1rem',
+              borderRadius:  '4px',
               textDecoration: 'none',
+              transition:    'background 0.2s ease',
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--c-gold)'; }}
           >
-            {BUSINESS_INFO.phone}
+            Get Free Estimate
           </a>
         </div>
 

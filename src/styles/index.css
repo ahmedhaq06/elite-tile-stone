@@ -4,28 +4,32 @@
    ============================================================ */
 
 :root {
-  /* Palette — warm stone material hierarchy */
-  --c-black:        #0C0B0A;   /* Near-black, primary dark bg */
-  --c-dark-1:       #141210;   /* Services section bg */
-  --c-dark-2:       #1C1916;   /* Hover states, footer */
-  --c-stone-dark:   #2C2520;   /* Dark stone accent */
-  --c-stone-mid:    #8A7A6B;   /* Secondary text, labels */
-  --c-stone-light:  #C4B9AD;   /* Body text on dark */
-  --c-warm-white:   #F2EDE8;   /* Contact section background */
-  --c-off-white:    #FAF8F5;   /* Primary text on dark */
-  --c-gold:         #C4A052;   /* Gold — micro-accent ONLY. Restrained. */
+  /* Brand Palette */
+  --c-gold:         #C9962F;   /* Headlines, buttons, accents */
+  --c-black:        #0D0D0D;   /* Main background */
+  --c-white:        #FFFFFF;   /* Primary body text */
+  --c-grey:         #8A8A8A;   /* Secondary text */
 
-  /* Typography */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  /* Legacy mappings for component compatibility */
+  --c-dark-1:       #0D0D0D;
+  --c-dark-2:       #161616;
+  --c-stone-dark:   #222222;
+  --c-stone-mid:    #8A8A8A;
+  --c-stone-light:  #FFFFFF;
+  --c-warm-white:   #0D0D0D;   /* Contact section dark background */
+  --c-off-white:    #FFFFFF;
+
+  /* Typography — Poppins */
+  --font-display: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-body:    'Poppins', system-ui, -apple-system, sans-serif;
 
   /* Easing */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Layout */
-  --pad-x: clamp(1.5rem, 5vw, 6rem);
-  --section-v: clamp(5rem, 10vw, 10rem);
+  --pad-x: clamp(1rem, 5vw, 5rem);
+  --section-v: clamp(3.5rem, 7vw, 7rem);
   --max-w: 1440px;
 }
 
@@ -51,7 +55,7 @@ html {
 
 body {
   background: var(--c-black);
-  color: var(--c-off-white);
+  color: var(--c-white);
   overflow-x: hidden;
 }
 
@@ -62,49 +66,52 @@ button { font-family: var(--font-body); }
 /* ============================================================
    SCROLLBAR
    ============================================================ */
-::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar       { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--c-black); }
-::-webkit-scrollbar-thumb { background: var(--c-stone-dark); }
+::-webkit-scrollbar-thumb { background: #262626; }
 
 /* ============================================================
    TYPOGRAPHY CLASSES
    ============================================================ */
 
-/* Eyebrow / section ID — 0.65rem, uppercase, tracked */
+/* Headlines — Gold #C9962F, Bold Poppins */
+h1, h2, h3, h4, .t-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--c-gold);
+}
+
 .t-eyebrow {
   font-family: var(--font-body);
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.22em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--c-stone-mid);
+  color: var(--c-grey);
 }
 
-/* Display text — Cormorant, editorial weight */
 .t-display {
-  font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
-  color: var(--c-off-white);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--c-gold);
 }
 
-/* Body copy on dark */
-.t-body {
+/* Body copy — White #FFFFFF, Regular Poppins */
+p, .t-body {
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 400;
-  line-height: 1.75;
-  color: var(--c-stone-light);
+  line-height: 1.65;
+  color: var(--c-white);
 }
 
-/* Small metadata */
+/* Small metadata / secondary text — Grey #8A8A8A */
 .t-meta {
   font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--c-stone-mid);
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--c-grey);
 }
 
 /* ============================================================
@@ -121,118 +128,129 @@ button { font-family: var(--font-body); }
    LINKS & BUTTONS
    ============================================================ */
 
-/* Primary button — on dark backgrounds */
+/* Primary brand button — Gold #C9962F */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
-  padding: 0.9rem 2.2rem;
+  padding: 0.95rem 2.2rem;
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   border: none;
-  transition: background 0.25s var(--ease-out), color 0.25s ease;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  background: var(--c-gold);
+  color: #0D0D0D;
+  min-height: 48px;
+}
+
+.btn:hover {
+  background: #D9A43B;
+  transform: translateY(-1px);
 }
 
 .btn-light {
-  background: var(--c-off-white);
-  color: var(--c-black);
+  background: var(--c-gold);
+  color: #0D0D0D;
 }
-.btn-light:hover { background: var(--c-warm-white); }
+.btn-light:hover { background: #D9A43B; }
 
 .btn-dark {
-  background: var(--c-black);
-  color: var(--c-off-white);
+  background: var(--c-gold);
+  color: #0D0D0D;
 }
-.btn-dark:hover { background: var(--c-dark-2); }
+.btn-dark:hover { background: #D9A43B; }
 
 .btn-outline-dark {
   background: transparent;
-  color: var(--c-black);
-  border: 1px solid rgba(12, 11, 10, 0.2);
+  color: var(--c-gold);
+  border: 1px solid var(--c-gold);
 }
 .btn-outline-dark:hover {
-  background: var(--c-black);
-  color: var(--c-off-white);
-  border-color: var(--c-black);
+  background: var(--c-gold);
+  color: #0D0D0D;
 }
 
-/* Animated link — underline slides in on hover */
+/* Animated link */
 .link-arrow {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--c-stone-light);
+  color: var(--c-grey);
   text-decoration: none;
-  position: relative;
-  transition: color 0.2s ease, gap 0.3s var(--ease-out);
+  transition: color 0.2s ease, gap 0.2s ease;
 }
-.link-arrow:hover { color: var(--c-off-white); gap: 0.85rem; }
+.link-arrow:hover { color: var(--c-gold); gap: 0.85rem; }
 
 /* ============================================================
-   FORM ELEMENTS — light section
+   FORM ELEMENTS — Mobile First & Accessible
    ============================================================ */
 
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
 .form-label {
   font-family: var(--font-body);
-  font-size: 0.63rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #8A7A6B;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--c-white);
 }
 
 .form-input,
 .form-select,
 .form-textarea {
   width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(12, 11, 10, 0.18);
-  color: #0C0B0A;
+  background: #181818;
+  border: 1px solid #333333;
+  color: var(--c-white);
   font-family: var(--font-body);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 400;
-  padding: 0.65rem 0;
+  padding: 0.85rem 1rem;
   outline: none;
-  transition: border-color 0.25s ease;
-  border-radius: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 6px;
+  min-height: 48px;
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: rgba(12, 11, 10, 0.22);
+  color: var(--c-grey);
+  opacity: 0.8;
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  border-bottom-color: #0C0B0A;
+  border-color: var(--c-gold);
+  box-shadow: 0 0 0 2px rgba(201, 150, 47, 0.25);
 }
 
 .form-select {
   cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23C9962F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
 }
 
 .form-textarea {
-  resize: none;
-  min-height: 80px;
+  resize: vertical;
+  min-height: 100px;
   line-height: 1.6;
 }
 

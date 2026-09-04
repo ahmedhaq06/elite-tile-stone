@@ -190,20 +190,20 @@ export default function PortfolioGallery() {
           className="reveal"
           style={{
             fontFamily:    'var(--font-display)',
-            fontSize:      'clamp(1.5rem, 2.5vw, 3rem)',
-            fontWeight:    '400',
-            lineHeight:    1.0,
+            fontSize:      'clamp(1.8rem, 3vw, 3.2rem)',
+            fontWeight:    '700',
+            lineHeight:    1.08,
             letterSpacing: '-0.01em',
-            color:         'var(--c-off-white)',
+            color:         'var(--c-gold)',
             maxWidth:      '22ch',
             marginBottom:  '0.6rem',
           }}
         >
           Selected Work.
           <br />
-          <em style={{ color: 'rgba(250,248,245,0.38)', fontStyle: 'italic' }}>
+          <span style={{ color: 'var(--c-white)' }}>
             Southern Nevada.
-          </em>
+          </span>
         </h2>
 
         {/* Pricing Scope & Millimetric Precision Sub-header */}

@@ -121,16 +121,16 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* H1 — benefit-driven: what the customer gets, not what we do */}
+          {/* H1 — benefit-driven: Gold headline */}
           <h1
             aria-label="Your Vision, Built to Last."
             style={{
               fontFamily:    'var(--font-display)',
-              fontSize:      'clamp(3.8rem, 7.8vw, 9rem)',
-              fontWeight:    '400',
+              fontSize:      'clamp(3.5rem, 7.5vw, 8.5rem)',
+              fontWeight:    '700',
               lineHeight:    0.94,
               letterSpacing: '-0.02em',
-              color:         'var(--c-off-white)',
+              color:         'var(--c-gold)',
               maxWidth:      '68vw',
               marginBottom:  'clamp(1.2rem, 2.5vh, 2rem)',
             }}
@@ -147,17 +147,15 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Subtitle — specific, not generic. A single measured line. */}
+          {/* Subtitle */}
           <p
             style={{
-              fontFamily:    'var(--font-display)',
-              fontStyle:     'italic',
-              fontSize:      'clamp(1rem, 1.5vw, 1.45rem)',
+              fontFamily:    'var(--font-body)',
+              fontSize:      'clamp(1rem, 1.5vw, 1.35rem)',
               fontWeight:    '400',
-              letterSpacing: '0.01em',
               lineHeight:    1.4,
-              color:         'rgba(196,185,173,0.55)',
-              maxWidth:      '38ch',
+              color:         'var(--c-grey)',
+              maxWidth:      '40ch',
               marginBottom:  '0.6rem',
               ...anim(0.56),
             }}
@@ -170,13 +168,12 @@ export default function Hero() {
           <p
             style={{
               fontFamily:    'var(--font-body)',
-              fontSize:      'clamp(0.8rem, 1.1vw, 0.95rem)',
+              fontSize:      'clamp(0.85rem, 1.1vw, 1rem)',
               fontWeight:    '400',
               lineHeight:    1.5,
-              color:         'var(--c-off-white)',
-              maxWidth:      '42ch',
+              color:         'var(--c-white)',
+              maxWidth:      '45ch',
               marginBottom:  'clamp(1.5rem, 3.5vh, 2.5rem)',
-              opacity:       0.9,
               ...anim(0.58),
             }}
           >
@@ -192,43 +189,44 @@ export default function Hero() {
               ...anim(0.6),
             }}
           >
-            {/* Primary CTA — Request a Consultation (scrolls to contact form) */}
+            {/* Primary CTA — Gold Button */}
             <a
               href="#contact"
               style={{
                 display:       'inline-block',
-                padding:       '0.85rem 2rem',
-                background:    'var(--c-off-white)',
-                color:         'var(--c-black)',
+                padding:       '0.95rem 2.2rem',
+                background:    'var(--c-gold)',
+                color:         '#0D0D0D',
                 fontFamily:    'var(--font-body)',
-                fontSize:      '0.75rem',
-                fontWeight:    '600',
-                letterSpacing: '0.12em',
+                fontSize:      '0.82rem',
+                fontWeight:    '700',
+                letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
-                transition:    'background 0.2s ease',
+                borderRadius:  '6px',
+                transition:    'all 0.2s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#e8e4df'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--c-off-white)'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--c-gold)'; }}
             >
-              Request a Consultation
+              Get My Free Estimate
             </a>
 
-            {/* Secondary — phone, small, for immediate callers */}
+            {/* Secondary — phone */}
             <a
               href={`tel:${BUSINESS_INFO.phoneRaw}`}
               style={{
                 fontFamily:    'var(--font-body)',
-                fontSize:      '0.75rem',
-                fontWeight:    '500',
-                letterSpacing: '0.1em',
+                fontSize:      '0.8rem',
+                fontWeight:    '600',
+                letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color:         'rgba(196,185,173,0.6)',
+                color:         'var(--c-grey)',
                 textDecoration: 'none',
                 transition:    'color 0.2s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(196,185,173,1)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(196,185,173,0.6)'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-gold)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--c-grey)'; }}
             >
               {BUSINESS_INFO.phone}
             </a>
