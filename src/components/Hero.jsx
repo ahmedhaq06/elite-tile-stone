@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BUSINESS_INFO } from '../data/tilesData';
-import { useParallax } from '../hooks/useReveal';
+import { useReveal, useParallax } from '../hooks/useReveal';
 
 export default function Hero() {
   const [ready, setReady] = useState(false);
+  const sectionRef = useReveal();
   const parallaxRef = useParallax(0.12);
 
   useEffect(() => {
@@ -18,6 +19,7 @@ export default function Hero() {
 
   return (
     <section
+      ref={sectionRef}
       aria-label="Hero"
       style={{
         position:  'relative',
@@ -33,7 +35,7 @@ export default function Hero() {
           ref={parallaxRef}
           src="/assets/after.jpeg"
           alt="Elite Tile & Stone — precision master suite installation, Las Vegas"
-          className="reveal-img"
+          className={`reveal-img ${ready ? 'is-visible' : ''}`}
           style={{
             width:          '100%',
             height:         '110%',
