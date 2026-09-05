@@ -77,7 +77,7 @@ export default function GalleryPage({ onNavigate, onOpenPrivacy }) {
 
   return (
     <div style={{ background: '#0D0D0D', minHeight: '100vh', color: '#FFFFFF' }}>
-      <Navbar onNavigate={onNavigate} />
+      <Navbar onNavigate={onNavigate} activeRoute="gallery" />
 
       {/* Hero Header */}
       <section
@@ -298,7 +298,7 @@ export default function GalleryPage({ onNavigate, onOpenPrivacy }) {
               onClick={() => setActiveItem(null)}
               style={{
                 position:   'absolute',
-                top:        '1rem',
+                top:        '1.5rem',
                 right:      '1.2rem',
                 background: 'rgba(0,0,0,0.7)',
                 border:     'none',
@@ -335,11 +335,10 @@ export default function GalleryPage({ onNavigate, onOpenPrivacy }) {
                 {activeItem.description}
               </p>
 
-              <a
-                href="#contact"
+              <button
                 onClick={() => {
                   setActiveItem(null);
-                  if (onNavigate) onNavigate('home');
+                  if (onNavigate) onNavigate('estimate');
                 }}
                 style={{
                   display:       'inline-block',
@@ -348,12 +347,13 @@ export default function GalleryPage({ onNavigate, onOpenPrivacy }) {
                   color:         '#0D0D0D',
                   fontWeight:    '700',
                   borderRadius:  '4px',
-                  textDecoration: 'none',
+                  border:        'none',
+                  cursor:        'pointer',
                   fontSize:      '0.82rem',
                 }}
               >
                 REQUEST PROJECT ESTIMATE
-              </a>
+              </button>
             </div>
           </div>
         </div>

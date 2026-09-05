@@ -12,7 +12,7 @@ export default function Hero({ onNavigate }) {
         flexDirection: 'column',
         justifyContent: 'space-between',
         overflow:   'hidden',
-        paddingTop: '74px', // account for navbar
+        paddingTop: '74px',
       }}
     >
       {/* ── Background Image & Dark Overlay ── */}
@@ -26,7 +26,6 @@ export default function Hero({ onNavigate }) {
           zIndex:     1,
         }}
       >
-        {/* Dark Vignette Overlay for readability */}
         <div
           style={{
             position:   'absolute',
@@ -52,7 +51,6 @@ export default function Hero({ onNavigate }) {
         }}
       >
         <div style={{ maxWidth: '640px' }}>
-          {/* Eyebrow */}
           <div
             style={{
               fontFamily:    'var(--font-body)',
@@ -67,7 +65,6 @@ export default function Hero({ onNavigate }) {
             LAS VEGAS, NEVADA
           </div>
 
-          {/* Headline */}
           <h1
             style={{
               fontFamily:    'var(--font-display)',
@@ -84,7 +81,6 @@ export default function Hero({ onNavigate }) {
             SET TO PERFECTION.
           </h1>
 
-          {/* Body Text */}
           <p
             style={{
               fontFamily:    'var(--font-body)',
@@ -99,10 +95,9 @@ export default function Hero({ onNavigate }) {
             We are a team of highly skilled tile &amp; stone experts. From custom showers to whole-home flooring, we build the details that make a home feel finished.
           </p>
 
-          {/* CTA Buttons */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <a
-              href="#contact"
+            <button
+              onClick={() => onNavigate && onNavigate('estimate')}
               style={{
                 display:       'inline-flex',
                 alignItems:    'center',
@@ -116,23 +111,18 @@ export default function Hero({ onNavigate }) {
                 color:         '#0D0D0D',
                 background:    '#C9962F',
                 borderRadius:  '4px',
-                textDecoration: 'none',
-                transition:    'background 0.2s ease, transform 0.2s ease',
+                border:        'none',
+                cursor:        'pointer',
+                transition:    'background 0.2s ease',
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
             >
               GET A FREE ESTIMATE
-            </a>
+            </button>
 
-            <a
-              href="#recent-work"
-              onClick={(e) => {
-                if (onNavigate) {
-                  e.preventDefault();
-                  onNavigate('gallery');
-                }
-              }}
+            <button
+              onClick={() => onNavigate && onNavigate('gallery')}
               style={{
                 display:       'inline-flex',
                 alignItems:    'center',
@@ -147,7 +137,7 @@ export default function Hero({ onNavigate }) {
                 background:    'rgba(13, 13, 13, 0.6)',
                 border:        '1px solid #C9962F',
                 borderRadius:  '4px',
-                textDecoration: 'none',
+                cursor:        'pointer',
                 transition:    'all 0.2s ease',
               }}
               onMouseEnter={(e) => {
@@ -160,12 +150,12 @@ export default function Hero({ onNavigate }) {
               }}
             >
               SEE OUR WORK
-            </a>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* ── Stats Bar (Bottom of Hero) ── */}
+      {/* ── Stats Bar ── */}
       <div
         style={{
           position:   'relative',

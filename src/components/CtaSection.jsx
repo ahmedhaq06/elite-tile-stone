@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function CtaSection() {
+export default function CtaSection({ onNavigate }) {
   return (
     <section
       id="contact"
@@ -12,7 +12,6 @@ export default function CtaSection() {
       }}
     >
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        {/* Eyebrow */}
         <div
           style={{
             fontFamily:    'var(--font-body)',
@@ -27,7 +26,6 @@ export default function CtaSection() {
           FREE IN-HOME ESTIMATES
         </div>
 
-        {/* Headline */}
         <h2
           style={{
             fontFamily:    'var(--font-display)',
@@ -44,7 +42,6 @@ export default function CtaSection() {
           SOMETHING WORTH SHOWING OFF?
         </h2>
 
-        {/* Action Buttons */}
         <div
           style={{
             display:        'flex',
@@ -53,14 +50,8 @@ export default function CtaSection() {
             flexWrap:       'wrap',
           }}
         >
-          <a
-            href="#contact-form"
-            onClick={(e) => {
-              e.preventDefault();
-              const contactEl = document.getElementById('footer-contact');
-              if (contactEl) contactEl.scrollIntoView({ behavior: 'smooth' });
-              else window.location.href = 'tel:7025550142';
-            }}
+          <button
+            onClick={() => onNavigate && onNavigate('estimate')}
             style={{
               display:       'inline-flex',
               alignItems:    'center',
@@ -73,15 +64,16 @@ export default function CtaSection() {
               textTransform: 'uppercase',
               color:         '#0D0D0D',
               background:    '#C9962F',
+              border:        'none',
               borderRadius:  '4px',
-              textDecoration: 'none',
+              cursor:        'pointer',
               transition:    'background 0.2s ease',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
           >
             REQUEST AN ESTIMATE
-          </a>
+          </button>
 
           <a
             href="tel:7025550142"

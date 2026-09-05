@@ -8,6 +8,7 @@ import CtaSection from './components/CtaSection';
 import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import GalleryPage from './components/GalleryPage';
+import EstimatePage from './components/EstimatePage';
 import CampaignLandingPage from './components/CampaignLandingPage';
 import { CAMPAIGN_ANGLES } from './data/campaignData';
 
@@ -19,6 +20,7 @@ function getActiveRoute() {
   if (CAMPAIGN_ANGLES['/' + hash]) return { type: 'campaign', data: CAMPAIGN_ANGLES['/' + hash] };
   if (hash === 'privacy' || hash === 'privacy-policy' || path === '/privacy') return { type: 'privacy' };
   if (hash === 'gallery' || path === '/gallery') return { type: 'gallery' };
+  if (hash === 'estimate' || hash === 'contact' || path === '/estimate' || path === '/contact') return { type: 'estimate' };
 
   return { type: 'home' };
 }
@@ -39,7 +41,13 @@ export default function App() {
   }, []);
 
   const navigateTo = (view, targetId) => {
-    if (view === 'gallery') {
+    if (view === 'estimate') {
+      if (window.location.hash !== '#estimate') {
+        window.history.pushState(null, '', '#estimate');
+      }
+      setRouteState({ type: 'estimate' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else if (view === 'gallery') {
       if (window.location.hash !== '#gallery') {
         window.history.pushState(null, '', '#gallery');
       }
@@ -91,6 +99,10 @@ export default function App() {
     return <GalleryPage onNavigate={navigateTo} onOpenPrivacy={openPrivacy} />;
   }
 
+  if (routeState.type === 'estimate') {
+    return <EstimatePage onNavigate={navigateTo} onOpenPrivacy={openPrivacy} />;
+  }
+
   return (
     <div style={{ background: '#0D0D0D', minHeight: '100vh' }}>
       <Navbar onNavigate={navigateTo} activeRoute={routeState.type} />
@@ -98,7 +110,7 @@ export default function App() {
       <Services onNavigate={navigateTo} />
       <WhyElite />
       <RecentWork onNavigate={navigateTo} />
-      <CtaSection />
+      <CtaSection onNavigate={navigateTo} />
       <Footer onNavigate={navigateTo} onOpenPrivacy={openPrivacy} />
 
       {/* Sticky Mobile Call & Estimate Bar */}
@@ -141,12 +153,8 @@ export default function App() {
           (702) 555-0142
         </a>
 
-        <a
-          href="#contact"
-          onClick={(e) => {
-            e.preventDefault();
-            navigateTo('home', 'contact');
-          }}
+        <button
+          onClick={() => navigateTo('estimate')}
           style={{
             fontFamily:     'var(--font-body)',
             fontSize:       '0.78rem',
@@ -157,13 +165,14 @@ export default function App() {
             background:     '#C9962F',
             padding:        '0.65rem 1rem',
             borderRadius:   '4px',
-            textDecoration: 'none',
+            border:         'none',
+            cursor:         'pointer',
             textAlign:      'center',
             flex:           1,
           }}
         >
           GET FREE ESTIMATE
-        </a>
+        </button>
       </div>
 
       <style>{`

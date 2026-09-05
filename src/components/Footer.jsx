@@ -111,23 +111,21 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
                 margin:     0,
                 display:    'flex',
                 flexDirection: 'column',
-                gap:         me => '0.85rem',
+                gap:        '0.85rem',
               }}
             >
               {[
                 { label: 'Services', href: '#services', id: 'services' },
                 { label: 'Gallery', href: '#gallery', id: 'gallery' },
                 { label: 'About Us', href: '#about', id: 'about' },
-                { label: 'Free Estimate', href: '#contact', id: 'contact' },
+                { label: 'Free Estimate', href: '#estimate', id: 'estimate' },
               ].map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
                     onClick={(e) => {
-                      if (link.id === 'gallery' && onNavigate) {
-                        e.preventDefault();
-                        onNavigate('gallery');
-                      }
+                      e.preventDefault();
+                      if (onNavigate) onNavigate(link.id === 'services' || link.id === 'about' ? 'home' : link.id, link.id);
                     }}
                     style={{
                       fontFamily:    'var(--font-body)',
@@ -223,7 +221,7 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
           </div>
         </div>
 
-        {/* Bottom Bar / Copyright */}
+        {/* Bottom Bar */}
         <div
           style={{
             paddingTop:     '2rem',
