@@ -8,7 +8,7 @@ const NAV_LINKS = [
   { id: 'contact',  href: '#contact',  label: 'CONTACT' },
 ];
 
-export default function Navbar({ onNavigate }) {
+export default function Navbar({ onNavigate, activeRoute }) {
   const [scrolled, setScrolled]     = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -24,16 +24,13 @@ export default function Navbar({ onNavigate }) {
   }, [drawerOpen]);
 
   const handleLinkClick = (e, link) => {
+    e.preventDefault();
+    setDrawerOpen(false);
+
     if (link.id === 'gallery') {
-      e.preventDefault();
       if (onNavigate) onNavigate('gallery');
-      else window.location.hash = 'gallery';
-      setDrawerOpen(false);
     } else {
-      if (onNavigate) {
-        onNavigate('home');
-      }
-      setDrawerOpen(false);
+      if (onNavigate) onNavigate('home', link.id);
     }
   };
 
@@ -88,7 +85,7 @@ export default function Navbar({ onNavigate }) {
                 fontSize:      '1.1rem',
                 fontWeight:    '700',
                 letterSpacing: '0.12em',
-                color:         'var(--c-gold)',
+                color:         '#C9962F',
                 lineHeight:    1,
               }}
             >
@@ -121,15 +118,17 @@ export default function Navbar({ onNavigate }) {
               onClick={(e) => handleLinkClick(e, link)}
               style={{
                 fontFamily:    'var(--font-body)',
-                fontSize:       me => '0.78rem',
+                fontSize:      '0.78rem',
                 fontWeight:    '600',
                 letterSpacing: '0.12em',
-                color:         '#FFFFFF',
+                color:         (activeRoute === 'gallery' && link.id === 'gallery') ? '#C9962F' : '#FFFFFF',
                 textDecoration: 'none',
                 transition:    'color 0.2s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-gold)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#C9962F'; }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = (activeRoute === 'gallery' && link.id === 'gallery') ? '#C9962F' : '#FFFFFF';
+              }}
             >
               {link.label}
             </a>
@@ -147,14 +146,14 @@ export default function Navbar({ onNavigate }) {
               fontWeight:    '700',
               letterSpacing: '0.04em',
               color:         '#0D0D0D',
-              background:    'var(--c-gold)',
+              background:    '#C9962F',
               padding:       '0.55rem 1.1rem',
               borderRadius:  '6px',
               textDecoration: 'none',
               transition:    'background 0.2s ease, transform 0.2s ease',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--c-gold)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
           >
             <span style={{ fontSize: '0.88rem' }}>📞</span>
             (702) 555-0142
@@ -205,7 +204,7 @@ export default function Navbar({ onNavigate }) {
             right:      '2rem',
             background: 'none',
             border:     'none',
-            color:      'var(--c-gold)',
+            color:      '#C9962F',
             fontSize:   '2.2rem',
             cursor:     'pointer',
           }}
@@ -243,7 +242,7 @@ export default function Navbar({ onNavigate }) {
               fontSize:      '1rem',
               fontWeight:    '700',
               color:         '#0D0D0D',
-              background:    'var(--c-gold)',
+              background:    '#C9962F',
               padding:       '0.9rem 1.5rem',
               borderRadius:  '6px',
               textDecoration: 'none',

@@ -38,16 +38,41 @@ export default function App() {
     };
   }, []);
 
-  const navigateTo = (view) => {
+  const navigateTo = (view, targetId) => {
     if (view === 'gallery') {
-      window.location.hash = 'gallery';
+      if (window.location.hash !== '#gallery') {
+        window.history.pushState(null, '', '#gallery');
+      }
       setRouteState({ type: 'gallery' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     } else if (view === 'privacy') {
-      window.location.hash = 'privacy';
+      if (window.location.hash !== '#privacy') {
+        window.history.pushState(null, '', '#privacy');
+      }
       setRouteState({ type: 'privacy' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     } else {
-      window.location.hash = '';
+      const isCurrentlyHome = routeState.type === 'home';
+      if (window.location.hash !== '') {
+        window.history.pushState(null, '', window.location.pathname);
+      }
       setRouteState({ type: 'home' });
+
+      if (targetId) {
+        const scrollToElement = () => {
+          const el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+          else window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        if (isCurrentlyHome) {
+          scrollToElement();
+        } else {
+          setTimeout(scrollToElement, 60);
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
@@ -68,7 +93,7 @@ export default function App() {
 
   return (
     <div style={{ background: '#0D0D0D', minHeight: '100vh' }}>
-      <Navbar onNavigate={navigateTo} />
+      <Navbar onNavigate={navigateTo} activeRoute={routeState.type} />
       <Hero onNavigate={navigateTo} />
       <Services onNavigate={navigateTo} />
       <WhyElite />
@@ -118,6 +143,10 @@ export default function App() {
 
         <a
           href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            navigateTo('home', 'contact');
+          }}
           style={{
             fontFamily:     'var(--font-body)',
             fontSize:       '0.78rem',
