@@ -1,246 +1,232 @@
-import React, { useEffect, useState } from 'react';
-import { BUSINESS_INFO } from '../data/tilesData';
-import { useReveal, useParallax } from '../hooks/useReveal';
+import React from 'react';
 
-export default function Hero({ headline, subheadline, ctaText, heroImage, badge }) {
-  const [ready, setReady] = useState(false);
-  const sectionRef = useReveal();
-  const parallaxRef = useParallax(0.12);
-
-  useEffect(() => {
-    const t = setTimeout(() => setReady(true), 60);
-    return () => clearTimeout(t);
-  }, []);
-
-  const anim = (delay) =>
-    ready
-      ? { animation: `heroSlideUp 0.95s cubic-bezier(0.16,1,0.3,1) ${delay}s both` }
-      : { opacity: 0 };
-
-  const displayHeadline = headline || "Your Vision,\nBuilt to Last.";
-  const displaySubheadline = subheadline || "Turn your daily routine into a resort experience. Complimentary on-site measurement included.";
-  const displayCta = ctaText || "Get My Free Estimate";
-  const displayImage = heroImage || "/assets/after.jpeg";
-
+export default function Hero({ onNavigate }) {
   return (
     <section
-      ref={sectionRef}
-      aria-label="Hero"
+      id="home"
       style={{
-        position:  'relative',
-        height:    '100svh',
-        minHeight: '600px',
-        overflow:  'hidden',
-        background: 'var(--c-black)',
+        position:   'relative',
+        minHeight:  '100vh',
+        background: '#0D0D0D',
+        display:    'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        overflow:   'hidden',
+        paddingTop: '74px', // account for navbar
       }}
     >
-      {/* ── Photography ── */}
-      <div className="hero-photo-panel">
-        <img
-          ref={parallaxRef}
-          src={displayImage}
-          alt="Elite Tile & Stone — master installation"
-          className={`reveal-img ${ready ? 'is-visible' : ''}`}
-          style={{
-            width:          '100%',
-            height:         '110%',
-            objectFit:      'cover',
-            objectPosition: 'center 35%',
-            animation:      'kenBurns 24s ease-in-out infinite alternate',
-            willChange:     'transform',
-          }}
-        />
-        {/* Left-side dark fade */}
+      {/* ── Background Image & Dark Overlay ── */}
+      <div
+        style={{
+          position:   'absolute',
+          inset:      0,
+          backgroundImage: `url('/assets/hero_dark_bathroom.jpg')`,
+          backgroundSize:  'cover',
+          backgroundPosition: 'center right',
+          zIndex:     1,
+        }}
+      >
+        {/* Dark Vignette Overlay for readability */}
         <div
-          aria-hidden="true"
           style={{
             position:   'absolute',
             inset:      0,
-            background: 'linear-gradient(to right, #0C0B0A 0%, rgba(12,11,10,0.65) 20%, rgba(12,11,10,0.15) 48%, transparent 72%)',
-          }}
-        />
-        {/* Bottom vignette */}
-        <div
-          aria-hidden="true"
-          style={{
-            position:   'absolute',
-            inset:      0,
-            background: 'linear-gradient(to top, rgba(12,11,10,0.7) 0%, transparent 42%)',
+            background: 'radial-gradient(circle at 20% 50%, rgba(13, 13, 13, 0.85) 0%, rgba(13, 13, 13, 0.55) 60%, rgba(13, 13, 13, 0.75) 100%), linear-gradient(to right, rgba(13,13,13,0.92) 0%, rgba(13,13,13,0.7) 45%, transparent 80%)',
           }}
         />
       </div>
 
-      {/* Mobile: heavier overlay */}
-      <style>{`
-        @media (max-width: 768px) {
-          .hero-photo-panel {
-            width: 100% !important;
-          }
-          .hero-photo-panel::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(12,11,10,0.58);
-          }
-        }
-      `}</style>
-
-      {/* ── Content ── */}
+      {/* ── Main Hero Content ── */}
       <div
         style={{
-          position:      'absolute',
-          inset:         0,
-          zIndex:        3,
-          display:       'flex',
+          position:   'relative',
+          zIndex:     2,
+          maxWidth:   '1440px',
+          width:      '100%',
+          margin:     '0 auto',
+          padding:    'clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
+          flex:       1,
+          display:    'flex',
           flexDirection: 'column',
-          padding:       '0 var(--pad-x)',
+          justifyContent: 'center',
         }}
       >
-        {/* Spacer */}
-        <div style={{ flex: 1 }} />
-
-        {/* Bottom-anchored block */}
-        <div style={{ paddingBottom: 'clamp(3.5rem, 8vh, 6rem)' }}>
-
-          {/* Badge / License info */}
+        <div style={{ maxWidth: '640px' }}>
+          {/* Eyebrow */}
           <div
             style={{
-              marginBottom: '1.4rem',
-              ...anim(0.18),
+              fontFamily:    'var(--font-body)',
+              fontSize:      '0.75rem',
+              fontWeight:    '700',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color:         '#C9962F',
+              marginBottom:  '1.2rem',
             }}
           >
-            <span
-              style={{
-                fontFamily:    'var(--font-body)',
-                fontSize:      '0.7rem',
-                fontWeight:    '600',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color:         'var(--c-gold)',
-                background:    'rgba(201, 150, 47, 0.12)',
-                padding:       '0.3rem 0.8rem',
-                borderRadius:  '4px',
-                border:        '1px solid rgba(201, 150, 47, 0.3)',
-              }}
-            >
-              {badge || `Las Vegas, NV · ${BUSINESS_INFO.license}`}
-            </span>
+            LAS VEGAS, NEVADA
           </div>
 
-          {/* H1 Headline */}
+          {/* Headline */}
           <h1
-            aria-label={displayHeadline}
             style={{
               fontFamily:    'var(--font-display)',
-              fontSize:      'clamp(2.5rem, 5.5vw, 6.5rem)',
+              fontSize:      'clamp(2.8rem, 5.8vw, 5.2rem)',
               fontWeight:    '700',
-              lineHeight:    1.02,
-              letterSpacing: '-0.01em',
-              color:         'var(--c-gold)',
-              maxWidth:      '22ch',
-              marginBottom:  'clamp(1rem, 2vh, 1.6rem)',
+              lineHeight:    1.05,
+              letterSpacing: '0.01em',
+              textTransform: 'uppercase',
+              color:         '#C9962F',
+              marginBottom:  '1.5rem',
             }}
           >
-            <span style={{ display: 'block', overflow: 'hidden' }}>
-              <span style={{ display: 'block', ...anim(0.3) }}>
-                {displayHeadline}
-              </span>
-            </span>
+            TILE &amp; STONE,<br />
+            SET TO PERFECTION.
           </h1>
 
-          {/* Subheadline */}
+          {/* Body Text */}
           <p
             style={{
               fontFamily:    'var(--font-body)',
-              fontSize:      'clamp(1rem, 1.4vw, 1.25rem)',
+              fontSize:      'clamp(0.95rem, 1.2vw, 1.1rem)',
               fontWeight:    '400',
-              lineHeight:    1.5,
-              color:         'var(--c-white)',
-              maxWidth:      '42ch',
-              marginBottom:  'clamp(1.5rem, 3.5vh, 2.5rem)',
-              ...anim(0.56),
+              lineHeight:    1.65,
+              color:         '#FFFFFF',
+              marginBottom:  '2.5rem',
+              maxWidth:      '500px',
             }}
           >
-            {displaySubheadline}
+            We are a team of highly skilled tile &amp; stone experts. From custom showers to whole-home flooring, we build the details that make a home feel finished.
           </p>
 
-          <div
-            style={{
-              display:    'flex',
-              gap:        '1.2rem',
-              alignItems: 'center',
-              flexWrap:   'wrap',
-              ...anim(0.6),
-            }}
-          >
-            {/* Primary CTA */}
+          {/* CTA Buttons */}
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <a
               href="#contact"
               style={{
-                display:       'inline-block',
-                padding:       '0.95rem 2.2rem',
-                background:    'var(--c-gold)',
-                color:         '#0D0D0D',
+                display:       'inline-flex',
+                alignItems:    'center',
+                justifyContent: 'center',
+                padding:       '1rem 2.2rem',
                 fontFamily:    'var(--font-body)',
                 fontSize:      '0.82rem',
                 fontWeight:    '700',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
+                color:         '#0D0D0D',
+                background:    '#C9962F',
+                borderRadius:  '4px',
                 textDecoration: 'none',
-                borderRadius:  '6px',
-                transition:    'all 0.2s ease',
+                transition:    'background 0.2s ease, transform 0.2s ease',
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--c-gold)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
             >
-              {displayCta}
+              GET A FREE ESTIMATE
             </a>
 
-            {/* Secondary Phone */}
             <a
-              href={`tel:${BUSINESS_INFO.phoneRaw}`}
+              href="#recent-work"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('gallery');
+                }
+              }}
               style={{
+                display:       'inline-flex',
+                alignItems:    'center',
+                justifyContent: 'center',
+                padding:       '1rem 2.2rem',
                 fontFamily:    'var(--font-body)',
-                fontSize:      '0.8rem',
-                fontWeight:    '600',
+                fontSize:      '0.82rem',
+                fontWeight:    '700',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color:         'var(--c-grey)',
+                color:         '#C9962F',
+                background:    'rgba(13, 13, 13, 0.6)',
+                border:        '1px solid #C9962F',
+                borderRadius:  '4px',
                 textDecoration: 'none',
-                transition:    'color 0.2s ease',
+                transition:    'all 0.2s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-gold)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--c-grey)'; }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#C9962F';
+                e.currentTarget.style.color = '#0D0D0D';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(13, 13, 13, 0.6)';
+                e.currentTarget.style.color = '#C9962F';
+              }}
             >
-              {BUSINESS_INFO.phone}
+              SEE OUR WORK
             </a>
           </div>
         </div>
       </div>
 
-      {/* ── Scroll tracer — right edge, bottom ── */}
+      {/* ── Stats Bar (Bottom of Hero) ── */}
       <div
-        aria-hidden="true"
         style={{
-          position:   'absolute',
-          bottom:     'clamp(2rem, 5vh, 3.5rem)',
-          right:      'clamp(1.5rem, 4vw, 4rem)',
-          zIndex:     4,
-          width:      '1px',
-          height:     '56px',
-          overflow:   'hidden',
-          background: 'rgba(255,255,255,0.08)',
-          ...anim(0.9),
+          position:   'relative',
+          zIndex:     2,
+          borderTop:  '1px solid rgba(255, 255, 255, 0.1)',
+          background: 'rgba(13, 13, 13, 0.92)',
+          backdropFilter: 'blur(10px)',
         }}
       >
         <div
           style={{
-            position:   'absolute',
-            inset:      0,
-            background: 'rgba(196,185,173,0.4)',
-            animation:  'scrollTracer 2.4s linear infinite',
+            maxWidth:   '1440px',
+            margin:     '0 auto',
+            display:    'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
           }}
-        />
+        >
+          {[
+            { number: '12+', label: 'YEARS IN THE VALLEY' },
+            { number: '800+', label: 'PROJECTS COMPLETED' },
+            { number: '100%', label: 'LICENSED & INSURED' },
+          ].map((stat, idx) => (
+            <div
+              key={idx}
+              style={{
+                padding:        '1.8rem 2rem',
+                textAlign:      'center',
+                borderRight:    idx < 2 ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+                display:        'flex',
+                flexDirection: 'column',
+                alignItems:     'center',
+                justifyContent: 'center',
+              }}
+            >
+              <div
+                style={{
+                  fontFamily:    'var(--font-display)',
+                  fontSize:      'clamp(2rem, 3.5vw, 2.8rem)',
+                  fontWeight:    '700',
+                  color:         '#C9962F',
+                  lineHeight:    1,
+                  marginBottom:  '0.4rem',
+                }}
+              >
+                {stat.number}
+              </div>
+              <div
+                style={{
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      '0.72rem',
+                  fontWeight:    '600',
+                  letterSpacing: '0.14em',
+                  color:         'rgba(255, 255, 255, 0.8)',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

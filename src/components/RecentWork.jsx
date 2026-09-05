@@ -1,24 +1,30 @@
 import React from 'react';
 
-export default function Services({ onNavigate }) {
-  const services = [
+export default function RecentWork({ onNavigate }) {
+  const projects = [
     {
-      title: 'SHOWERS & BATHROOMS',
-      description: 'Curbless walk-ins, linear drains, waterproofed to the letter, finished with slab-look porcelain or natural stone.',
+      id: 1,
+      title: 'Kitchen Backsplash',
+      image: '/assets/08f40bc1-a67f-4f82-8283-fd52b849de06.jpeg',
+      alt: 'Kitchen Backsplash Project',
     },
     {
-      title: 'KITCHEN BACKSPLASHES',
-      description: 'Herringbone, stacked, mosaic or full-height slab. Tight grout lines and mitered edges you can inspect up close.',
+      id: 2,
+      title: 'Large-Format Porcelain Flooring',
+      image: '/assets/living_room_floor.jpg',
+      alt: 'Living Room Tile Flooring Project',
     },
     {
-      title: 'LARGE-FORMAT FLOORING',
-      description: 'Up to 48" porcelain planks and tiles, laser-leveled and lippage-free across whole homes.',
+      id: 3,
+      title: 'Marble Slab Fireplace Wall',
+      image: '/assets/fireplace_wall.jpg',
+      alt: 'Marble Fireplace Wall Project',
     },
   ];
 
   return (
     <section
-      id="services"
+      id="recent-work"
       style={{
         background: '#0D0D0D',
         padding:    'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)',
@@ -26,8 +32,8 @@ export default function Services({ onNavigate }) {
       }}
     >
       <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-        {/* Section Header */}
-        <div style={{ marginBottom: '3.5rem' }}>
+        {/* Header */}
+        <div style={{ marginBottom: '3rem' }}>
           <div
             style={{
               fontFamily:    'var(--font-body)',
@@ -39,7 +45,7 @@ export default function Services({ onNavigate }) {
               marginBottom:  '0.8rem',
             }}
           >
-            WHAT WE DO
+            RECENT WORK
           </div>
           <h2
             style={{
@@ -52,11 +58,11 @@ export default function Services({ onNavigate }) {
               letterSpacing: '0.01em',
             }}
           >
-            CRAFTSMANSHIP IN EVERY SQUARE FOOT
+            FROM THE VALLEY
           </h2>
         </div>
 
-        {/* 3 Cards Grid */}
+        {/* 3 Project Cards Grid */}
         <div
           style={{
             display:             'grid',
@@ -65,68 +71,44 @@ export default function Services({ onNavigate }) {
             marginBottom:        '3rem',
           }}
         >
-          {services.map((item, idx) => (
+          {projects.map((proj) => (
             <div
-              key={idx}
+              key={proj.id}
+              onClick={() => onNavigate && onNavigate('gallery')}
               style={{
-                background:   '#161616',
+                position:     'relative',
+                borderRadius: '6px',
+                overflow:     'hidden',
+                height:       '320px',
+                cursor:       'pointer',
                 border:       '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '8px',
-                padding:      '2.5rem 2rem',
-                display:      'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                transition:   'transform 0.3s ease, border-color 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(201, 150, 47, 0.4)';
-                e.currentTarget.style.transform = 'translateY(-4px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                e.currentTarget.style.transform = 'translateY(0)';
+                boxShadow:    '0 12px 30px rgba(0,0,0,0.5)',
               }}
             >
-              <div>
-                <h3
-                  style={{
-                    fontFamily:    'var(--font-display)',
-                    fontSize:      '1.25rem',
-                    fontWeight:    '700',
-                    letterSpacing: '0.05em',
-                    textTransform: 'uppercase',
-                    color:         '#FFFFFF',
-                    marginBottom:  '1.2rem',
-                    lineHeight:    1.2,
-                  }}
-                >
-                  {item.title}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize:   '0.92rem',
-                    fontWeight: '400',
-                    lineHeight: 1.65,
-                    color:      '#8A8A8A',
-                  }}
-                >
-                  {item.description}
-                </p>
-              </div>
+              <img
+                src={proj.image}
+                alt={proj.alt}
+                style={{
+                  width:      '100%',
+                  height:     '100%',
+                  objectFit:  'cover',
+                  transition: 'transform 0.5s ease',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+              />
             </div>
           ))}
         </div>
 
-        {/* All Services CTA Button */}
+        {/* View Full Gallery Button */}
         <div>
           <a
-            href="#contact"
+            href="#gallery"
             onClick={(e) => {
-              if (onNavigate) {
-                e.preventDefault();
-                onNavigate('gallery');
-              }
+              e.preventDefault();
+              if (onNavigate) onNavigate('gallery');
+              else window.location.hash = 'gallery';
             }}
             style={{
               display:       'inline-flex',
@@ -154,7 +136,7 @@ export default function Services({ onNavigate }) {
               e.currentTarget.style.color = '#C9962F';
             }}
           >
-            ALL SERVICES
+            VIEW FULL GALLERY
           </a>
         </div>
       </div>

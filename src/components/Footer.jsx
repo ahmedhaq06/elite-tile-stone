@@ -1,308 +1,262 @@
 import React from 'react';
-import { BUSINESS_INFO } from '../data/tilesData';
-import { useReveal } from '../hooks/useReveal';
 
-const NAV_LINKS = [
-  { href: '#services', label: 'Specialties' },
-  { href: '#before-after', label: 'Before & After' },
-  { href: '#portfolio', label: 'Projects' },
-  { href: '#contact', label: 'Contact' },
-  { href: '#privacy', label: 'Privacy Policy' },
-  { href: 'https://www.google.com/search?q=Elite+Tile+%26+Stone+Las+Vegas', label: 'Reviews (5.0★)', target: '_blank' },
-];
-
-export default function Footer({ onOpenPrivacy }) {
-  const ref = useReveal();
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-
+export default function Footer({ onNavigate, onOpenPrivacy }) {
   return (
     <footer
-      ref={ref}
+      id="footer-contact"
       style={{
-        background: '#0C0B0A',
-        color: '#FAF8F5',
-        overflow: 'hidden',
+        background:  '#080808',
+        borderTop:   '1px solid rgba(255, 255, 255, 0.08)',
+        color:       '#FFFFFF',
+        paddingTop:  'clamp(3.5rem, 6vw, 5rem)',
+        paddingBottom: '2.5rem',
       }}
     >
-      {/* ── Top row: contact left / nav right ── */}
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '1.5rem',
-          padding: '2.2rem var(--pad-x)',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
+          maxWidth:   '1440px',
+          margin:     '0 auto',
+          padding:    '0 clamp(1.5rem, 5vw, 4rem)',
         }}
       >
-        {/* Left — contact block */}
-        <div className="reveal" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            {/* Logo image */}
-            <img
-              src="/assets/Logo.jpeg"
-              alt="Elite Tile & Stone Logo"
-              style={{
-                height: '46px',
-                width: 'auto',
-                marginBottom: '1.2rem',
-                borderRadius: '4px',
-                objectFit: 'contain',
-              }}
-            />
-
-            {/* Eyebrow label */}
+        <div
+          style={{
+            display:             'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap:                 '3rem 4rem',
+            paddingBottom:      '3.5rem',
+            borderBottom:       '1px solid rgba(255, 255, 255, 0.08)',
+          }}
+        >
+          {/* Column 1 — Logo & About */}
+          <div style={{ maxWidth: '340px' }}>
             <div
               style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.6rem',
-                fontWeight: '600',
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.3)',
-                marginBottom: '0.6rem',
+                display:      'flex',
+                alignItems:   'center',
+                gap:          '0.75rem',
+                marginBottom: '1.2rem',
               }}
             >
-              Get In Touch
+              <img
+                src="/assets/Logo.jpeg"
+                alt="Elite Tile & Stone Logo"
+                style={{
+                  height:       '40px',
+                  width:        'auto',
+                  borderRadius: '4px',
+                  objectFit:    'contain',
+                }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span
+                  style={{
+                    fontFamily:    'var(--font-display)',
+                    fontSize:      '1.15rem',
+                    fontWeight:    '700',
+                    letterSpacing: '0.12em',
+                    color:         '#C9962F',
+                    lineHeight:    1,
+                  }}
+                >
+                  ELITE
+                </span>
+                <span
+                  style={{
+                    fontFamily:    'var(--font-body)',
+                    fontSize:      '0.64rem',
+                    fontWeight:    '500',
+                    letterSpacing: '0.16em',
+                    color:         'rgba(255, 255, 255, 0.7)',
+                    marginTop:     '0.15rem',
+                  }}
+                >
+                  TILE &amp; STONE LLC
+                </span>
+              </div>
             </div>
 
-            {/* Phone — large, primary */}
-            <a
-              href={`tel:${BUSINESS_INFO.phoneRaw}`}
+            <p
               style={{
-                display: 'block',
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(1rem, 1.5vw, 1.3rem)',
+                fontSize:   '0.88rem',
                 fontWeight: '400',
-                color: 'rgba(255,255,255,0.88)',
-                marginBottom: '0.25rem',
-                lineHeight: 1.25,
-                transition: 'color 0.2s ease',
+                lineHeight: 1.65,
+                color:      '#8A8A8A',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#FAF8F5'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.88)'; }}
             >
-              {BUSINESS_INFO.phone}
-            </a>
-
-            {/* Instagram — smaller, secondary */}
-            <a
-              href={BUSINESS_INFO.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'block',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.75rem',
-                color: 'rgba(255,255,255,0.3)',
-                lineHeight: 1.4,
-                transition: 'color 0.2s ease',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.3)'; }}
-            >
-              {BUSINESS_INFO.instagramHandle}
-            </a>
+              A team of highly skilled tile &amp; stone experts serving Las Vegas and the surrounding valley. We make people's dream homes come true.
+            </p>
           </div>
 
-          {/* Back to top — small capsule */}
-          <div style={{ marginTop: '1.2rem' }}>
-            <button
-              onClick={scrollToTop}
-              aria-label="Back to top"
+          {/* Column 2 — Explore */}
+          <div>
+            <h4
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                background: 'none',
-                border: '1px solid rgba(255,255,255,0.14)',
-                borderRadius: '99px',
-                color: 'rgba(255,255,255,0.4)',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.58rem',
-                fontWeight: '600',
-                letterSpacing: '0.18em',
+                fontFamily:    'var(--font-body)',
+                fontSize:      '0.82rem',
+                fontWeight:    '700',
+                letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                padding: '0.35rem 0.8rem',
-                cursor: 'pointer',
-                transition: 'color 0.2s ease, border-color 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'rgba(255,255,255,0.4)';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
+                color:         '#FFFFFF',
+                marginBottom:  '1.4rem',
               }}
             >
-              {/* Up arrow circle */}
-              <svg width="12" height="12" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-                <circle cx="6.5" cy="6.5" r="6" stroke="currentColor" strokeWidth="0.9" />
-                <path d="M6.5 9V4M4.5 6 L6.5 4 L8.5 6" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Back to top
-            </button>
+              EXPLORE
+            </h4>
+            <ul
+              style={{
+                listStyle:  'none',
+                padding:    0,
+                margin:     0,
+                display:    'flex',
+                flexDirection: 'column',
+                gap:         me => '0.85rem',
+              }}
+            >
+              {[
+                { label: 'Services', href: '#services', id: 'services' },
+                { label: 'Gallery', href: '#gallery', id: 'gallery' },
+                { label: 'About Us', href: '#about', id: 'about' },
+                { label: 'Free Estimate', href: '#contact', id: 'contact' },
+              ].map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      if (link.id === 'gallery' && onNavigate) {
+                        e.preventDefault();
+                        onNavigate('gallery');
+                      }
+                    }}
+                    style={{
+                      fontFamily:    'var(--font-body)',
+                      fontSize:      '0.88rem',
+                      fontWeight:    '400',
+                      color:         '#8A8A8A',
+                      textDecoration: 'none',
+                      transition:    'color 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = '#C9962F'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = '#8A8A8A'; }}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3 — Contact */}
+          <div>
+            <h4
+              style={{
+                fontFamily:    'var(--font-body)',
+                fontSize:      '0.82rem',
+                fontWeight:    '700',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color:         '#FFFFFF',
+                marginBottom:  '1.4rem',
+              }}
+            >
+              CONTACT
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+              <a
+                href="tel:7025550142"
+                style={{
+                  display:       'flex',
+                  alignItems:    'center',
+                  gap:           '0.6rem',
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      '0.88rem',
+                  color:         '#8A8A8A',
+                  textDecoration: 'none',
+                }}
+              >
+                <span>📞</span> (702) 555-0142
+              </a>
+              <a
+                href="mailto:info@elitetileandstonelv.com"
+                style={{
+                  display:       'flex',
+                  alignItems:    'center',
+                  gap:           '0.6rem',
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      '0.88rem',
+                  color:         '#8A8A8A',
+                  textDecoration: 'none',
+                }}
+              >
+                <span>✉️</span> info@elitetileandstonelv.com
+              </a>
+              <a
+                href="https://www.instagram.com/elite_tileandstone"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display:       'flex',
+                  alignItems:    'center',
+                  gap:           '0.6rem',
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      '0.88rem',
+                  color:         '#8A8A8A',
+                  textDecoration: 'none',
+                }}
+              >
+                <span>📸</span> @elite_tileandstone
+              </a>
+              <div
+                style={{
+                  display:    'flex',
+                  alignItems: 'center',
+                  gap:        '0.6rem',
+                  fontFamily: 'var(--font-body)',
+                  fontSize:   '0.88rem',
+                  color:      '#8A8A8A',
+                }}
+              >
+                <span>📍</span> Las Vegas, Nevada
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right — nav links, right-aligned */}
-        <div
-          className="reveal stagger-2"
-          style={{ textAlign: 'right' }}
-        >
-          <nav
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end',
-              gap: '0.1rem',
-            }}
-          >
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => {
-                  if (link.href === '#privacy' && onOpenPrivacy) {
-                    e.preventDefault();
-                    onOpenPrivacy();
-                  }
-                }}
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(1.2rem, 2vw, 2.2rem)',
-                  fontWeight: '400',
-                  lineHeight: 1.15,
-                  letterSpacing: '-0.01em',
-                  color: 'rgba(255,255,255,0.35)',
-                  textDecoration: 'none',
-                  display: 'block',
-                  transition: 'color 0.25s ease',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; }}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </div>
-
-      {/* ── Bottom wordmark ── */}
-      <div
-        className="reveal"
-        style={{
-          padding: '0 var(--pad-x)',
-          lineHeight: 0.88,
-          userSelect: 'none',
-        }}
-      >
-        {/* Line 1 */}
+        {/* Bottom Bar / Copyright */}
         <div
           style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: '400',
-            fontSize: 'clamp(2.5rem, 7vw, 8rem)',
-            letterSpacing: '-0.01em',
-            color: 'rgba(200,196,190,0.72)',
-            display: 'block',
-            whiteSpace: 'nowrap',
+            paddingTop:     '2rem',
+            display:        'flex',
+            justifyContent: 'space-between',
+            alignItems:     'center',
+            flexWrap:       'wrap',
+            gap:            '1rem',
+            fontSize:       '0.75rem',
+            color:          '#8A8A8A',
+            fontFamily:     'var(--font-body)',
           }}
         >
-          ELITE
-        </div>
-
-        {/* Line 2 — fills width */}
-        <div
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: '400',
-            fontSize: 'clamp(2.5rem, 7vw, 8rem)',
-            letterSpacing: '-0.01em',
-            color: 'rgba(160,156,150,0.55)',
-            display: 'block',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          TILE & STONE
-        </div>
-      </div>
-
-      {/* ── Bottom micro-bar ── */}
-      <div
-        style={{
-          padding: '0.8rem var(--pad-x)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '0.5rem',
-          borderTop: '1px solid rgba(255,255,255,0.04)',
-          marginTop: '0.8rem',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.62rem',
-            letterSpacing: '0.06em',
-            color: 'rgba(255,255,255,0.18)',
-          }}
-        >
-          © {new Date().getFullYear()} Elite Tile & Stone · {BUSINESS_INFO.license} · {BUSINESS_INFO.licenseText}
-        </span>
-        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-          <span
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.62rem',
-              letterSpacing: '0.06em',
-              color: 'rgba(255,255,255,0.18)',
-            }}
-          >
-            Las Vegas, Nevada
-          </span>
-          <a
-            href="#privacy"
-            onClick={(e) => {
-              if (onOpenPrivacy) {
-                e.preventDefault();
-                onOpenPrivacy();
-              }
-            }}
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.62rem',
-              letterSpacing: '0.06em',
-              color: 'rgba(255,255,255,0.4)',
-              textDecoration: 'underline',
-              cursor: 'pointer',
-              transition: 'color 0.2s ease',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-off-white)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}
-          >
-            Privacy Policy
-          </a>
+          <div>
+            © 2026 Elite Tile &amp; Stone LLC • Licensed &amp; Insured • Las Vegas, NV
+          </div>
+          {onOpenPrivacy && (
+            <button
+              onClick={onOpenPrivacy}
+              style={{
+                background:     'none',
+                border:         'none',
+                color:          '#8A8A8A',
+                cursor:         'pointer',
+                fontSize:       '0.75rem',
+                textDecoration: 'underline',
+              }}
+            >
+              Privacy Policy
+            </button>
+          )}
         </div>
       </div>
-
-      {/* Responsive */}
-      <style>{`
-        @media (max-width: 640px) {
-          footer > div:first-child {
-            grid-template-columns: 1fr !important;
-          }
-          footer > div:first-child > div:nth-child(2) {
-            text-align: left !important;
-          }
-          footer > div:first-child > div:nth-child(2) nav {
-            align-items: flex-start !important;
-          }
-        }
-      `}</style>
     </footer>
   );
 }

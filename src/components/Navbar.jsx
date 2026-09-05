@@ -1,32 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { BUSINESS_INFO } from '../data/tilesData';
 
 const NAV_LINKS = [
-  { href: '#services',      label: 'Specialties' },
-  { href: '#before-after',  label: 'Before & After' },
-  { href: '#portfolio',     label: 'Projects' },
-  { href: '#contact',       label: 'Contact' },
+  { id: 'home',     href: '#home',     label: 'HOME' },
+  { id: 'services', href: '#services', label: 'SERVICES' },
+  { id: 'gallery',  href: '#gallery',  label: 'GALLERY' },
+  { id: 'about',    href: '#about',    label: 'ABOUT' },
+  { id: 'contact',  href: '#contact',  label: 'CONTACT' },
 ];
 
-export default function Navbar() {
+export default function Navbar({ onNavigate }) {
   const [scrolled, setScrolled]     = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 56);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Lock body scroll when drawer is open
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [drawerOpen]);
 
+  const handleLinkClick = (e, link) => {
+    if (link.id === 'gallery') {
+      e.preventDefault();
+      if (onNavigate) onNavigate('gallery');
+      else window.location.hash = 'gallery';
+      setDrawerOpen(false);
+    } else {
+      if (onNavigate) {
+        onNavigate('home');
+      }
+      setDrawerOpen(false);
+    }
+  };
+
   return (
     <>
-      {/* ── Main nav bar ── */}
+      {/* ── Navbar ── */}
       <nav
         aria-label="Primary navigation"
         style={{
@@ -35,26 +48,26 @@ export default function Navbar() {
           left:           0,
           right:          0,
           zIndex:         100,
-          height:         '68px',
+          height:         '74px',
           display:        'flex',
           alignItems:     'center',
           justifyContent: 'space-between',
-          padding:        '0 var(--pad-x)',
-          background:     scrolled ? 'rgba(12, 11, 10, 0.92)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(14px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(14px)' : 'none',
-          borderBottom:   scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
-          transition:     'background 0.45s ease, border-color 0.45s ease',
+          padding:        '0 clamp(1.2rem, 5vw, 4rem)',
+          background:     scrolled ? 'rgba(13, 13, 13, 0.95)' : 'rgba(13, 13, 13, 0.65)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom:   '1px solid rgba(255, 255, 255, 0.08)',
+          transition:     'background 0.3s ease',
         }}
       >
-        {/* Wordmark & Logo */}
+        {/* Brand Logo & Name */}
         <a
           href="#"
-          aria-label="Elite Tile & Stone — home"
+          onClick={(e) => handleLinkClick(e, { id: 'home' })}
           style={{
-            display:    'flex',
-            alignItems: 'center',
-            gap:        '0.75rem',
+            display:        'flex',
+            alignItems:     'center',
+            gap:            '0.75rem',
             textDecoration: 'none',
           }}
         >
@@ -62,173 +75,183 @@ export default function Navbar() {
             src="/assets/Logo.jpeg"
             alt="Elite Tile & Stone Logo"
             style={{
-              height: '42px',
+              height: '38px',
               width: 'auto',
               borderRadius: '4px',
               objectFit: 'contain',
             }}
           />
-          <span
-            style={{
-              fontFamily:    'var(--font-display)',
-              fontSize:      '1.05rem',
-              fontWeight:    '600',
-              letterSpacing: '0.13em',
-              textTransform: 'uppercase',
-              color:         'var(--c-off-white)',
-              lineHeight:    1,
-            }}
-          >
-            Elite Tile &amp; Stone
-          </span>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span
+              style={{
+                fontFamily:    'var(--font-display)',
+                fontSize:      '1.1rem',
+                fontWeight:    '700',
+                letterSpacing: '0.12em',
+                color:         'var(--c-gold)',
+                lineHeight:    1,
+              }}
+            >
+              ELITE
+            </span>
+            <span
+              style={{
+                fontFamily:    'var(--font-body)',
+                fontSize:      '0.62rem',
+                fontWeight:    '500',
+                letterSpacing: '0.16em',
+                color:         'rgba(255, 255, 255, 0.7)',
+                marginTop:     '0.15rem',
+              }}
+            >
+              TILE &amp; STONE LLC
+            </span>
+          </div>
         </a>
 
-        {/* Desktop nav links */}
+        {/* Desktop Links */}
         <div
           className="nav-desktop"
-          style={{ alignItems: 'center', gap: '2.8rem' }}
+          style={{ alignItems: 'center', gap: '2.5rem' }}
         >
           {NAV_LINKS.map((link) => (
             <a
-              key={link.href}
+              key={link.id}
               href={link.href}
+              onClick={(e) => handleLinkClick(e, link)}
               style={{
                 fontFamily:    'var(--font-body)',
-                fontSize:      '0.76rem',
-                fontWeight:    '400',
-                letterSpacing: '0.08em',
-                color:         'rgba(250,248,245,0.6)',
+                fontSize:       me => '0.78rem',
+                fontWeight:    '600',
+                letterSpacing: '0.12em',
+                color:         '#FFFFFF',
                 textDecoration: 'none',
                 transition:    'color 0.2s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-off-white)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(250,248,245,0.6)'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--c-gold)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = '#FFFFFF'; }}
             >
               {link.label}
             </a>
           ))}
 
-          {/* Free Estimate CTA Button */}
+          {/* Phone Call CTA Button */}
           <a
-            href="#contact"
+            href="tel:7025550142"
             style={{
+              display:       'inline-flex',
+              alignItems:    'center',
+              gap:           '0.45rem',
               fontFamily:    'var(--font-body)',
-              fontSize:      '0.75rem',
+              fontSize:      '0.82rem',
               fontWeight:    '700',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
+              letterSpacing: '0.04em',
               color:         '#0D0D0D',
               background:    'var(--c-gold)',
               padding:       '0.55rem 1.1rem',
-              borderRadius:  '4px',
+              borderRadius:  '6px',
               textDecoration: 'none',
-              transition:    'background 0.2s ease',
+              transition:    'background 0.2s ease, transform 0.2s ease',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--c-gold)'; }}
           >
-            Get Free Estimate
+            <span style={{ fontSize: '0.88rem' }}>📞</span>
+            (702) 555-0142
           </a>
         </div>
 
-        {/* Mobile hamburger */}
+        {/* Mobile Hamburger Button */}
         <button
           className="nav-mobile-btn"
           onClick={() => setDrawerOpen(true)}
-          aria-label="Open menu"
+          aria-label="Open navigation menu"
           style={{
             background: 'none',
             border:     'none',
             cursor:     'pointer',
             padding:    '0.4rem',
-            color:      'var(--c-off-white)',
+            color:      '#FFFFFF',
           }}
         >
-          <svg width="24" height="14" viewBox="0 0 24 14" fill="none" aria-hidden="true">
-            <line x1="0" y1="0.75" x2="24" y2="0.75" stroke="currentColor" strokeWidth="1.5"/>
-            <line x1="4" y1="7" x2="24" y2="7" stroke="currentColor" strokeWidth="1.5"/>
-            <line x1="0" y1="13.25" x2="24" y2="13.25" stroke="currentColor" strokeWidth="1.5"/>
+          <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+            <line x1="0" y1="1" x2="24" y2="1" stroke="#C9962F" strokeWidth="2"/>
+            <line x1="0" y1="8" x2="24" y2="8" stroke="#C9962F" strokeWidth="2"/>
+            <line x1="0" y1="15" x2="24" y2="15" stroke="#C9962F" strokeWidth="2"/>
           </svg>
         </button>
       </nav>
 
-      {/* ── Mobile full-screen drawer ── */}
+      {/* ── Mobile Fullscreen Drawer ── */}
       <div
-        aria-modal="true"
-        role="dialog"
-        aria-label="Navigation menu"
         style={{
           position:   'fixed',
           inset:      0,
-          background: 'rgba(12, 11, 10, 0.98)',
+          background: 'rgba(13, 13, 13, 0.98)',
           zIndex:     200,
           display:    'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          padding:    'var(--pad-x)',
+          padding:    '2rem',
           transform:  drawerOpen ? 'translateX(0)' : 'translateX(100%)',
-          transition: 'transform 0.5s var(--ease-out)',
+          transition: 'transform 0.4s var(--ease-out)',
         }}
       >
-        {/* Close */}
         <button
           onClick={() => setDrawerOpen(false)}
-          aria-label="Close menu"
           style={{
             position:   'absolute',
             top:        '1.5rem',
-            right:      'var(--pad-x)',
+            right:      '2rem',
             background: 'none',
             border:     'none',
-            color:      'var(--c-stone-mid)',
+            color:      'var(--c-gold)',
+            fontSize:   '2.2rem',
             cursor:     'pointer',
-            fontSize:   '1.6rem',
-            lineHeight: 1,
           }}
         >
           ×
         </button>
 
-        {/* Links — oversized Cormorant */}
-        <nav>
-          {NAV_LINKS.map((link, i) => (
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {NAV_LINKS.map((link) => (
             <a
-              key={link.href}
+              key={link.id}
               href={link.href}
-              onClick={() => setDrawerOpen(false)}
+              onClick={(e) => handleLinkClick(e, link)}
               style={{
-                display:        'block',
-                fontFamily:     'var(--font-display)',
-                fontSize:       'clamp(2.6rem, 9vw, 4.2rem)',
-                fontWeight:     '400',
-                letterSpacing:  '-0.01em',
-                lineHeight:     1.1,
-                color:          'var(--c-off-white)',
-                padding:        '0.5rem 0',
-                borderBottom:   '1px solid rgba(255,255,255,0.06)',
-                opacity:        drawerOpen ? 1 : 0,
-                transform:      drawerOpen ? 'translateY(0)' : 'translateY(12px)',
-                transition:     `opacity 0.45s ease ${i * 0.07 + 0.1}s, transform 0.45s var(--ease-out) ${i * 0.07 + 0.1}s`,
+                fontFamily:    'var(--font-display)',
+                fontSize:      '1.8rem',
+                fontWeight:    '700',
+                letterSpacing: '0.08em',
+                color:         '#FFFFFF',
+                textDecoration: 'none',
               }}
             >
               {link.label}
             </a>
           ))}
+          <a
+            href="tel:7025550142"
+            style={{
+              marginTop:     '1.5rem',
+              display:       'inline-flex',
+              alignItems:    'center',
+              justifyContent: 'center',
+              gap:           '0.5rem',
+              fontFamily:    'var(--font-body)',
+              fontSize:      '1rem',
+              fontWeight:    '700',
+              color:         '#0D0D0D',
+              background:    'var(--c-gold)',
+              padding:       '0.9rem 1.5rem',
+              borderRadius:  '6px',
+              textDecoration: 'none',
+            }}
+          >
+            📞 (702) 555-0142
+          </a>
         </nav>
-
-        <a
-          href={`tel:${BUSINESS_INFO.phoneRaw}`}
-          style={{
-            marginTop:     '2.5rem',
-            fontFamily:    'var(--font-body)',
-            fontSize:      '0.9rem',
-            fontWeight:    '600',
-            letterSpacing: '0.06em',
-            color:         'var(--c-gold)',
-          }}
-        >
-          {BUSINESS_INFO.phone}
-        </a>
       </div>
     </>
   );
