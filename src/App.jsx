@@ -7,20 +7,58 @@ import RecentWork from './components/RecentWork';
 import CtaSection from './components/CtaSection';
 import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsPage from './components/TermsPage';
 import GalleryPage from './components/GalleryPage';
 import EstimatePage from './components/EstimatePage';
 import CampaignLandingPage from './components/CampaignLandingPage';
-import { CAMPAIGN_ANGLES } from './data/campaignData';
+import { CAMPAIGN_ANGLES, getCampaignAngle } from './data/campaignData';
 
 function getActiveRoute() {
+  if (typeof window === 'undefined') return { type: 'home' };
+
   const path = window.location.pathname.replace(/\/$/, '') || '/';
   const hash = window.location.hash.replace(/^#\/?/, '/').replace(/\/$/, '');
+  const searchParams = new URLSearchParams(window.location.search);
+  const adParam = searchParams.get('ad');
 
-  if (CAMPAIGN_ANGLES[path]) return { type: 'campaign', data: CAMPAIGN_ANGLES[path] };
-  if (CAMPAIGN_ANGLES['/' + hash]) return { type: 'campaign', data: CAMPAIGN_ANGLES['/' + hash] };
-  if (hash === 'privacy' || hash === 'privacy-policy' || path === '/privacy') return { type: 'privacy' };
-  if (hash === 'gallery' || path === '/gallery') return { type: 'gallery' };
-  if (hash === 'estimate' || hash === 'contact' || path === '/estimate' || path === '/contact') return { type: 'estimate' };
+  // Check for ad parameter first (e.g., ?ad=failed-shower)
+  if (adParam) {
+    return { type: 'campaign', data: getCampaignAngle(adParam) };
+  }
+
+  // Terms page route
+  if (hash === 'terms' || hash === 'terms-of-service' || path === '/terms' || path === '/terms-of-service') {
+    return { type: 'terms' };
+  }
+
+  // Privacy policy page route
+  if (hash === 'privacy' || hash === 'privacy-policy' || path === '/privacy' || path === '/privacy-policy') {
+    return { type: 'privacy' };
+  }
+
+  // Gallery page route
+  if (hash === 'gallery' || path === '/gallery') {
+    return { type: 'gallery' };
+  }
+
+  // Estimate page route
+  if (hash === 'estimate' || hash === 'contact' || path === '/estimate' || path === '/contact') {
+    return { type: 'estimate' };
+  }
+
+  // Campaign path routes (e.g., /failed-shower, /tub-conversion, /offer, /landing, /ad)
+  if (path !== '/' && path !== '') {
+    const cleanPath = path.replace(/^\//, '');
+    if (CAMPAIGN_ANGLES[cleanPath] || cleanPath === 'offer' || cleanPath === 'landing' || cleanPath === 'ad') {
+      return { type: 'campaign', data: getCampaignAngle(cleanPath) };
+    }
+  }
+
+  // Hash campaign route (e.g., #ad=failed-shower)
+  if (hash.startsWith('ad=')) {
+    const param = hash.split('ad=')[1];
+    return { type: 'campaign', data: getCampaignAngle(param) };
+  }
 
   return { type: 'home' };
 }
@@ -59,6 +97,12 @@ export default function App() {
       }
       setRouteState({ type: 'privacy' });
       window.scrollTo({ top: 0, behavior: 'instant' });
+    } else if (view === 'terms') {
+      if (window.location.hash !== '#terms') {
+        window.history.pushState(null, '', '#terms');
+      }
+      setRouteState({ type: 'terms' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     } else {
       const isCurrentlyHome = routeState.type === 'home';
       if (window.location.hash !== '') {
@@ -85,14 +129,19 @@ export default function App() {
   };
 
   const openPrivacy = () => navigateTo('privacy');
-  const closePrivacy = () => navigateTo('home');
+  const openTerms = () => navigateTo('terms');
+  const closeLegal = () => navigateTo('home');
+
+  if (routeState.type === 'terms') {
+    return <TermsPage onBack={closeLegal} />;
+  }
 
   if (routeState.type === 'privacy') {
-    return <PrivacyPolicy onBack={closePrivacy} />;
+    return <PrivacyPolicy onBack={closeLegal} />;
   }
 
   if (routeState.type === 'campaign') {
-    return <CampaignLandingPage angle={routeState.data} onOpenPrivacy={openPrivacy} />;
+    return <CampaignLandingPage angle={routeState.data} onOpenPrivacy={openPrivacy} onOpenTerms={openTerms} />;
   }
 
   if (routeState.type === 'gallery') {

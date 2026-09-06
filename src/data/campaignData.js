@@ -1,6 +1,7 @@
 export const CAMPAIGN_ANGLES = {
-  '/failed-shower': {
+  'failed-shower': {
     id: 'failed-shower',
+    param: 'failed-shower',
     headline: 'Think your shower was done wrong?',
     subheadline: "Water damage doesn't stop on its own. We rebuild rotted subfloors with 100% Schluter waterproofing and precision master tile setting.",
     heroImage: '/assets/before.jpeg',
@@ -23,8 +24,9 @@ export const CAMPAIGN_ANGLES = {
     offerDesc: 'Complimentary moisture check and itemized rebuild quote in Las Vegas, Henderson & Summerlin.'
   },
 
-  '/tub-to-walk-in': {
-    id: 'tub-to-walk-in',
+  'tub-conversion': {
+    id: 'tub-conversion',
+    param: 'tub-conversion',
     headline: 'Turn that unused tub into a walk-in shower',
     subheadline: 'Same space. Same plumbing. Convert your outdated fiberglass bath into a zero-threshold curbless luxury shower.',
     heroImage: '/assets/60c064df-5f37-4fde-a6b6-a516542d3c12.jpeg',
@@ -47,35 +49,12 @@ export const CAMPAIGN_ANGLES = {
     offerDesc: 'On-site measurement and exact cost breakdown for your tub-to-shower conversion.'
   },
 
-  '/craftsmanship': {
-    id: 'craftsmanship',
-    headline: 'Custom tile showers, built to last',
-    subheadline: 'Every corner cut by hand. No metal trim. Precision mitered 45° edges and seamless vein-matched stone slabs.',
-    heroImage: '/assets/9f4bba36-57cb-4094-b3dd-c23a8dd66207.jpeg',
-    beforeAfterImage: '/assets/after.jpeg',
-    badge: 'Master Tile & Stone Craftsmen',
-    preselectedService: 'Shower remodel',
-    painPoints: [
-      'Cheap plastic or metal Schluter edging that looks builder-grade',
-      'Lippage (uneven tile edges) that catch your feet or fingers',
-      'Crooked grout lines and poorly aligned corner miters',
-      'Subcontractors rushing jobs in 2 days'
-    ],
-    solutions: [
-      'Razor-sharp 45-degree hand-mitered tile & stone corners',
-      'Continuous vein-matching across walls, benches, and niches',
-      'Zero-lippage leveling clips on every single slab',
-      'Dedicated master setters with 15+ years of custom slab work'
-    ],
-    offerTitle: 'Claim Your Free Custom Craftsmanship Quote',
-    offerDesc: 'Speak directly with our master tile contractor for your custom suite design.'
-  },
-
-  '/luxury-showers': {
-    id: 'luxury-showers',
+  'luxury': {
+    id: 'luxury',
+    param: 'luxury',
     headline: 'Luxury showers, built in Las Vegas',
     subheadline: 'Real stone. Real craftsmanship. Turn your daily routine into a resort spa experience with custom porcelain & marble slabs.',
-    heroImage: '/assets/after.jpeg',
+    heroImage: '/assets/hero_dark_bathroom.jpg',
     beforeAfterImage: '/assets/60c064df-5f37-4fde-a6b6-a516542d3c12.jpeg',
     badge: 'Resort-Grade Spa Suite Builders',
     preselectedService: 'Shower remodel',
@@ -95,11 +74,12 @@ export const CAMPAIGN_ANGLES = {
     offerDesc: 'Complimentary on-site measurement & 3D slab visualization consultation.'
   },
 
-  '/floors': {
+  'floors': {
     id: 'floors',
+    param: 'floors',
     headline: "Cracked concrete? You don't have to tear it out.",
     subheadline: 'We go straight over the top. Anti-fracture membranes and self-leveling mortar beds allow seamless large-format tile over existing slabs.',
-    heroImage: '/assets/08f40bc1-a67f-4f82-8283-fd52b849de06.jpeg',
+    heroImage: '/assets/living_room_floor.jpg',
     beforeAfterImage: '/assets/before.jpeg',
     badge: 'Subfloor Prep & Tile Flooring Specialist',
     preselectedService: 'Floor installation',
@@ -119,8 +99,9 @@ export const CAMPAIGN_ANGLES = {
     offerDesc: 'On-site floor inspection and square footage cost estimate in Southern Nevada.'
   },
 
-  '/new-house': {
-    id: 'new-house',
+  'new-home': {
+    id: 'new-home',
+    param: 'new-home',
     headline: 'New house. Old bathroom.',
     subheadline: "Let's fix it before you unpack. Upgrade builder-grade developer finishes into your dream master suite before move-in day.",
     heroImage: '/assets/after.jpeg',
@@ -141,5 +122,48 @@ export const CAMPAIGN_ANGLES = {
     ],
     offerTitle: 'Get Your Pre-Move-In Estimate Today',
     offerDesc: 'Fast response and priority scheduling for new Nevada homeowners.'
+  },
+
+  'default': {
+    id: 'default',
+    param: 'default',
+    headline: 'Custom Tile Showers & Flooring, Built to Last',
+    subheadline: 'Las Vegas premier master tile setters. Zero-threshold walk-ins, full-height stone slabs, and precision porcelain floors.',
+    heroImage: '/assets/hero_dark_bathroom.jpg',
+    beforeAfterImage: '/assets/after.jpeg',
+    badge: 'Premier Las Vegas Tile & Stone Contractor',
+    preselectedService: 'Shower remodel',
+    painPoints: [
+      'Disappointing builder-grade tile finishes',
+      'Fears of hidden water leaks and poor subfloor prep',
+      'Contractors who do not show up on time',
+      'Lack of clear written itemized pricing'
+    ],
+    solutions: [
+      'Master tile setting with 15+ years experience',
+      '100% Schluter-certified waterproofing system',
+      'On-time completion & clean jobsite protection',
+      'Nevada licensed, bonded & insured #0095105'
+    ],
+    offerTitle: 'Get Your Free In-Home Estimate',
+    offerDesc: 'On-site laser measurement and itemized project quote in Southern Nevada.'
   }
 };
+
+// Aliases for path or alternate param names
+CAMPAIGN_ANGLES['tub-to-walk-in'] = CAMPAIGN_ANGLES['tub-conversion'];
+CAMPAIGN_ANGLES['craftsmanship'] = CAMPAIGN_ANGLES['luxury'];
+CAMPAIGN_ANGLES['luxury-showers'] = CAMPAIGN_ANGLES['luxury'];
+CAMPAIGN_ANGLES['new-house'] = CAMPAIGN_ANGLES['new-home'];
+
+export function getCampaignAngle(adParamOrPath) {
+  if (!adParamOrPath) return CAMPAIGN_ANGLES['default'];
+  
+  const key = String(adParamOrPath)
+    .toLowerCase()
+    .replace(/^\//, '')
+    .replace(/^#\/?/, '')
+    .trim();
+
+  return CAMPAIGN_ANGLES[key] || CAMPAIGN_ANGLES['default'];
+}

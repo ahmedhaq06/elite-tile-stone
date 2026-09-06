@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, CheckCircle, ShieldCheck, Clock, AlertTriangle, Award, Star, ArrowRight, Sparkles, Check, ChevronRight } from 'lucide-react';
+import { getCampaignAngle } from '../data/campaignData';
 import { BUSINESS_INFO } from '../data/tilesData';
+import { trackPageView, trackLeadEvent } from '../utils/metaPixel';
+import { Phone, CheckCircle, Clock, ShieldCheck, Star, ArrowRight } from 'lucide-react';
 
-export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
+export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, onOpenTerms }) {
+  const [angle, setAngle] = useState(() => {
+    if (propAngle) return propAngle;
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      const adParam = searchParams.get('ad');
+      if (adParam) return getCampaignAngle(adParam);
+      
+      const path = window.location.pathname.replace(/\/$/, '');
+      if (path && path !== '/') return getCampaignAngle(path);
+    }
+    return getCampaignAngle('default');
+  });
+
   const [submitted, setSubmitted] = useState(false);
-  const [sliderPos, setSliderPos] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
   const [form, setForm] = useState({
     firstName:   '',
     phone:       '',
@@ -18,19 +31,40 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
     consent:     false,
   });
 
-  // Reset form pre-selection when route angle changes
+  // Fire Meta Pixel PageView on initial landing page load
   useEffect(() => {
-    setForm((prev) => ({
-      ...prev,
-      lookingToDo: angle.preselectedService || 'Shower remodel',
-    }));
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [angle]);
+    trackPageView();
+  }, []);
+
+  // Update angle if URL search parameter changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      const adParam = searchParams.get('ad');
+      if (adParam) {
+        const newAngle = getCampaignAngle(adParam);
+        setAngle(newAngle);
+        setForm((prev) => ({ ...prev, lookingToDo: newAngle.preselectedService || prev.lookingToDo }));
+      }
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.consent) return;
+
     setSubmitted(true);
+
+    // Fire Meta Pixel Lead Event ONLY upon successful form submission
+    trackLeadEvent({
+      adAngle: angle.id,
+      service: form.lookingToDo,
+      budget: form.budget,
+      timeline: form.timeline,
+    });
+
+    const formEl = document.getElementById('qualification-form-section');
+    if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
   };
 
   const update = (field) => (e) => {
@@ -38,405 +72,392 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const scrollToForm = () => {
-    const el = document.getElementById('estimate-form');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  const setHomeOwnerValue = (val) => {
+    setForm((prev) => ({ ...prev, homeOwner: val }));
   };
 
-  const handleSliderMove = (e) => {
-    if (!isDragging && e.type !== 'click') return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
-    const percent = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    setSliderPos(percent);
+  const scrollToForm = () => {
+    const formEl = document.getElementById('qualification-form-section');
+    if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div style={{ background: '#0D0D0D', color: '#FFFFFF', minHeight: '100vh', fontFamily: "'Poppins', sans-serif" }}>
-
-      {/* ── Announcement Bar ── */}
-      <div
-        style={{
-          background:    '#C9962F',
-          color:         '#0D0D0D',
-          textAlign:     'center',
-          padding:       '0.55rem 1rem',
-          fontSize:      '0.78rem',
-          fontWeight:    '700',
-          letterSpacing: '0.04em',
-        }}
-      >
-        ⚡ Southern Nevada Paid Campaign Offer: Free On-Site Measurement &amp; Itemized Estimate Included
-      </div>
-
-      {/* ── Subpage Header ── */}
+    <div style={{ background: '#0D0D0D', color: '#FFFFFF', fontFamily: "'Poppins', sans-serif", minHeight: '100vh' }}>
+      
+      {/* ── Standalone Sales Funnel Header (No generic website menu) ── */}
       <header
         style={{
-          padding:         '0.9rem var(--pad-x)',
-          background:      'rgba(13, 13, 13, 0.94)',
-          borderBottom:    '1px solid #222222',
-          position:        'sticky',
-          top:             0,
-          zIndex:          100,
-          backdropFilter:  'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          display:         'flex',
-          justifyContent:  'space-between',
-          alignItems:      'center',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-          <img
-            src="/assets/Logo.jpeg"
-            alt="Elite Tile & Stone Logo"
-            style={{ height: '42px', width: 'auto', borderRadius: '4px', objectFit: 'contain' }}
-          />
-          <div>
-            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', lineHeight: 1 }}>
-              Elite Tile &amp; Stone
-            </div>
-            <div style={{ fontSize: '0.66rem', color: '#8A8A8A', marginTop: '0.2rem' }}>
-              Las Vegas, NV · {BUSINESS_INFO.license}
-            </div>
-          </div>
-        </div>
-
-        <a
-          href={`tel:${BUSINESS_INFO.phoneRaw}`}
-          style={{
-            display:        'inline-flex',
-            alignItems:     'center',
-            background:     '#C9962F',
-            color:          '#0D0D0D',
-            padding:        '0.55rem 1.1rem',
-            borderRadius:   '6px',
-            fontWeight:     '700',
-            fontSize:       '0.82rem',
-            textDecoration: 'none',
-            transition:     'background 0.2s ease',
-          }}
-        >
-          <Phone size={15} />
-          <span>{BUSINESS_INFO.phone}</span>
-        </a>
-      </header>
-
-      {/* ── Subpage Hero Section ── */}
-      <section
-        style={{
-          position:   'relative',
-          padding:    'clamp(3rem, 6vw, 6.5rem) var(--pad-x)',
-          overflow:   'hidden',
-          background: 'radial-gradient(circle at 80% 20%, rgba(201, 150, 47, 0.08) 0%, transparent 60%), #0D0D0D',
-          borderBottom: '1px solid #222222',
+          position:   'sticky',
+          top:        0,
+          zIndex:     100,
+          background: 'rgba(13, 13, 13, 0.95)',
+          backdropFilter: 'blur(12px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          padding:    '0.8rem clamp(1.2rem, 5vw, 4rem)',
         }}
       >
         <div
           style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, 1fr)',
-            gap: 'clamp(2.5rem, 5vw, 5rem)',
-            alignItems: 'center',
+            maxWidth:       '1440px',
+            margin:         '0 auto',
+            display:        'flex',
+            alignItems:     'center',
+            justifyContent: 'space-between',
           }}
-          className="subpage-hero-grid"
         >
-          {/* Left Angle Copy */}
-          <div>
-            <div
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <img
+              src="/assets/Logo.jpeg"
+              alt="Elite Tile & Stone"
+              style={{ height: '36px', width: 'auto', borderRadius: '4px' }}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: '700', color: '#C9962F', lineHeight: 1 }}>
+                ELITE
+              </span>
+              <span style={{ fontSize: '0.6rem', fontWeight: '500', color: '#8A8A8A', letterSpacing: '0.14em' }}>
+                TILE &amp; STONE LLC
+              </span>
+            </div>
+          </div>
+
+          {/* Direct Phone CTA Header Button */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ fontSize: '0.78rem', color: '#8A8A8A', display: 'none' }} className="header-tagline">
+              NV Lic #0095105
+            </span>
+            <a
+              href="tel:7025550142"
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                background: 'rgba(201, 150, 47, 0.15)',
-                border: '1px solid rgba(201, 150, 47, 0.4)',
-                color: '#C9962F',
-                fontSize: '0.75rem',
-                fontWeight: '700',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                padding: '0.4rem 0.9rem',
-                borderRadius: '4px',
-                marginBottom: '1.4rem',
+                display:       'inline-flex',
+                alignItems:    'center',
+                gap:           '0.45rem',
+                fontSize:      '0.82rem',
+                fontWeight:    '700',
+                color:         '#0D0D0D',
+                background:    '#C9962F',
+                padding:       '0.55rem 1.1rem',
+                borderRadius:  '6px',
+                textDecoration: 'none',
+                transition:    'background 0.2s ease',
               }}
             >
-              <Sparkles size={14} />
-              <span>{angle.badge}</span>
+              <Phone size={15} />
+              (702) 555-0142
+            </a>
+          </div>
+        </div>
+      </header>
+
+      {/* ── Section 1: DYNAMIC HERO (Matched to ?ad= parameter) ── */}
+      <section
+        style={{
+          position:   'relative',
+          background: '#0D0D0D',
+          padding:    'clamp(3rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 4rem)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          overflow:   'hidden',
+        }}
+      >
+        {/* Hero background photography panel */}
+        <div
+          style={{
+            position:        'absolute',
+            inset:           0,
+            backgroundImage: `url('${angle.heroImage}')`,
+            backgroundSize:  'cover',
+            backgroundPosition: 'center',
+            opacity:         0.22,
+          }}
+        />
+
+        <div
+          style={{
+            position:  'relative',
+            zIndex:    2,
+            maxWidth:  '1440px',
+            margin:    '0 auto',
+            display:   'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap:       '3rem',
+            alignItems: 'center',
+          }}
+        >
+          {/* Left Column: Ad-Matched Headline & Offer */}
+          <div>
+            {/* Badge */}
+            <div style={{ marginBottom: '1.2rem' }}>
+              <span
+                style={{
+                  fontSize:      '0.72rem',
+                  fontWeight:    '700',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  color:         '#C9962F',
+                  background:    'rgba(201, 150, 47, 0.14)',
+                  padding:       '0.35rem 0.85rem',
+                  borderRadius:  '4px',
+                  border:        '1px solid rgba(201, 150, 47, 0.35)',
+                }}
+              >
+                {angle.badge}
+              </span>
             </div>
 
+            {/* Headline */}
             <h1
               style={{
-                fontSize:      'clamp(2.4rem, 5vw, 4.5rem)',
-                fontWeight:    '800',
-                color:         '#C9962F',
+                fontFamily:    'var(--font-display)',
+                fontSize:      'clamp(2.4rem, 5vw, 4.2rem)',
+                fontWeight:    '700',
                 lineHeight:    1.08,
-                letterSpacing: '-0.01em',
-                marginBottom:  '1.4rem',
+                color:         '#C9962F',
+                marginBottom:  '1.2rem',
+                textTransform: 'uppercase',
               }}
             >
               {angle.headline}
             </h1>
 
+            {/* Subheadline */}
             <p
               style={{
-                fontSize:      'clamp(1rem, 1.3vw, 1.25rem)',
-                color:         '#FFFFFF',
-                lineHeight:    1.65,
-                maxWidth:      '48ch',
+                fontSize:     'clamp(1rem, 1.3vw, 1.15rem)',
+                color:        '#FFFFFF',
+                lineHeight:   1.65,
+                marginBottom: '2rem',
+                maxWidth:     '560px',
               }}
             >
               {angle.subheadline}
             </p>
 
-            {/* Checklist */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', marginBottom: '2.2rem' }}>
-              {[
-                'Licensed Nevada Contractor #0095105 · Insured & Bonded',
-                '100% Waterproof Schluter-Kerdi Shower Pan Guarantee',
-                'Laser-Leveled Mortar Beds & Hand-Mitered 45° Edges',
-              ].map((item) => (
-                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', fontSize: '0.9rem', color: '#8A8A8A' }}>
-                  <CheckCircle size={18} style={{ color: '#C9962F', flexShrink: 0 }} />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Action Buttons */}
+            {/* CTAs */}
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
               <button
                 onClick={scrollToForm}
-                className="btn"
                 style={{
-                  background: '#C9962F',
-                  color: '#0D0D0D',
-                  fontWeight: '700',
-                  fontSize: '0.95rem',
-                  padding: '1.05rem 2.2rem',
-                  borderRadius: '6px',
-                  boxShadow: '0 6px 20px rgba(201, 150, 47, 0.35)',
+                  display:       'inline-flex',
+                  alignItems:    'center',
+                  gap:           '0.6rem',
+                  padding:       '1rem 2.2rem',
+                  fontSize:      '0.85rem',
+                  fontWeight:    '700',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color:         '#0D0D0D',
+                  background:    '#C9962F',
+                  border:        'none',
+                  borderRadius:  '6px',
+                  cursor:        'pointer',
+                  boxShadow:     '0 4px 18px rgba(201, 150, 47, 0.35)',
                 }}
               >
-                Get Free Estimate ↓
+                Claim Free Estimate <ArrowRight size={18} />
               </button>
 
               <a
-                href={`tel:${BUSINESS_INFO.phoneRaw}`}
+                href="tel:7025550142"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  color: '#8A8A8A',
-                  fontSize: '0.88rem',
-                  fontWeight: '600',
+                  fontSize:      '0.82rem',
+                  fontWeight:    '700',
+                  color:         '#8A8A8A',
                   textDecoration: 'none',
                 }}
               >
-                <Phone size={15} style={{ color: '#C9962F' }} />
-                <span>Call {BUSINESS_INFO.phone}</span>
+                or Call (702) 555-0142
               </a>
             </div>
-            
-            <div style={{ fontSize: '0.76rem', color: '#8A8A8A', marginTop: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Clock size={14} style={{ color: '#C9962F' }} />
-              <span>Takes 30 seconds · Free on-site measurement included</span>
+
+            {/* Quick Micro-Trust Signals */}
+            <div
+              style={{
+                display:    'flex',
+                gap:        '1.5rem',
+                marginTop:  '2rem',
+                paddingTop: '1.5rem',
+                borderTop:  '1px solid rgba(255, 255, 255, 0.1)',
+                fontSize:   '0.78rem',
+                color:      '#8A8A8A',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <CheckCircle size={15} style={{ color: '#C9962F' }} /> 100% Schluter Waterproofing
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Star size={15} style={{ color: '#C9962F' }} /> 5.0 Star Google Rating
+              </div>
             </div>
           </div>
 
-          {/* Right Hero Image Card */}
-          <div style={{ position: 'relative' }}>
-            <div
-              style={{
-                position: 'relative',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                border: '1px solid #262626',
-                boxShadow: '0 20px 48px rgba(0,0,0,0.8)',
-              }}
-            >
-              <img
-                src={angle.heroImage}
-                alt={angle.headline}
-                style={{ width: '100%', height: '460px', objectFit: 'cover', objectPosition: 'center 35%' }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: '1.5rem',
-                  background: 'linear-gradient(to top, rgba(13,13,13,0.95) 0%, transparent 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                }}
-              >
-                <div style={{ color: '#C9962F', fontSize: '1.2rem', letterSpacing: '0.1em' }}>★★★★★</div>
-                <div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#FFFFFF' }}>
-                    150+ Master Projects Completed
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: '#8A8A8A' }}>
-                    Las Vegas · Summerlin · Henderson · MacDonald Highlands
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Right Column: Hero Visual Card */}
+          <div
+            style={{
+              position:     'relative',
+              borderRadius: '10px',
+              overflow:     'hidden',
+              border:       '1px solid rgba(255, 255, 255, 0.12)',
+              boxShadow:    '0 20px 50px rgba(0,0,0,0.7)',
+              maxHeight:    '450px',
+            }}
+          >
+            <img
+              src={angle.heroImage}
+              alt={angle.headline}
+              style={{ width: '100%', height: '100%', maxHeight: '450px', objectFit: 'cover' }}
+            />
           </div>
         </div>
       </section>
 
-      {/* ── Problem vs Solution Matrix ── */}
-      <section style={{ background: '#141414', padding: '4.5rem var(--pad-x)', borderBottom: '1px solid #222222' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span style={{ color: '#8A8A8A', fontSize: '0.75rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-              The Master Craftsman Standard
-            </span>
-            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 3.2rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem' }}>
-              Why Shortcuts Fail vs. The Elite Solution
+      {/* ── Section 2: PROBLEM → SOLUTION MESSAGING ── */}
+      <section
+        style={{
+          background: '#141414',
+          padding:    'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        }}
+      >
+        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 3.5rem auto' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '0.2em', color: '#C9962F', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+              THE ELITE TILE DIFFERENCE
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 3.8vw, 3.2rem)', fontWeight: '700', color: '#FFFFFF', textTransform: 'uppercase' }}>
+              Why Most Tile Installations Fail &amp; How We Build It Right
             </h2>
           </div>
 
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '2.5rem',
+              display:             'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap:                 '2.5rem',
             }}
-            className="subpage-comparison-grid"
           >
-            {/* Common Failures */}
+            {/* Common Problems */}
             <div
               style={{
-                background: '#1A1414',
-                border: '1px solid #3A2222',
-                padding: '2.2rem',
+                background:   '#181818',
+                border:       '1px solid rgba(239, 68, 68, 0.3)',
                 borderRadius: '10px',
+                padding:      '2rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#E53E3E', fontWeight: '700', fontSize: '1.15rem', marginBottom: '1.4rem' }}>
-                <AlertTriangle size={22} />
-                <span>The Unlicensed Shortcut Problem</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-                {angle.painPoints.map((pt) => (
-                  <div key={pt} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.9rem', color: '#E2E8F0', lineHeight: 1.55 }}>
-                    <span style={{ color: '#E53E3E', fontWeight: 'bold' }}>✕</span>
-                    <span>{pt}</span>
-                  </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#EF4444', marginBottom: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                ⚠️ Common Las Vegas Contractor Mistakes
+              </h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {angle.painPoints.map((point, idx) => (
+                  <li key={idx} style={{ fontSize: '0.9rem', color: '#CCCCCC', display: 'flex', alignItems: 'flex-start', gap: '0.6rem', lineHeight: 1.5 }}>
+                    <span style={{ color: '#EF4444', fontWeight: 'bold' }}>✕</span>
+                    {point}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
-            {/* The Elite Solution */}
+            {/* Our Solution */}
             <div
               style={{
-                background: '#161914',
-                border: '1px solid #223822',
-                padding: '2.2rem',
+                background:   '#181818',
+                border:       '1px solid #C9962F',
                 borderRadius: '10px',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+                padding:      '2rem',
+                boxShadow:    '0 10px 30px rgba(201, 150, 47, 0.15)',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#C9962F', fontWeight: '700', fontSize: '1.15rem', marginBottom: '1.4rem' }}>
-                <ShieldCheck size={22} />
-                <span>The Elite Master Tile Standard</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-                {angle.solutions.map((sol) => (
-                  <div key={sol} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.9rem', color: '#FFFFFF', lineHeight: 1.55 }}>
-                    <CheckCircle size={18} style={{ color: '#C9962F', flexShrink: 0, marginTop: '2px' }} />
-                    <span>{sol}</span>
-                  </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#C9962F', marginBottom: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                ✓ The Elite Master Craftsmanship Standard
+              </h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {angle.solutions.map((sol, idx) => (
+                  <li key={idx} style={{ fontSize: '0.9rem', color: '#FFFFFF', display: 'flex', alignItems: 'flex-start', gap: '0.6rem', lineHeight: 1.5 }}>
+                    <span style={{ color: '#C9962F', fontWeight: 'bold' }}>✓</span>
+                    {sol}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Client Testimonials / Reviews Section ── */}
-      <section style={{ padding: '4.5rem var(--pad-x)', background: '#0D0D0D', borderBottom: '1px solid #222222' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+      {/* ── Section 3: PROJECT PROOF & REVIEWS ── */}
+      <section
+        style={{
+          background: '#0D0D0D',
+          padding:    'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        }}
+      >
+        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span style={{ color: '#C9962F', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-              VERIFIED SOUTHERN NEVADA REVIEWS
-            </span>
-            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 3.2rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem', marginBottom: '0.6rem' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '0.2em', color: '#C9962F', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+              VERIFIED REVIEWS
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 3.8vw, 3.2rem)', fontWeight: '700', color: '#FFFFFF', textTransform: 'uppercase' }}>
               What Our Clients Say
             </h2>
-            <p style={{ color: '#8A8A8A', fontSize: '0.95rem', maxWidth: '48ch', margin: '0 auto' }}>
-              Over 150+ Las Vegas, Henderson &amp; Summerlin homeowners trust Elite Tile &amp; Stone for their custom bathrooms &amp; tile flooring.
+            <p style={{ color: '#8A8A8A', fontSize: '0.95rem', marginTop: '0.4rem' }}>
+              Over 150+ Las Vegas, Henderson &amp; Summerlin homeowners trust Elite Tile &amp; Stone.
             </p>
           </div>
 
-          {/* Testimonial Cards Grid */}
           <div
             style={{
-              display: 'grid',
+              display:             'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '2rem',
+              gap:                 '2rem',
             }}
           >
             {[
               {
-                quote: "After a rotted shower pan caused leaks in our downstairs ceiling, Ahmed and his team completely tore out the mess and rebuilt it with Schluter waterproofing. The Calacatta porcelain miters are razor-sharp. Outstanding craftsmanship.",
+                quote: "After a rotted shower pan caused leaks in our downstairs ceiling, Ahmed and his team completely tore out the mess and rebuilt it with Schluter waterproofing. Outstand craftsmanship.",
                 author: "Robert & Elena M.",
                 location: "The Ridges, Summerlin",
-                project: "Master Suite Shower & Waterproofing Rebuild",
+                project: "Master Suite Shower Rebuild",
               },
               {
-                quote: "We converted our old 90s bathtub into a zero-threshold walk-in tile shower before moving into our new home. Zero dust outside the bathroom and finished right on budget. They are true master setters.",
+                quote: "We converted our old 90s bathtub into a zero-threshold walk-in tile shower before moving into our new home. Zero dust outside the bathroom and finished right on budget.",
                 author: "David K.",
                 location: "MacDonald Highlands, Henderson",
                 project: "Tub-to-Walk-In Shower Conversion",
               },
               {
-                quote: "Tiled over 1,800 sq ft of post-tension slab concrete flooring. Laser leveled everything perfectly with no lippage anywhere. Worth every penny for precision natural stone work.",
+                quote: "Tiled over 1,800 sq ft of post-tension slab concrete flooring. Laser leveled everything perfectly with no lippage anywhere. Worth every penny for precision stone work.",
                 author: "Marcus & Sarah T.",
                 location: "Green Valley Ranch, NV",
-                project: "Full Estate Porcelain & Stone Flooring",
+                project: "Full Estate Porcelain Flooring",
               },
-            ].map((review) => (
+            ].map((review, idx) => (
               <div
-                key={review.author}
+                key={idx}
                 style={{
-                  background: '#141414',
-                  border: '1px solid #262626',
-                  padding: '2rem',
+                  background:   '#141414',
+                  border:       '1px solid #262626',
+                  padding:      '2rem',
                   borderRadius: '10px',
-                  display: 'flex',
+                  display:      'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
                 }}
               >
                 <div>
-                  {/* Stars & Verified Badge */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
-                    <div style={{ color: '#C9962F', fontSize: '1.1rem', letterSpacing: '0.1em' }}>
-                      ★★★★★
-                    </div>
-                    <span style={{ fontSize: '0.68rem', color: '#C9962F', background: 'rgba(201, 150, 47, 0.12)', border: '1px solid rgba(201, 150, 47, 0.3)', padding: '0.25rem 0.6rem', borderRadius: '4px', fontWeight: '600' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <div style={{ color: '#C9962F', fontSize: '1.1rem' }}>★★★★★</div>
+                    <span style={{ fontSize: '0.68rem', color: '#C9962F', background: 'rgba(201, 150, 47, 0.12)', border: '1px solid rgba(201, 150, 47, 0.3)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
                       Google Verified Review
                     </span>
                   </div>
-
-                  {/* Review Text */}
-                  <p style={{ fontSize: '0.92rem', color: '#FFFFFF', lineHeight: 1.65, fontStyle: 'italic', marginBottom: '1.5rem' }}>
+                  <p style={{ fontSize: '0.92rem', color: '#FFFFFF', lineHeight: 1.6, fontStyle: 'italic', marginBottom: '1.5rem' }}>
                     "{review.quote}"
                   </p>
                 </div>
-
-                {/* Author Info */}
                 <div style={{ borderTop: '1px solid #222222', paddingTop: '1rem' }}>
-                  <div style={{ fontWeight: '700', fontSize: '0.92rem', color: '#C9962F' }}>
-                    {review.author}
-                  </div>
-                  <div style={{ fontSize: '0.76rem', color: '#8A8A8A', marginTop: '0.15rem' }}>
+                  <div style={{ fontWeight: '700', fontSize: '0.9rem', color: '#C9962F' }}>{review.author}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#8A8A8A', marginTop: '0.15rem' }}>
                     {review.location} · <span style={{ color: '#CCCCCC' }}>{review.project}</span>
                   </div>
                 </div>
@@ -446,146 +467,187 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
         </div>
       </section>
 
-      {/* ── Value Pillars Grid ── */}
-      <section style={{ background: '#141414', padding: '4.5rem var(--pad-x)', borderBottom: '1px solid #222222' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.2vw, 3rem)', color: '#C9962F', fontWeight: '700' }}>
-              The 4 Pillars Of Elite Craftsmanship
-            </h2>
+      {/* ── Section 4: QUALIFICATION & PRICING EXPECTATIONS ── */}
+      <section
+        style={{
+          background: '#141414',
+          padding:    'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        }}
+      >
+        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '0.2em', color: '#C9962F', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+            TRANSPARENT EXPECTATIONS
           </div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 3.8vw, 3.2rem)', fontWeight: '700', color: '#FFFFFF', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
+            Who We Are Built For
+          </h2>
 
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: '1.8rem',
+              display:             'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap:                 '1.5rem',
+              textAlign:           'left',
             }}
           >
-            {[
-              {
-                title: '100% Waterproof Pan',
-                desc: 'Dual-layer Schluter-Kerdi membrane preventing water penetration into lower floors forever.',
-                icon: ShieldCheck,
-              },
-              {
-                title: 'Hand-Mitered 45° Edges',
-                desc: 'Custom mitered corners for continuous stone elegance without plastic or metal trim.',
-                icon: Sparkles,
-              },
-              {
-                title: 'Laser-Leveled Mortar',
-                desc: 'Mortar beds leveled with millimetric accuracy guaranteeing zero tile lippage or cracking.',
-                icon: Award,
-              },
-              {
-                title: 'Clean Containment Guarantee',
-                desc: 'HEPA dust containment during prep keeping your home immaculate throughout construction.',
-                icon: CheckCircle,
-              },
-            ].map((pillar) => (
-              <div
-                key={pillar.title}
-                style={{
-                  background: '#181818',
-                  border: '1px solid #262626',
-                  padding: '1.8rem',
-                  borderRadius: '8px',
-                  transition: 'border-color 0.2s ease',
-                }}
-              >
-                <pillar.icon size={28} style={{ color: '#C9962F', marginBottom: '1rem' }} />
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#FFFFFF', marginBottom: '0.6rem' }}>
-                  {pillar.title}
-                </h3>
-                <p style={{ fontSize: '0.88rem', color: '#8A8A8A', lineHeight: 1.6 }}>
-                  {pillar.desc}
-                </p>
+            <div style={{ background: '#181818', border: '1px solid #262626', padding: '1.5rem', borderRadius: '8px' }}>
+              <div style={{ color: '#C9962F', fontWeight: '700', fontSize: '1rem', marginBottom: '0.5rem' }}>
+                👍 Homeowners Who Want It Built Right
               </div>
-            ))}
+              <p style={{ fontSize: '0.85rem', color: '#8A8A8A', lineHeight: 1.5 }}>
+                We specialize in homeowners who want genuine waterproofing, tight grout miters, and zero-lippage precision that lasts for decades.
+              </p>
+            </div>
+
+            <div style={{ background: '#181818', border: '1px solid #262626', padding: '1.5rem', borderRadius: '8px' }}>
+              <div style={{ color: '#C9962F', fontWeight: '700', fontSize: '1rem', marginBottom: '0.5rem' }}>
+                📋 Itemized Written Pricing
+              </div>
+              <p style={{ fontSize: '0.85rem', color: '#8A8A8A', lineHeight: 1.5 }}>
+                You get a detailed line-item breakdown covering substrate prep, waterproofing membrane, thinset, and tile installation before work starts.
+              </p>
+            </div>
+
+            <div style={{ background: '#181818', border: '1px solid #262626', padding: '1.5rem', borderRadius: '8px' }}>
+              <div style={{ color: '#C9962F', fontWeight: '700', fontSize: '1rem', marginBottom: '0.5rem' }}>
+                🛡️ Nevada Licensed &amp; Insured
+              </div>
+              <p style={{ fontSize: '0.85rem', color: '#8A8A8A', lineHeight: 1.5 }}>
+                Fully licensed with the Nevada State Contractors Board (Lic #0095105). Bonded and insured with full workmanship warranty.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Authority Trust Signals ── */}
-      <section style={{ padding: '3rem var(--pad-x)', background: '#0D0D0D', borderBottom: '1px solid #222222' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ color: '#C9962F', fontSize: '1.5rem', letterSpacing: '0.1em' }}>★★★★★</div>
-            <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#FFFFFF', marginTop: '0.2rem' }}>5.0 Google Star Rating</div>
-            <div style={{ fontSize: '0.78rem', color: '#8A8A8A' }}>150+ Nevada Homeowners Served</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ color: '#C9962F', fontWeight: '700', fontSize: '1.3rem' }}>{BUSINESS_INFO.license}</div>
-            <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#FFFFFF', marginTop: '0.2rem' }}>State Licensed Contractor</div>
-            <div style={{ fontSize: '0.78rem', color: '#8A8A8A' }}>Licensed, Bonded &amp; Insured</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ color: '#C9962F', fontWeight: '700', fontSize: '1.3rem' }}>15+ Years</div>
-            <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#FFFFFF', marginTop: '0.2rem' }}>Southern Nevada Masters</div>
-            <div style={{ fontSize: '0.78rem', color: '#8A8A8A' }}>Family Owned &amp; Operated</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 11-Step Qualification & Lead Form ── */}
-      <section id="estimate-form" style={{ background: '#141414', padding: '5rem var(--pad-x)' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <span style={{ color: '#C9962F', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-              Free On-Site Estimate Request
-            </span>
-            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)', color: '#C9962F', fontWeight: '700', marginTop: '0.4rem', marginBottom: '0.6rem' }}>
-              {angle.offerTitle}
-            </h2>
-            <p style={{ color: '#8A8A8A', fontSize: '0.95rem' }}>
-              {angle.offerDesc}
-            </p>
-          </div>
-
+      {/* ── Section 5: LEAD QUALIFICATION FORM / THANK-YOU SCREEN ── */}
+      <section
+        id="qualification-form-section"
+        style={{
+          background: '#0D0D0D',
+          padding:    'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)',
+        }}
+      >
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          
           {submitted ? (
+            /* ── THANK-YOU PAGE STATE (Meta Pixel Lead event fires ONLY here!) ── */
             <div
               style={{
-                background: '#181818',
-                border: '1px solid #262626',
-                padding: '3.5rem 2rem',
-                borderRadius: '10px',
-                textAlign: 'center',
+                background:   '#141414',
+                border:       '2px solid #C9962F',
+                borderRadius: '12px',
+                padding:      'clamp(2.5rem, 5vw, 4rem) 2rem',
+                textAlign:    'center',
+                boxShadow:    '0 20px 60px rgba(0,0,0,0.8)',
               }}
             >
-              <CheckCircle size={52} style={{ color: '#C9962F', marginBottom: '1.2rem' }} />
-              <h3 style={{ fontSize: '2rem', color: '#C9962F', fontWeight: '700', marginBottom: '0.8rem' }}>
-                Estimate Request Received!
-              </h3>
-              <p style={{ fontSize: '0.98rem', color: '#FFFFFF', lineHeight: 1.6, marginBottom: '1.8rem' }}>
-                Thank you, <strong>{form.firstName}</strong>. A master contractor will review your project details and reach out to <strong>{form.phone}</strong> within 24 hours.
-              </p>
-              <button
-                onClick={() => setSubmitted(false)}
-                className="btn"
-                style={{ background: 'transparent', border: '1px solid #C9962F', color: '#C9962F' }}
+              <CheckCircle size={60} style={{ color: '#C9962F', marginBottom: '1.5rem' }} />
+              
+              <div style={{ fontSize: '0.78rem', fontWeight: '700', letterSpacing: '0.2em', color: '#C9962F', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                QUALIFICATION CONFIRMED
+              </div>
+              
+              <h2
+                style={{
+                  fontFamily:   'var(--font-display)',
+                  fontSize:     'clamp(2.2rem, 4vw, 3.2rem)',
+                  fontWeight:   '700',
+                  color:        '#FFFFFF',
+                  marginBottom: '1rem',
+                  textTransform: 'uppercase',
+                }}
               >
-                Submit Another Request
-              </button>
+                Thank You, {form.firstName}!
+              </h2>
+              
+              <p
+                style={{
+                  fontSize:     '1.05rem',
+                  color:        '#CCCCCC',
+                  lineHeight:   1.65,
+                  maxWidth:     '560px',
+                  margin:       '0 auto 2rem auto',
+                }}
+              >
+                Your request for <strong>{form.lookingToDo}</strong> has been prioritized. Master contractor Ahmed will personally review your project details and contact you at <strong>{form.phone}</strong> within 24 hours.
+              </p>
+
+              <div
+                style={{
+                  background:   '#181818',
+                  border:       '1px solid #262626',
+                  borderRadius: '8px',
+                  padding:      '1.5rem',
+                  marginBottom: '2rem',
+                  textAlign:    'left',
+                  fontSize:     '0.88rem',
+                  color:        '#8A8A8A',
+                }}
+              >
+                <div style={{ color: '#FFFFFF', fontWeight: '700', marginBottom: '0.5rem' }}>
+                  What happens next?
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <div>1. 📱 We confirm project scope and tile material choices by call/text.</div>
+                  <div>2. 📏 We schedule your complimentary on-site measurement in Las Vegas.</div>
+                  <div>3. 📝 You receive an itemized, written estimate with guaranteed pricing.</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <a
+                  href={`tel:${BUSINESS_INFO.phoneRaw}`}
+                  style={{
+                    display:       'inline-flex',
+                    alignItems:    'center',
+                    gap:            me => '0.5rem',
+                    padding:       '0.9rem 1.8rem',
+                    background:    '#C9962F',
+                    color:         '#0D0D0D',
+                    fontWeight:    '700',
+                    borderRadius:  '6px',
+                    textDecoration: 'none',
+                    fontSize:      '0.85rem',
+                  }}
+                >
+                  <Phone size={18} /> Call Directly: (702) 555-0142
+                </a>
+              </div>
             </div>
           ) : (
-            <form
-              onSubmit={handleSubmit}
+            /* ── LEAD QUALIFICATION FORM (11-Step Fields) ── */
+            <div
               style={{
-                background: '#181818',
-                border: '1px solid #262626',
-                padding: 'clamp(1.8rem, 3.5vw, 3rem)',
-                borderRadius: '10px',
-                boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
+                background:   '#141414',
+                border:       '1px solid #262626',
+                borderRadius: '12px',
+                padding:      'clamp(1.8rem, 4vw, 3rem)',
+                boxShadow:    '0 20px 50px rgba(0,0,0,0.6)',
               }}
             >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '0.2em', color: '#C9962F', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                  FREE IN-HOME ESTIMATE FORM
+                </div>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: '700', color: '#FFFFFF', textTransform: 'uppercase' }}>
+                  {angle.offerTitle}
+                </h2>
+                <p style={{ fontSize: '0.88rem', color: '#8A8A8A', marginTop: '0.4rem' }}>
+                  {angle.offerDesc}
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
                 
-                {/* 1. First name */}
+                {/* 1. First name — text */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="sub-first-name">First Name *</label>
+                  <label className="form-label" htmlFor="ad-first-name">
+                    First Name *
+                  </label>
                   <input
-                    id="sub-first-name"
+                    id="ad-first-name"
                     type="text"
                     required
                     placeholder="Enter your first name"
@@ -595,25 +657,29 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                   />
                 </div>
 
-                {/* 2. Phone */}
+                {/* 2. Phone — text */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="sub-phone">Phone Number *</label>
+                  <label className="form-label" htmlFor="ad-phone">
+                    Phone Number *
+                  </label>
                   <input
-                    id="sub-phone"
+                    id="ad-phone"
                     type="tel"
                     required
-                    placeholder="702-334-1707"
+                    placeholder="702-555-0142"
                     value={form.phone}
                     onChange={update('phone')}
                     className="form-input"
                   />
                 </div>
 
-                {/* 3. Email */}
+                {/* 3. Email — text */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="sub-email">Email Address *</label>
+                  <label className="form-label" htmlFor="ad-email">
+                    Email Address *
+                  </label>
                   <input
-                    id="sub-email"
+                    id="ad-email"
                     type="email"
                     required
                     placeholder="name@example.com"
@@ -623,11 +689,13 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                   />
                 </div>
 
-                {/* 4. What are you looking to do? */}
+                {/* 4. What are you looking to do? — dropdown */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="sub-looking">What are you looking to do? *</label>
+                  <label className="form-label" htmlFor="ad-looking-to-do">
+                    What are you looking to do? *
+                  </label>
                   <select
-                    id="sub-looking"
+                    id="ad-looking-to-do"
                     value={form.lookingToDo}
                     onChange={update('lookingToDo')}
                     className="form-select"
@@ -639,24 +707,28 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                   </select>
                 </div>
 
-                {/* 5. Do you own the home? */}
+                {/* 5. Do you own the home? — Yes / No */}
                 <div className="form-field">
-                  <label className="form-label">Do you own the home? *</label>
+                  <label className="form-label">
+                    Do you own the home? *
+                  </label>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
                     {['Yes', 'No'].map((opt) => (
                       <button
                         key={opt}
                         type="button"
-                        onClick={() => setForm((p) => ({ ...p, homeOwner: opt }))}
+                        onClick={() => setHomeOwnerValue(opt)}
                         style={{
-                          padding: '0.85rem',
+                          padding: '0.75rem',
                           borderRadius: '6px',
                           border: form.homeOwner === opt ? '2px solid #C9962F' : '1px solid #333333',
-                          background: form.homeOwner === opt ? 'rgba(201, 150, 47, 0.18)' : '#121212',
+                          background: form.homeOwner === opt ? 'rgba(201, 150, 47, 0.15)' : '#181818',
                           color: form.homeOwner === opt ? '#C9962F' : '#FFFFFF',
                           fontWeight: form.homeOwner === opt ? '700' : '400',
+                          fontFamily: "'Poppins', sans-serif",
                           fontSize: '0.9rem',
                           cursor: 'pointer',
+                          transition: 'all 0.2s ease',
                         }}
                       >
                         {opt}
@@ -665,11 +737,13 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                   </div>
                 </div>
 
-                {/* 6. When are you looking to start? */}
+                {/* 6. When are you looking to start? — dropdown */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="sub-timeline">When are you looking to start? *</label>
+                  <label className="form-label" htmlFor="ad-timeline">
+                    When are you looking to start? *
+                  </label>
                   <select
-                    id="sub-timeline"
+                    id="ad-timeline"
                     value={form.timeline}
                     onChange={update('timeline')}
                     className="form-select"
@@ -681,11 +755,13 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                   </select>
                 </div>
 
-                {/* 7. What's your budget range? */}
+                {/* 7. What's your budget range? — dropdown */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="sub-budget">What's your budget range? *</label>
+                  <label className="form-label" htmlFor="ad-budget">
+                    What's your budget range? *
+                  </label>
                   <select
-                    id="sub-budget"
+                    id="ad-budget"
                     value={form.budget}
                     onChange={update('budget')}
                     className="form-select"
@@ -698,20 +774,22 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                   </select>
                 </div>
 
-                {/* 8. Anything else we should know? */}
+                {/* 8. Anything else we should know? — optional text box */}
                 <div className="form-field">
-                  <label className="form-label" htmlFor="sub-notes">Anything else we should know? (Optional)</label>
+                  <label className="form-label" htmlFor="ad-notes">
+                    Anything else we should know? (Optional)
+                  </label>
                   <textarea
-                    id="sub-notes"
+                    id="ad-notes"
                     rows={3}
-                    placeholder="Share any special material requests, square footage, or project goals…"
+                    placeholder="Share any special material requests, square footage, or details…"
                     value={form.notes}
                     onChange={update('notes')}
                     className="form-textarea"
                   />
                 </div>
 
-                {/* 9. Consent checkbox */}
+                {/* 9. Consent checkbox, required */}
                 <div style={{ marginTop: '0.4rem' }}>
                   <label
                     style={{
@@ -744,91 +822,112 @@ export default function CampaignLandingPage({ angle, onOpenPrivacy }) {
                   </label>
                 </div>
 
-                {/* 10. Submit Button */}
+                {/* 10. Button: Get My Free Estimate */}
                 <button
                   type="submit"
-                  className="btn"
                   style={{
-                    width: '100%',
-                    marginTop: '0.6rem',
-                    background: '#C9962F',
-                    color: '#0D0D0D',
-                    fontWeight: '700',
-                    fontSize: '1rem',
+                    width:        '100%',
+                    marginTop:    '0.6rem',
+                    background:   '#C9962F',
+                    color:        '#0D0D0D',
+                    fontWeight:   '700',
+                    fontSize:     '0.95rem',
                     borderRadius: '6px',
-                    padding: '1.15rem',
-                    boxShadow: '0 6px 20px rgba(201, 150, 47, 0.35)',
+                    padding:      '1.05rem',
+                    border:       'none',
+                    cursor:       'pointer',
+                    boxShadow:    '0 4px 14px rgba(201, 150, 47, 0.3)',
+                    transition:   'background 0.2s ease',
                   }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
                 >
                   Get My Free Estimate
                 </button>
 
-                {/* 11. Below button notice */}
+                {/* 11. Below the button notice */}
                 <div
                   style={{
-                    textAlign: 'center',
-                    fontSize: '0.8rem',
-                    color: '#8A8A8A',
-                    display: 'flex',
-                    alignItems: 'center',
+                    textAlign:      'center',
+                    fontSize:       '0.8rem',
+                    color:          '#8A8A8A',
+                    display:        'flex',
+                    alignItems:     'center',
                     justifyContent: 'center',
-                    gap: '0.4rem',
+                    gap:            '0.4rem',
+                    marginTop:      '0.2rem',
                   }}
                 >
                   <Clock size={15} style={{ color: '#C9962F' }} />
                   <span>A specialist will call you within 24 hours.</span>
                 </div>
 
-              </div>
-            </form>
+              </form>
+            </div>
           )}
+
         </div>
       </section>
 
-      {/* ── Subpage Footer ── */}
+      {/* ── META COMPLIANCE FOOTER ── */}
       <footer
         style={{
-          background: '#080808',
-          borderTop: '1px solid #1F1F1F',
-          padding: '2.5rem var(--pad-x)',
-          textAlign: 'center',
-          fontSize: '0.78rem',
-          color: '#8A8A8A',
+          background:   '#080808',
+          borderTop:    '1px solid rgba(255, 255, 255, 0.08)',
+          padding:      '3rem clamp(1.5rem, 5vw, 4rem)',
+          fontSize:     '0.8rem',
+          color:        '#8A8A8A',
+          textAlign:    'center',
         }}
       >
-        <p style={{ color: '#8A8A8A', marginBottom: '0.6rem' }}>
-          © {new Date().getFullYear()} Elite Tile &amp; Stone · {BUSINESS_INFO.license} · Licensed, Insured &amp; Bonded
-        </p>
-        <p style={{ color: '#8A8A8A', marginBottom: '1rem' }}>
-          Serving Las Vegas, Summerlin, Henderson &amp; Southern Nevada Region
-        </p>
-        <button
-          onClick={onOpenPrivacy}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#8A8A8A',
-            textDecoration: 'underline',
-            cursor: 'pointer',
-            fontSize: '0.75rem',
-          }}
-        >
-          Privacy Policy
-        </button>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.2rem', alignItems: 'center' }}>
+          
+          <div style={{ fontWeight: '700', color: '#FFFFFF', fontSize: '0.95rem' }}>
+            Elite Tile &amp; Stone LLC · Nevada State Contractors Board Lic #0095105
+          </div>
+
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div>📍 7495 W Azure Dr, Suite 120, Las Vegas, NV 89130</div>
+            <div>📞 (702) 555-0142 / 702-334-1707</div>
+            <div>✉️ info@elitetileandstonelv.com</div>
+          </div>
+
+          {/* Legal Compliance Links */}
+          <div style={{ display: 'flex', gap: '1.5rem', margin: '0.5rem 0' }}>
+            <button
+              onClick={() => onOpenPrivacy && onOpenPrivacy()}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#C9962F',
+                cursor: 'pointer',
+                fontSize: '0.82rem',
+                textDecoration: 'underline',
+              }}
+            >
+              Privacy Policy
+            </button>
+            <span style={{ color: '#333333' }}>|</span>
+            <button
+              onClick={() => onOpenTerms && onOpenTerms()}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#C9962F',
+                cursor: 'pointer',
+                fontSize: '0.82rem',
+                textDecoration: 'underline',
+              }}
+            >
+              Terms of Service
+            </button>
+          </div>
+
+          <div style={{ fontSize: '0.75rem', color: '#666666' }}>
+            © 2026 Elite Tile &amp; Stone LLC. All rights reserved. Licensed, Bonded &amp; Insured in the State of Nevada.
+          </div>
+        </div>
       </footer>
-
-      {/* Responsive Styles */}
-      <style>{`
-        @media (max-width: 860px) {
-          .subpage-hero-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .subpage-comparison-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
-
     </div>
   );
 }
