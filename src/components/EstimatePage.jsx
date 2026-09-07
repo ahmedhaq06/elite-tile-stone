@@ -4,8 +4,12 @@ import Footer from './Footer';
 import { Phone, CheckCircle, Clock, ShieldCheck, Star } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/tilesData';
 
+const ESTIMATE_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyWMX4vOEG_0hs-aT_svKUkRUvWygEGQD_BSj9oRYINhF7sZlVmB7B5VrO1FaU0uo6huA/exec';
+
 export default function EstimatePage({ onNavigate, onOpenPrivacy }) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [form, setForm] = useState({
     firstName:   '',
     phone:       '',
@@ -18,11 +22,39 @@ export default function EstimatePage({ onNavigate, onOpenPrivacy }) {
     consent:     false,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.consent) return;
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!form.consent || submitting) return;
+
+    setSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const payload = new URLSearchParams({
+        firstName:   form.firstName,
+        phone:       form.phone,
+        email:       form.email,
+        lookingToDo: form.lookingToDo,
+        homeOwner:   form.homeOwner,
+        timeline:    form.timeline,
+        budget:      form.budget,
+        notes:       form.notes,
+      });
+
+      await fetch(ESTIMATE_WEBHOOK_URL, {
+        method:  'POST',
+        mode:    'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body:    payload.toString(),
+      });
+
+      setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      setSubmitError('We could not send your request. Please call us directly or try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const update = (field) => (e) => {
@@ -483,6 +515,7 @@ export default function EstimatePage({ onNavigate, onOpenPrivacy }) {
                     {/* 10. Button: Get My Free Estimate */}
                     <button
                       type="submit"
+                      disabled={submitting}
                       style={{
                         width:        '100%',
                         marginTop:    '0.6rem',
@@ -493,15 +526,30 @@ export default function EstimatePage({ onNavigate, onOpenPrivacy }) {
                         borderRadius: '6px',
                         padding:      '1.05rem',
                         border:       'none',
-                        cursor:       'pointer',
+                        cursor:       submitting ? 'wait' : 'pointer',
+                        opacity:      submitting ? 0.65 : 1,
                         boxShadow:    '0 4px 14px rgba(201, 150, 47, 0.3)',
                         transition:   'background 0.2s ease',
                       }}
                       onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
                       onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
                     >
-                      Get My Free Estimate
+                      {submitting ? 'Sending Request...' : 'Get My Free Estimate'}
                     </button>
+
+                    {submitError && (
+                      <div
+                        role="alert"
+                        style={{
+                          color:      '#E58A8A',
+                          fontSize:   '0.82rem',
+                          lineHeight: 1.5,
+                          textAlign:  'center',
+                        }}
+                      >
+                        {submitError}
+                      </div>
+                    )}
 
                     {/* 11. Below the button notice */}
                     <div

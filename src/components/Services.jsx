@@ -4,36 +4,42 @@ const SERVICES = [
   {
     num:   '01',
     name:  'Custom showers (master / walk-in)',
+    desc:  'Zero-threshold curbless wet rooms, Schluter waterproofing, built-in niches, and floating marble benches.',
     image: '/assets/ME6b7c6ff636af09a4d467353389260a63.jpeg',
     alt:   'Custom master walk-in marble shower',
   },
   {
     num:   '02',
     name:  'Flooring',
+    desc:  'Herringbone wood-look porcelain, large-format marble slabs, laser-leveled subfloor prep, and geometric tile layouts.',
     image: '/assets/MEe8289819d2bcc230c65c85a467b4b4aa.jpeg',
     alt:   'Herringbone tile floor with border inlay',
   },
   {
     num:   '03',
     name:  'Kitchen countertops (slab)',
+    desc:  'Continuous vein-matched bookmatched marble & quartzite slab fabrication with mitered waterfall edges.',
     image: '/assets/ME4b4558ddf77f63f092ffc323aa04acc1.jpeg',
     alt:   'Luxury veined marble countertop slab installation',
   },
   {
     num:   '04',
     name:  'Kitchen backsplashes',
+    desc:  'Basketweave marble, mitered tile window jambs, seamless outlet cutouts, and custom mosaic backsplashes.',
     image: '/assets/ME8ba8343c9ed6ad836c82a179c96c6ac8.jpeg',
     alt:   'Basketweave marble kitchen tile backsplash',
   },
   {
     num:   '05',
     name:  'Stone columns (exterior)',
+    desc:  'Architectural natural stone veneer column wraps, exterior stacked stone walls, and weather-sealed masonry.',
     image: '/assets/ME59b97d4872ac9abbd62d399e9555ebd2.jpeg',
     alt:   'Architectural exterior stone wall and column wrap',
   },
   {
     num:   '06',
     name:  'Fireplaces',
+    desc:  'Floor-to-ceiling stacked stone feature walls, bookmatched slab surrounds, floating mantels, and linear fire inserts.',
     image: '/assets/fireplace.jpeg',
     alt:   'Stacked stone fireplace with linear fire insert',
   },
@@ -79,6 +85,7 @@ export default function Services({ onNavigate }) {
             {SERVICES.map((svc, i) => (
               <div
                 key={svc.num}
+                className="services-item"
                 style={{
                   cursor:     'pointer',
                   transition: 'all 0.3s ease',
@@ -88,11 +95,12 @@ export default function Services({ onNavigate }) {
                 onClick={() => onNavigate && onNavigate('estimate')}
               >
                 <div
+                  className="services-item-content"
                   style={{
                     display:             'grid',
-                    gridTemplateColumns: '3rem 1fr',
+                    gridTemplateColumns: '2.25rem minmax(0, 1fr)',
                     alignItems:          'start',
-                    gap:                 '1rem',
+                    gap:                 'clamp(0.75rem, 1.5vw, 1rem)',
                     padding:             '1.4rem 0',
                     borderBottom:        '1px solid rgba(255, 255, 255, 0.08)',
                   }}
@@ -111,7 +119,7 @@ export default function Services({ onNavigate }) {
                     {svc.num}
                   </span>
 
-                  {/* Name + Description */}
+                  {/* Name */}
                   <div>
                     <div
                       style={{
@@ -126,16 +134,6 @@ export default function Services({ onNavigate }) {
                       }}
                     >
                       {svc.name}
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize:   '0.88rem',
-                        lineHeight: 1.6,
-                        color:      '#8A8A8A',
-                      }}
-                    >
-                      {svc.desc}
                     </div>
                   </div>
                 </div>
@@ -286,31 +284,18 @@ export default function Services({ onNavigate }) {
               </div>
               <h2
                 style={{
-                  maxWidth:       '32rem',
+                  maxWidth:       '30rem',
                   margin:         '0 0 1.25rem',
-                  fontFamily:     'var(--font-display)',
-                  fontSize:       'clamp(2rem, 3.8vw, 3.2rem)',
-                  fontWeight:     '700',
-                  lineHeight:     1.08,
-                  textTransform:  'uppercase',
-                  letterSpacing:  '0.01em',
+                  fontFamily:     'var(--font-body)',
+                  fontSize:       'clamp(1.25rem, 2vw, 1.75rem)',
+                  fontWeight:     '500',
+                  lineHeight:     1.4,
+                  letterSpacing:  '0',
                   color:          '#FFFFFF',
                 }}
               >
-                {activeService.name}
-              </h2>
-              <p
-                style={{
-                  maxWidth:   '30rem',
-                  margin:     0,
-                  fontFamily: 'var(--font-body)',
-                  fontSize:   '0.95rem',
-                  lineHeight: 1.65,
-                  color:      '#8A8A8A',
-                }}
-              >
                 {activeService.desc}
-              </p>
+              </h2>
             </div>
 
             <div
