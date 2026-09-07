@@ -196,7 +196,7 @@ export default function EstimatePage({ onNavigate, onOpenPrivacy }) {
                   }}
                 >
                   <Phone size={24} style={{ color: '#C9962F' }} />
-                  (702) 555-0142
+                  702 334 1707
                 </a>
                 <p style={{ fontSize: '0.82rem', color: '#8A8A8A', marginTop: '0.5rem' }}>
                   Direct contractor line · Mon–Sat 7:00 AM – 6:00 PM
@@ -347,7 +347,7 @@ export default function EstimatePage({ onNavigate, onOpenPrivacy }) {
                         id="est-phone"
                         type="tel"
                         required
-                        placeholder="702-555-0142"
+                        placeholder="702 334 1707"
                         value={form.phone}
                         onChange={update('phone')}
                         className="form-input"

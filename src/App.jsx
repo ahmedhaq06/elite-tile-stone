@@ -183,7 +183,7 @@ export default function App() {
         }}
       >
         <a
-          href="tel:7025550142"
+          href="tel:7023341707"
           style={{
             display:        'flex',
             alignItems:     'center',
@@ -199,7 +199,7 @@ export default function App() {
           }}
         >
           <span>📞</span>
-          (702) 555-0142
+          702 334 1707
         </a>
 
         <button

@@ -128,7 +128,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
               NV Lic #0095105
             </span>
             <a
-              href="tel:7025550142"
+              href="tel:7023341707"
               style={{
                 display:       'inline-flex',
                 alignItems:    'center',
@@ -144,7 +144,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
               }}
             >
               <Phone size={15} />
-              (702) 555-0142
+              702 334 1707
             </a>
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
               </button>
 
               <a
-                href="tel:7025550142"
+                href="tel:7023341707"
                 style={{
                   fontSize:      '0.82rem',
                   fontWeight:    '700',
@@ -266,7 +266,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                   textDecoration: 'none',
                 }}
               >
-                or Call (702) 555-0142
+                or Call 702 334 1707
               </a>
             </div>
 
@@ -612,7 +612,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                     fontSize:      '0.85rem',
                   }}
                 >
-                  <Phone size={18} /> Call Directly: (702) 555-0142
+                  <Phone size={18} /> Call Directly: 702 334 1707
                 </a>
               </div>
             </div>
@@ -666,7 +666,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                     id="ad-phone"
                     type="tel"
                     required
-                    placeholder="702-555-0142"
+                    placeholder="702 334 1707"
                     value={form.phone}
                     onChange={update('phone')}
                     className="form-input"
@@ -891,7 +891,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
 
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <div>📍 7495 W Azure Dr, Suite 120, Las Vegas, NV 89130</div>
-            <div>📞 (702) 555-0142 / 702-334-1707</div>
+            <div>📞 702 334 1707</div>
             <div>✉️ info@elitetileandstonelv.com</div>
           </div>
 

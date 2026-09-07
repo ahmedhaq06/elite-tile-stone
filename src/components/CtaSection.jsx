@@ -76,7 +76,7 @@ export default function CtaSection({ onNavigate }) {
           </button>
 
           <a
-            href="tel:7025550142"
+            href="tel:7023341707"
             style={{
               display:       'inline-flex',
               alignItems:    'center',
@@ -103,7 +103,7 @@ export default function CtaSection({ onNavigate }) {
               e.currentTarget.style.color = '#C9962F';
             }}
           >
-            CALL (702) 555-0142
+            CALL 702 334 1707
           </a>
         </div>
       </div>
