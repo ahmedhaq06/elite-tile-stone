@@ -92,7 +92,7 @@ export default function TermsPage({ onBack }) {
             <div style={{ marginTop: '0.8rem', background: '#141414', padding: '1.2rem', borderRadius: '6px', border: '1px solid #262626' }}>
               <div><strong>Elite Tile &amp; Stone LLC</strong></div>
               <div>7495 W Azure Dr, Suite 120, Las Vegas, NV 89130</div>
-              <div>Phone: (702) 555-0142 / 702-334-1707</div>
+              <div>Phone: 702 334 1707</div>
               <div>Email: info@elitetileandstonelv.com</div>
               <div>NV License #0095105</div>
             </div>

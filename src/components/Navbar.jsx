@@ -136,7 +136,7 @@ export default function Navbar({ onNavigate, activeRoute }) {
 
           {/* Phone Call CTA Button */}
           <a
-            href="tel:7025550142"
+            href="tel:7023341707"
             style={{
               display:       'inline-flex',
               alignItems:    'center',
@@ -156,7 +156,7 @@ export default function Navbar({ onNavigate, activeRoute }) {
             onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
           >
             <span style={{ fontSize: '0.88rem' }}>📞</span>
-            (702) 555-0142
+            702 334 1707
           </a>
         </div>
 
@@ -231,7 +231,7 @@ export default function Navbar({ onNavigate, activeRoute }) {
             </a>
           ))}
           <a
-            href="tel:7025550142"
+            href="tel:7023341707"
             style={{
               marginTop:     '1.5rem',
               display:       'inline-flex',
@@ -248,7 +248,7 @@ export default function Navbar({ onNavigate, activeRoute }) {
               textDecoration: 'none',
             }}
           >
-            📞 (702) 555-0142
+            📞 702 334 1707
           </a>
         </nav>
       </div>

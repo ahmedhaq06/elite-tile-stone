@@ -356,7 +356,7 @@ export default function ContactSection({ initialService }) {
                       id="form-phone"
                       type="tel"
                       required
-                      placeholder="702-334-1707"
+                      placeholder="702 334 1707"
                       value={form.phone}
                       onChange={update('phone')}
                       className="form-input"

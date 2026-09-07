@@ -162,7 +162,7 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
               <a
-                href="tel:7025550142"
+                href="tel:7023341707"
                 style={{
                   display:       'flex',
                   alignItems:    'center',
@@ -173,7 +173,7 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
                   textDecoration: 'none',
                 }}
               >
-                <span>📞</span> (702) 555-0142
+                <span>📞</span> 702 334 1707
               </a>
               <a
                 href="mailto:info@elitetileandstonelv.com"
