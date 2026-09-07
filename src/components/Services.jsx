@@ -4,42 +4,36 @@ const SERVICES = [
   {
     num:   '01',
     name:  'Custom showers (master / walk-in)',
-    desc:  'Zero-threshold curbless wet rooms, Schluter waterproofing, built-in niches, and floating marble benches.',
     image: '/assets/ME6b7c6ff636af09a4d467353389260a63.jpeg',
     alt:   'Custom master walk-in marble shower',
   },
   {
     num:   '02',
     name:  'Flooring',
-    desc:  'Herringbone wood-look porcelain, large-format marble slabs, laser-leveled subfloor prep, and geometric tile layouts.',
     image: '/assets/MEe8289819d2bcc230c65c85a467b4b4aa.jpeg',
     alt:   'Herringbone tile floor with border inlay',
   },
   {
     num:   '03',
     name:  'Kitchen countertops (slab)',
-    desc:  'Continuous vein-matched bookmatched marble & quartzite slab fabrication with mitered waterfall edges.',
     image: '/assets/ME4b4558ddf77f63f092ffc323aa04acc1.jpeg',
     alt:   'Luxury veined marble countertop slab installation',
   },
   {
     num:   '04',
     name:  'Kitchen backsplashes',
-    desc:  'Basketweave marble, mitered tile window jambs, seamless outlet cutouts, and custom mosaic backsplashes.',
     image: '/assets/ME8ba8343c9ed6ad836c82a179c96c6ac8.jpeg',
     alt:   'Basketweave marble kitchen tile backsplash',
   },
   {
     num:   '05',
     name:  'Stone columns (exterior)',
-    desc:  'Architectural natural stone veneer column wraps, exterior stacked stone walls, and weather-sealed masonry.',
     image: '/assets/ME59b97d4872ac9abbd62d399e9555ebd2.jpeg',
     alt:   'Architectural exterior stone wall and column wrap',
   },
   {
     num:   '06',
     name:  'Fireplaces',
-    desc:  'Floor-to-ceiling stacked stone feature walls, bookmatched slab surrounds, floating mantels, and linear fire inserts.',
     image: '/assets/fireplace.jpeg',
     alt:   'Stacked stone fireplace with linear fire insert',
   },
@@ -47,6 +41,7 @@ const SERVICES = [
 
 export default function Services({ onNavigate }) {
   const [activeIndex, setActiveIndex] = useState(null);
+  const activeService = SERVICES[activeIndex ?? 0];
 
   return (
     <section
@@ -71,36 +66,6 @@ export default function Services({ onNavigate }) {
           className="services-left"
           style={{ padding: 'clamp(3.5rem, 6vw, 7rem) clamp(1.5rem, 5vw, 4rem)' }}
         >
-          {/* Section Header */}
-          <div style={{ marginBottom: '2.5rem' }}>
-            <div
-              style={{
-                fontFamily:    'var(--font-body)',
-                fontSize:      '0.75rem',
-                fontWeight:    '700',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color:         '#C9962F',
-                marginBottom:  '0.6rem',
-              }}
-            >
-              WHAT WE DO
-            </div>
-            <h2
-              style={{
-                fontFamily:    'var(--font-display)',
-                fontSize:      'clamp(2rem, 3.8vw, 3.2rem)',
-                fontWeight:    '700',
-                lineHeight:    1.08,
-                textTransform: 'uppercase',
-                color:         '#FFFFFF',
-                letterSpacing: '0.01em',
-              }}
-            >
-              CRAFTSMANSHIP IN EVERY SQUARE FOOT
-            </h2>
-          </div>
-
           <div
             style={{
               height:       '1px',
@@ -110,71 +75,73 @@ export default function Services({ onNavigate }) {
           />
 
           {/* Interactive Service Rows */}
-          {SERVICES.map((svc, i) => (
-            <div
-              key={svc.num}
-              style={{
-                cursor:     'pointer',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={() => setActiveIndex(i)}
-              onMouseLeave={() => setActiveIndex(null)}
-              onClick={() => onNavigate && onNavigate('estimate')}
-            >
+          <div className="services-list">
+            {SERVICES.map((svc, i) => (
               <div
+                key={svc.num}
                 style={{
-                  display:             'grid',
-                  gridTemplateColumns: '3rem 1fr',
-                  alignItems:          'start',
-                  gap:                 '1rem',
-                  padding:             '1.4rem 0',
-                  borderBottom:        '1px solid rgba(255, 255, 255, 0.08)',
+                  cursor:     'pointer',
+                  transition: 'all 0.3s ease',
                 }}
+                onMouseEnter={() => setActiveIndex(i)}
+                onMouseLeave={() => setActiveIndex(null)}
+                onClick={() => onNavigate && onNavigate('estimate')}
               >
-                {/* Number */}
-                <span
+                <div
                   style={{
-                    fontFamily:    'var(--font-body)',
-                    fontSize:      '0.8rem',
-                    fontWeight:    '700',
-                    color:         activeIndex === i ? '#C9962F' : 'rgba(255, 255, 255, 0.3)',
-                    transition:    'color 0.3s ease',
-                    paddingTop:    '0.3rem',
+                    display:             'grid',
+                    gridTemplateColumns: '3rem 1fr',
+                    alignItems:          'start',
+                    gap:                 '1rem',
+                    padding:             '1.4rem 0',
+                    borderBottom:        '1px solid rgba(255, 255, 255, 0.08)',
                   }}
                 >
-                  {svc.num}
-                </span>
-
-                {/* Name + Description */}
-                <div>
-                  <div
+                  {/* Number */}
+                  <span
                     style={{
-                      fontFamily:    'var(--font-display)',
-                      fontSize:      'clamp(1.25rem, 2vw, 1.8rem)',
+                      fontFamily:    'var(--font-body)',
+                      fontSize:      '0.8rem',
                       fontWeight:    '700',
-                      letterSpacing: '0.02em',
-                      lineHeight:    1.15,
-                      color:         activeIndex === i ? '#C9962F' : '#FFFFFF',
+                      color:         activeIndex === i ? '#C9962F' : 'rgba(255, 255, 255, 0.3)',
                       transition:    'color 0.3s ease',
-                      marginBottom:  '0.4rem',
+                      paddingTop:    '0.3rem',
                     }}
                   >
-                    {svc.name}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize:   '0.88rem',
-                      lineHeight: 1.6,
-                      color:      '#8A8A8A',
-                    }}
-                  >
-                    {svc.desc}
+                    {svc.num}
+                  </span>
+
+                  {/* Name + Description */}
+                  <div>
+                    <div
+                      style={{
+                        fontFamily:    'var(--font-display)',
+                        fontSize:      'clamp(1.25rem, 2vw, 1.8rem)',
+                        fontWeight:    '700',
+                        letterSpacing: '0.02em',
+                        lineHeight:    1.15,
+                        color:         activeIndex === i ? '#C9962F' : '#FFFFFF',
+                        transition:    'color 0.3s ease',
+                        marginBottom:  '0.4rem',
+                      }}
+                    >
+                      {svc.name}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize:   '0.88rem',
+                        lineHeight: 1.6,
+                        color:      '#8A8A8A',
+                      }}
+                    >
+                      {svc.desc}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* All Services Estimate CTA */}
           <div style={{ marginTop: '2.5rem' }}>
@@ -215,15 +182,19 @@ export default function Services({ onNavigate }) {
         <div
           className="services-image-panel"
           style={{
-            position: 'relative',
-            borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
+            position:       'relative',
+            display:        'flex',
+            flexDirection:  'column',
+            alignSelf:      'stretch',
+            width:          '100%',
+            borderLeft:     '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
           <div
             style={{
               position:  'relative',
-              height:    '100%',
-              minHeight: '420px',
+              width:     '100%',
+              aspectRatio: '4 / 3',
               overflow:  'hidden',
             }}
           >
@@ -286,6 +257,102 @@ export default function Services({ onNavigate }) {
                   background: 'linear-gradient(to right, #0D0D0D 0%, transparent 28%)',
                 }}
               />
+            </div>
+          </div>
+
+          <div
+            style={{
+              flex:          '1 1 auto',
+              display:       'flex',
+              flexDirection: 'column',
+              justifyContent:'space-between',
+              padding:       'clamp(2rem, 4vw, 4rem)',
+              borderTop:     '1px solid rgba(255, 255, 255, 0.08)',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      '0.72rem',
+                  fontWeight:    '700',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color:         '#C9962F',
+                  marginBottom:  '1rem',
+                }}
+              >
+                WHAT WE DO
+              </div>
+              <h2
+                style={{
+                  maxWidth:       '32rem',
+                  margin:         '0 0 1.25rem',
+                  fontFamily:     'var(--font-display)',
+                  fontSize:       'clamp(2rem, 3.8vw, 3.2rem)',
+                  fontWeight:     '700',
+                  lineHeight:     1.08,
+                  textTransform:  'uppercase',
+                  letterSpacing:  '0.01em',
+                  color:          '#FFFFFF',
+                }}
+              >
+                {activeService.name}
+              </h2>
+              <p
+                style={{
+                  maxWidth:   '30rem',
+                  margin:     0,
+                  fontFamily: 'var(--font-body)',
+                  fontSize:   '0.95rem',
+                  lineHeight: 1.65,
+                  color:      '#8A8A8A',
+                }}
+              >
+                {activeService.desc}
+              </p>
+            </div>
+
+            <div
+              style={{
+                display:             'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap:                 '1rem',
+                paddingTop:          '2rem',
+              }}
+            >
+              {[
+                ['06', 'Specialties'],
+                ['01', 'Dedicated crew'],
+                ['100%', 'Custom finish'],
+              ].map(([value, label]) => (
+                <div key={label}>
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize:   'clamp(1.3rem, 2.5vw, 2rem)',
+                      fontWeight: '700',
+                      color:      '#FFFFFF',
+                      lineHeight: 1,
+                    }}
+                  >
+                    {value}
+                  </div>
+                  <div
+                    style={{
+                      marginTop:    '0.5rem',
+                      fontFamily:   'var(--font-body)',
+                      fontSize:     '0.68rem',
+                      fontWeight:   '700',
+                      letterSpacing:'0.08em',
+                      textTransform:'uppercase',
+                      color:        '#8A8A8A',
+                    }}
+                  >
+                    {label}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
