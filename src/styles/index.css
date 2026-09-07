@@ -377,9 +377,20 @@ p, .t-body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: stretch;
+}
+
+.services-item {
+  min-width: 0;
+}
+
+.services-item-content {
+  min-height: 8.75rem;
+  box-sizing: border-box;
 }
 
 @media (max-width: 900px) {
+  #services { display: none !important; }
   .services-image-panel { display: none !important; }
 
   /* On mobile, service rows take full width */
@@ -391,6 +402,10 @@ p, .t-body {
 @media (max-width: 640px) {
   .services-list {
     grid-template-columns: 1fr;
+  }
+
+  .services-item-content {
+    min-height: 7rem;
   }
 }
 
