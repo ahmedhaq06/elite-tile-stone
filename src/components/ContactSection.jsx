@@ -9,7 +9,7 @@ export default function ContactSection({ initialService }) {
     firstName:     '',
     phone:         '',
     email:         '',
-    lookingToDo:   initialService || 'Shower remodel',
+    lookingToDo:   initialService || 'Custom showers (master / walk-in)',
     homeOwner:     'Yes',
     timeline:      'As soon as possible',
     budget:        '$5,000–$10,000',
@@ -390,10 +390,13 @@ export default function ContactSection({ initialService }) {
                       onChange={update('lookingToDo')}
                       className="form-select"
                     >
-                      <option value="Shower remodel">Shower remodel</option>
-                      <option value="Floor installation">Floor installation</option>
-                      <option value="Both">Both</option>
-                      <option value="Something else">Something else</option>
+                      <option value="Custom showers (master / walk-in)">Custom showers (master / walk-in)</option>
+                      <option value="Flooring">Flooring</option>
+                      <option value="Kitchen countertops (slab)">Kitchen countertops (slab)</option>
+                      <option value="Kitchen backsplashes">Kitchen backsplashes</option>
+                      <option value="Stone columns (exterior)">Stone columns (exterior)</option>
+                      <option value="Fireplaces">Fireplaces</option>
+                      <option value="Other / Multiple services">Other / Multiple services</option>
                     </select>
                   </div>
 

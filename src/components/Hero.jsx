@@ -20,7 +20,7 @@ export default function Hero({ onNavigate }) {
         style={{
           position:   'absolute',
           inset:      0,
-          backgroundImage: `url('/assets/hero_dark_bathroom.jpg')`,
+          backgroundImage: `url('/assets/ME6b7c6ff636af09a4d467353389260a63.jpeg')`,
           backgroundSize:  'cover',
           backgroundPosition: 'center right',
           zIndex:     1,

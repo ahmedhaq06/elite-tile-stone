@@ -7,7 +7,7 @@ export const CAMPAIGN_ANGLES = {
     heroImage: '/assets/before.jpeg',
     beforeAfterImage: '/assets/after.jpeg',
     badge: 'Shower Repair & Rebuild Specialist',
-    preselectedService: 'Shower remodel',
+    preselectedService: 'Custom showers (master / walk-in)',
     painPoints: [
       'Water leaking into lower ceilings or surrounding drywall',
       'Cracked grout, spongy shower pan, or foul mold smell',
@@ -32,7 +32,7 @@ export const CAMPAIGN_ANGLES = {
     heroImage: '/assets/60c064df-5f37-4fde-a6b6-a516542d3c12.jpeg',
     beforeAfterImage: '/assets/after.jpeg',
     badge: 'Tub-to-Shower Conversion Specialist',
-    preselectedService: 'Shower remodel',
+    preselectedService: 'Custom showers (master / walk-in)',
     painPoints: [
       'High 16-inch tub ledge that is dangerous to step over',
       'Yellowed, hard-to-clean acrylic or fiberglass tub surround',
@@ -57,7 +57,7 @@ export const CAMPAIGN_ANGLES = {
     heroImage: '/assets/hero_dark_bathroom.jpg',
     beforeAfterImage: '/assets/60c064df-5f37-4fde-a6b6-a516542d3c12.jpeg',
     badge: 'Resort-Grade Spa Suite Builders',
-    preselectedService: 'Shower remodel',
+    preselectedService: 'Custom showers (master / walk-in)',
     painPoints: [
       'Standard 4x4 builder tiles that feel dated and generic',
       'Grout lines every 12 inches that gather soap scum and mildew',
@@ -82,7 +82,7 @@ export const CAMPAIGN_ANGLES = {
     heroImage: '/assets/living_room_floor.jpg',
     beforeAfterImage: '/assets/before.jpeg',
     badge: 'Subfloor Prep & Tile Flooring Specialist',
-    preselectedService: 'Floor installation',
+    preselectedService: 'Flooring',
     painPoints: [
       'Post-tension slab cracks telegraphing into tile floors',
       'Uneven concrete subfloors that make large tiles wobble',
@@ -132,7 +132,7 @@ export const CAMPAIGN_ANGLES = {
     heroImage: '/assets/hero_dark_bathroom.jpg',
     beforeAfterImage: '/assets/after.jpeg',
     badge: 'Premier Las Vegas Tile & Stone Contractor',
-    preselectedService: 'Shower remodel',
+    preselectedService: 'Custom showers (master / walk-in)',
     painPoints: [
       'Disappointing builder-grade tile finishes',
       'Fears of hidden water leaks and poor subfloor prep',

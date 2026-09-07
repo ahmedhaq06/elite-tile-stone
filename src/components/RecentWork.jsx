@@ -4,21 +4,21 @@ export default function RecentWork({ onNavigate }) {
   const projects = [
     {
       id: 1,
-      title: 'Kitchen Backsplash',
-      image: '/assets/08f40bc1-a67f-4f82-8283-fd52b849de06.jpeg',
-      alt: 'Kitchen Backsplash Project',
+      title: 'Master Walk-In Marble Shower',
+      image: '/assets/ME6b7c6ff636af09a4d467353389260a63.jpeg',
+      alt: 'Master Walk-In Marble Shower',
     },
     {
       id: 2,
-      title: 'Large-Format Porcelain Flooring',
-      image: '/assets/living_room_floor.jpg',
-      alt: 'Living Room Tile Flooring Project',
+      title: 'Polished Viola Marble Flooring',
+      image: '/assets/MEb5d1272033e08cdee97949bed6f7be83.jpeg',
+      alt: 'Polished Viola Marble Flooring',
     },
     {
       id: 3,
-      title: 'Marble Slab Fireplace Wall',
-      image: '/assets/fireplace_wall.jpg',
-      alt: 'Marble Fireplace Wall Project',
+      title: 'Stacked Stone Fireplace Wall',
+      image: '/assets/fireplace.jpeg',
+      alt: 'Stacked Stone Fireplace Wall',
     },
   ];
 
