@@ -203,7 +203,7 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
                   textDecoration: 'none',
                 }}
               >
-                <span><img src="assets/instagram_logo.jpeg" alt="Instagram" /></span> @elite_tileandstone
+                <span><img src="/assets/instagram_logo.jpeg" alt="Instagram" style={{ height: '18px', width: '18px', objectFit: 'contain', verticalAlign: 'middle' }} /></span> @elite_tileandstone
               </a>
               <a
                 href="https://www.tiktok.com/@hugomendoza3893?_r=1&_t=ZT-99Y0RstXzB8"
@@ -219,7 +219,7 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
                   textDecoration: 'none',
                 }}
               >
-                <span><img src="assets/tiktok_logo.jpeg" alt="TikTok" /></span> @hugomendoza3893
+                <span><img src="/assets/tiktok_logo.jpeg" alt="TikTok" style={{ height: '18px', width: '18px', objectFit: 'contain', verticalAlign: 'middle' }} /></span> @hugomendoza3893
               </a>
               <a
                 href="https://www.facebook.com/people/Elite-Tile-And-Stone-Llc/61590267161809/?rdid=twkmcNCFkGqflgyu"
@@ -235,7 +235,7 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
                   textDecoration: 'none',
                 }}
               >
-                <span><img src="assets/facebook_logo.jpeg" alt="Facebook" /></span> Elite Tile And Stone Llc
+                <span><img src="/assets/facebook_logo.jpeg" alt="Facebook" style={{ height: '18px', width: '18px', objectFit: 'contain', verticalAlign: 'middle' }} /></span> Elite Tile And Stone Llc
               </a>
               <div
                 style={{
