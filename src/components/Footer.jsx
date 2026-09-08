@@ -187,7 +187,7 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
                   textDecoration: 'none',
                 }}
               >
-                <span>✉️</span> info@elitetileandstonelv.com
+                <span>✉️</span> hugo@elitetileandstonelv.com
               </a>
               <a
                 href="https://www.instagram.com/elite_tileandstone"
@@ -204,6 +204,38 @@ export default function Footer({ onNavigate, onOpenPrivacy }) {
                 }}
               >
                 <span>📸</span> @elite_tileandstone
+              </a>
+              <a
+                href="https://www.tiktok.com/@hugomendoza3893?_r=1&_t=ZT-99Y0RstXzB8"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display:       'flex',
+                  alignItems:    'center',
+                  gap:           '0.6rem',
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      '0.88rem',
+                  color:         '#8A8A8A',
+                  textDecoration: 'none',
+                }}
+              >
+                <span>📸</span> @hugomendoza3893
+              </a>
+              <a
+                href="https://www.facebook.com/people/Elite-Tile-And-Stone-Llc/61590267161809/?rdid=twkmcNCFkGqflgyu"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display:       'flex',
+                  alignItems:    'center',
+                  gap:           '0.6rem',
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      '0.88rem',
+                  color:         '#8A8A8A',
+                  textDecoration: 'none',
+                }}
+              >
+                <span>📸</span> Elite Tile And Stone Llc
               </a>
               <div
                 style={{
