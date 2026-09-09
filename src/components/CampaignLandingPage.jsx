@@ -4,6 +4,11 @@ import { BUSINESS_INFO } from '../data/tilesData';
 import { trackPageView, trackLeadEvent } from '../utils/metaPixel';
 import { Phone, CheckCircle, Clock, ShieldCheck, Star, ArrowRight } from 'lucide-react';
 
+// ── Google Sheets Submission Endpoint ─────────────────────────────────────────
+// After deploying the Apps Script, paste the Web App URL below.
+const GOOGLE_SHEETS_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+// ──────────────────────────────────────────────────────────────────────────────
+
 export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, onOpenTerms }) {
   const [angle, setAngle] = useState(() => {
     if (propAngle) return propAngle;
@@ -19,6 +24,8 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dynamicAnswers, setDynamicAnswers] = useState({});
   const [form, setForm] = useState({
     firstName:   '',
     phone:       '',
@@ -45,21 +52,58 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
         const newAngle = getCampaignAngle(adParam);
         setAngle(newAngle);
         setForm((prev) => ({ ...prev, lookingToDo: newAngle.preselectedService || prev.lookingToDo }));
+        setDynamicAnswers({});
       }
     }
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.consent) return;
 
+    setIsSubmitting(true);
+
+    // Build payload including ad-specific dynamic question answers
+    const extraQuestions  = angle.formQuestions || [];
+    const extraQ1         = extraQuestions[0] || null;
+    const extraQ2         = extraQuestions[1] || null;
+
+    const payload = {
+      adSource:      angle.id,
+      firstName:     form.firstName,
+      phone:         form.phone,
+      email:         form.email,
+      lookingToDo:   form.lookingToDo,
+      homeOwner:     form.homeOwner,
+      timeline:      form.timeline,
+      budget:        form.budget,
+      extraQ1Label:  extraQ1 ? extraQ1.label : '',
+      extraQ1Answer: extraQ1 ? (dynamicAnswers[extraQ1.id] || 'Not answered') : '',
+      extraQ2Label:  extraQ2 ? extraQ2.label : '',
+      extraQ2Answer: extraQ2 ? (dynamicAnswers[extraQ2.id] || 'Not answered') : '',
+      notes:         form.notes,
+    };
+
+    try {
+      // Using text/plain to avoid CORS preflight — Apps Script handles it fine
+      await fetch(GOOGLE_SHEETS_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body:    JSON.stringify(payload),
+      });
+    } catch (err) {
+      // Silent fail — never block the user from seeing the thank-you screen
+      console.error('Google Sheets submission error:', err);
+    }
+
+    setIsSubmitting(false);
     setSubmitted(true);
 
     // Fire Meta Pixel Lead Event ONLY upon successful form submission
     trackLeadEvent({
       adAngle: angle.id,
-      service: form.lookingToDo,
-      budget: form.budget,
+      service:  form.lookingToDo,
+      budget:   form.budget,
       timeline: form.timeline,
     });
 
@@ -710,6 +754,68 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                   </select>
                 </div>
 
+                {/* ── Ad-Specific Dynamic Qualifying Questions ── */}
+                {(angle.formQuestions || []).map((q) => (
+                  <div key={q.id} className="form-field">
+                    <label className="form-label">
+                      {q.label}{q.required ? ' *' : ''}
+                    </label>
+
+                    {q.type === 'select' && (
+                      <select
+                        value={dynamicAnswers[q.id] || ''}
+                        onChange={(e) => setDynamicAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                        className="form-select"
+                        required={q.required}
+                      >
+                        <option value="">— Select an option —</option>
+                        {(q.options || []).map((opt) => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                    )}
+
+                    {q.type === 'buttons' && (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.8rem' }}>
+                        {(q.options || []).map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => setDynamicAnswers((prev) => ({ ...prev, [q.id]: opt }))}
+                            style={{
+                              padding:      '0.75rem 0.5rem',
+                              borderRadius: '6px',
+                              border:       dynamicAnswers[q.id] === opt ? '2px solid #C9962F' : '1px solid #333333',
+                              background:   dynamicAnswers[q.id] === opt ? 'rgba(201, 150, 47, 0.15)' : '#181818',
+                              color:        dynamicAnswers[q.id] === opt ? '#C9962F' : '#FFFFFF',
+                              fontWeight:   dynamicAnswers[q.id] === opt ? '700' : '400',
+                              fontFamily:   "'Poppins', sans-serif",
+                              fontSize:     '0.84rem',
+                              cursor:       'pointer',
+                              transition:   'all 0.2s ease',
+                              textAlign:    'center',
+                              lineHeight:   1.3,
+                            }}
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {q.type === 'text' && (
+                      <input
+                        type="text"
+                        value={dynamicAnswers[q.id] || ''}
+                        onChange={(e) => setDynamicAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                        placeholder={q.placeholder || ''}
+                        className="form-input"
+                        required={q.required}
+                      />
+                    )}
+                  </div>
+                ))}
+
                 {/* 5. Do you own the home? — Yes / No */}
                 <div className="form-field">
                   <label className="form-label">
@@ -828,24 +934,37 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                 {/* 10. Button: Get My Free Estimate */}
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   style={{
-                    width:        '100%',
-                    marginTop:    '0.6rem',
-                    background:   '#C9962F',
-                    color:        '#0D0D0D',
-                    fontWeight:   '700',
-                    fontSize:     '0.95rem',
-                    borderRadius: '6px',
-                    padding:      '1.05rem',
-                    border:       'none',
-                    cursor:       'pointer',
-                    boxShadow:    '0 4px 14px rgba(201, 150, 47, 0.3)',
-                    transition:   'background 0.2s ease',
+                    width:          '100%',
+                    marginTop:      '0.6rem',
+                    background:     isSubmitting ? '#8A6B22' : '#C9962F',
+                    color:          '#0D0D0D',
+                    fontWeight:     '700',
+                    fontSize:       '0.95rem',
+                    borderRadius:   '6px',
+                    padding:        '1.05rem',
+                    border:         'none',
+                    cursor:         isSubmitting ? 'not-allowed' : 'pointer',
+                    boxShadow:      '0 4px 14px rgba(201, 150, 47, 0.3)',
+                    transition:     'background 0.2s ease',
+                    display:        'flex',
+                    alignItems:     'center',
+                    justifyContent: 'center',
+                    gap:            '0.5rem',
+                    opacity:        isSubmitting ? 0.85 : 1,
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#D9A43B'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#C9962F'; }}
+                  onMouseEnter={(e) => { if (!isSubmitting) e.currentTarget.style.background = '#D9A43B'; }}
+                  onMouseLeave={(e) => { if (!isSubmitting) e.currentTarget.style.background = isSubmitting ? '#8A6B22' : '#C9962F'; }}
                 >
-                  Get My Free Estimate
+                  {isSubmitting ? (
+                    <>
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'spin 0.9s linear infinite' }}>
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                      </svg>
+                      Sending your request…
+                    </>
+                  ) : 'Get My Free Estimate'}
                 </button>
 
                 {/* 11. Below the button notice */}
