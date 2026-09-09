@@ -40,7 +40,6 @@ export function trackPageView() {
   initMetaPixel();
   if (typeof window !== 'undefined' && window.fbq) {
     window.fbq('track', 'PageView');
-    console.log('[Meta Pixel] PageView tracked for pixel:', getPixelId());
   }
 }
 
@@ -54,6 +53,5 @@ export function trackLeadEvent(leadData = {}) {
       value: 0,
       ...leadData,
     });
-    console.log('[Meta Pixel] Lead event tracked on Thank You Page:', leadData);
   }
 }
