@@ -21,7 +21,23 @@ export const CAMPAIGN_ANGLES = {
       'Licensed NV contractor #0095105 with 15+ years experience'
     ],
     offerTitle: 'Get Your Free On-Site Shower Inspection & Estimate',
-    offerDesc: 'Complimentary moisture check and itemized rebuild quote in Las Vegas, Henderson & Summerlin.'
+    offerDesc: 'Complimentary moisture check and itemized rebuild quote in Las Vegas, Henderson & Summerlin.',
+    formQuestions: [
+      {
+        id: 'showerIssue',
+        label: "What's happening with your shower?",
+        type: 'select',
+        required: true,
+        options: [
+          'Water leaking / flooding into walls or ceiling',
+          'Tiles cracking, popping, or falling off',
+          'Mold, mildew, or foul smell from grout',
+          'Spongy shower pan or soft floor',
+          'Full gut & rebuild — prior contractor failure',
+          'Not sure — needs inspection',
+        ],
+      },
+    ],
   },
 
   'tub-conversion': {
@@ -46,7 +62,20 @@ export const CAMPAIGN_ANGLES = {
       'Floor-to-ceiling porcelain or natural marble wall slabs'
     ],
     offerTitle: 'Get Your Free Walk-In Conversion Estimate',
-    offerDesc: 'On-site measurement and exact cost breakdown for your tub-to-shower conversion.'
+    offerDesc: 'On-site measurement and exact cost breakdown for your tub-to-shower conversion.',
+    formQuestions: [
+      {
+        id: 'conversionStyle',
+        label: 'What style of walk-in shower are you envisioning?',
+        type: 'buttons',
+        required: false,
+        options: [
+          'Walk-in with frameless glass door',
+          'Open walk-in (no glass)',
+          'Walk-in with bench + LED niche',
+        ],
+      },
+    ],
   },
 
   'luxury': {
@@ -71,7 +100,23 @@ export const CAMPAIGN_ANGLES = {
       'Custom linear slot drains and illuminated floating niches'
     ],
     offerTitle: 'Get Your Free Luxury Suite Estimate',
-    offerDesc: 'Complimentary on-site measurement & 3D slab visualization consultation.'
+    offerDesc: 'Complimentary on-site measurement & 3D slab visualization consultation.',
+    formQuestions: [
+      {
+        id: 'projectArea',
+        label: 'Which area are you looking to remodel?',
+        type: 'buttons',
+        required: false,
+        options: ['Master shower only', 'Guest bathroom', 'Multiple rooms'],
+      },
+      {
+        id: 'tileInspiration',
+        label: 'Do you have a tile style or inspiration in mind?',
+        type: 'buttons',
+        required: false,
+        options: ['Yes — I have photos / ideas', 'No — help me choose'],
+      },
+    ],
   },
 
   'floors': {
@@ -96,7 +141,23 @@ export const CAMPAIGN_ANGLES = {
       'Seamless installation over post-tension Las Vegas concrete slabs'
     ],
     offerTitle: 'Get Your Free Tile Flooring Estimate',
-    offerDesc: 'On-site floor inspection and square footage cost estimate in Southern Nevada.'
+    offerDesc: 'On-site floor inspection and square footage cost estimate in Southern Nevada.',
+    formQuestions: [
+      {
+        id: 'sqFootage',
+        label: 'Approximate square footage to tile?',
+        type: 'text',
+        placeholder: 'e.g. 800 sq ft, or 2,000 sq ft for the full estate',
+        required: false,
+      },
+      {
+        id: 'floorLocation',
+        label: 'Is the area indoor, outdoor, or both?',
+        type: 'buttons',
+        required: false,
+        options: ['Indoor living area', 'Outdoor patio / pool deck', 'Both'],
+      },
+    ],
   },
 
   'new-home': {
@@ -121,7 +182,23 @@ export const CAMPAIGN_ANGLES = {
       'Protected job site containment keeping dust out of rest of house'
     ],
     offerTitle: 'Get Your Pre-Move-In Estimate Today',
-    offerDesc: 'Fast response and priority scheduling for new Nevada homeowners.'
+    offerDesc: 'Fast response and priority scheduling for new Nevada homeowners.',
+    formQuestions: [
+      {
+        id: 'moveInTimeline',
+        label: 'How soon are you moving in?',
+        type: 'buttons',
+        required: false,
+        options: ['Already moved in', 'Within 30 days', '1–3 months out'],
+      },
+      {
+        id: 'areasToTile',
+        label: 'Which areas are you looking to tile?',
+        type: 'buttons',
+        required: false,
+        options: ['Shower only', 'Floors only', 'Both shower & floors'],
+      },
+    ],
   },
 
   'default': {
@@ -146,7 +223,8 @@ export const CAMPAIGN_ANGLES = {
       'Nevada licensed, bonded & insured #0095105'
     ],
     offerTitle: 'Get Your Free In-Home Estimate',
-    offerDesc: 'On-site laser measurement and itemized project quote in Southern Nevada.'
+    offerDesc: 'On-site laser measurement and itemized project quote in Southern Nevada.',
+    formQuestions: [],
   }
 };
 
