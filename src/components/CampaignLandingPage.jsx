@@ -6,7 +6,7 @@ import { Phone, CheckCircle, Clock, ShieldCheck, Star, ArrowRight } from 'lucide
 
 // ── Google Sheets Submission Endpoint ─────────────────────────────────────────
 // After deploying the Apps Script, paste the Web App URL below.
-const GOOGLE_SHEETS_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxZS784BMtRkjbreLlKiEUnprNdq5nNCYGpcxawawtxcCJYZ1rJbqP9Ud79JAeepHow/exec';
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, onOpenTerms }) {
