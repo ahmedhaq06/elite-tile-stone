@@ -1,5 +1,5 @@
 // Meta Pixel Utility & Tracking Helper
-export const DEFAULT_PIXEL_ID = '123456789012345'; // Replace with client's Meta Pixel ID when deploying
+export const DEFAULT_PIXEL_ID = '1662174195275353';
 
 export function getPixelId() {
   if (typeof window !== 'undefined' && window.META_PIXEL_ID) {

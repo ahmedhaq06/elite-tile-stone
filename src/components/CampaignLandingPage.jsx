@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getCampaignAngle } from '../data/campaignData';
 import { BUSINESS_INFO } from '../data/tilesData';
-import { trackPageView, trackLeadEvent } from '../utils/metaPixel';
+import { trackLeadEvent } from '../utils/metaPixel';
 import { Phone, CheckCircle, Clock, ShieldCheck, Star, ArrowRight } from 'lucide-react';
 
 // ── Google Sheets Submission Endpoint ─────────────────────────────────────────
@@ -37,11 +37,6 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
     notes:       '',
     consent:     false,
   });
-
-  // Fire Meta Pixel PageView on initial landing page load
-  useEffect(() => {
-    trackPageView();
-  }, []);
 
   // Update angle if URL search parameter changes
   useEffect(() => {
