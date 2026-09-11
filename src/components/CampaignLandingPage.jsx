@@ -6,7 +6,7 @@ import { Phone, CheckCircle, Clock, ShieldCheck, Star, ArrowRight } from 'lucide
 
 // ── Google Sheets Submission Endpoint ─────────────────────────────────────────
 // After deploying the Apps Script, paste the Web App URL below.
-const GOOGLE_SHEETS_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwOi-ltL76H9-MjhWjlsSM1dNsKnbXu3anDS9NSx4aJzhWlMPem5Vv6_HTKUvLqG2rl/exec';
 // ──────────────────────────────────────────────────────────────────────────────
 
 export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, onOpenTerms }) {
@@ -16,7 +16,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
       const searchParams = new URLSearchParams(window.location.search);
       const adParam = searchParams.get('ad');
       if (adParam) return getCampaignAngle(adParam);
-      
+
       const path = window.location.pathname.replace(/\/$/, '');
       if (path && path !== '/') return getCampaignAngle(path);
     }
@@ -27,15 +27,15 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dynamicAnswers, setDynamicAnswers] = useState({});
   const [form, setForm] = useState({
-    firstName:   '',
-    phone:       '',
-    email:       '',
+    firstName: '',
+    phone: '',
+    email: '',
     lookingToDo: angle.preselectedService || 'Custom showers (master / walk-in)',
-    homeOwner:   'Yes',
-    timeline:    'As soon as possible',
-    budget:      '$5,000–$10,000',
-    notes:       '',
-    consent:     false,
+    homeOwner: 'Yes',
+    timeline: 'As soon as possible',
+    budget: '$5,000–$10,000',
+    notes: '',
+    consent: false,
   });
 
   // Update angle if URL search parameter changes
@@ -59,32 +59,32 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
     setIsSubmitting(true);
 
     // Build payload including ad-specific dynamic question answers
-    const extraQuestions  = angle.formQuestions || [];
-    const extraQ1         = extraQuestions[0] || null;
-    const extraQ2         = extraQuestions[1] || null;
+    const extraQuestions = angle.formQuestions || [];
+    const extraQ1 = extraQuestions[0] || null;
+    const extraQ2 = extraQuestions[1] || null;
 
     const payload = {
-      adSource:      angle.id,
-      firstName:     form.firstName,
-      phone:         form.phone,
-      email:         form.email,
-      lookingToDo:   form.lookingToDo,
-      homeOwner:     form.homeOwner,
-      timeline:      form.timeline,
-      budget:        form.budget,
-      extraQ1Label:  extraQ1 ? extraQ1.label : '',
+      adSource: angle.id,
+      firstName: form.firstName,
+      phone: form.phone,
+      email: form.email,
+      lookingToDo: form.lookingToDo,
+      homeOwner: form.homeOwner,
+      timeline: form.timeline,
+      budget: form.budget,
+      extraQ1Label: extraQ1 ? extraQ1.label : '',
       extraQ1Answer: extraQ1 ? (dynamicAnswers[extraQ1.id] || 'Not answered') : '',
-      extraQ2Label:  extraQ2 ? extraQ2.label : '',
+      extraQ2Label: extraQ2 ? extraQ2.label : '',
       extraQ2Answer: extraQ2 ? (dynamicAnswers[extraQ2.id] || 'Not answered') : '',
-      notes:         form.notes,
+      notes: form.notes,
     };
 
     try {
       // Using text/plain to avoid CORS preflight — Apps Script handles it fine
       await fetch(GOOGLE_SHEETS_URL, {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body:    JSON.stringify(payload),
+        body: JSON.stringify(payload),
       });
     } catch (err) {
       // Silent fail — never block the user from seeing the thank-you screen
@@ -97,8 +97,8 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
     // Fire Meta Pixel Lead Event ONLY upon successful form submission
     trackLeadEvent({
       adAngle: angle.id,
-      service:  form.lookingToDo,
-      budget:   form.budget,
+      service: form.lookingToDo,
+      budget: form.budget,
       timeline: form.timeline,
     });
 
@@ -122,25 +122,25 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
 
   return (
     <div style={{ background: '#0D0D0D', color: '#FFFFFF', fontFamily: "'Poppins', sans-serif", minHeight: '100vh' }}>
-      
+
       {/* ── Standalone Sales Funnel Header (No generic website menu) ── */}
       <header
         style={{
-          position:   'sticky',
-          top:        0,
-          zIndex:     100,
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
           background: 'rgba(13, 13, 13, 0.95)',
           backdropFilter: 'blur(12px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          padding:    '0.8rem clamp(1.2rem, 5vw, 4rem)',
+          padding: '0.8rem clamp(1.2rem, 5vw, 4rem)',
         }}
       >
         <div
           style={{
-            maxWidth:       '1440px',
-            margin:         '0 auto',
-            display:        'flex',
-            alignItems:     'center',
+            maxWidth: '1440px',
+            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'space-between',
           }}
         >
@@ -169,17 +169,17 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
             <a
               href="tel:7023341707"
               style={{
-                display:       'inline-flex',
-                alignItems:    'center',
-                gap:           '0.45rem',
-                fontSize:      '0.82rem',
-                fontWeight:    '700',
-                color:         '#0D0D0D',
-                background:    '#C9962F',
-                padding:       '0.55rem 1.1rem',
-                borderRadius:  '6px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontSize: '0.82rem',
+                fontWeight: '700',
+                color: '#0D0D0D',
+                background: '#C9962F',
+                padding: '0.55rem 1.1rem',
+                borderRadius: '6px',
                 textDecoration: 'none',
-                transition:    'background 0.2s ease',
+                transition: 'background 0.2s ease',
               }}
             >
               <Phone size={15} />
@@ -192,34 +192,34 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
       {/* ── Section 1: DYNAMIC HERO (Matched to ?ad= parameter) ── */}
       <section
         style={{
-          position:   'relative',
+          position: 'relative',
           background: '#0D0D0D',
-          padding:    'clamp(3rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 4rem)',
+          padding: 'clamp(3rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 4rem)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          overflow:   'hidden',
+          overflow: 'hidden',
         }}
       >
         {/* Hero background photography panel */}
         <div
           style={{
-            position:        'absolute',
-            inset:           0,
+            position: 'absolute',
+            inset: 0,
             backgroundImage: `url('${angle.heroImage}')`,
-            backgroundSize:  'cover',
+            backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity:         0.22,
+            opacity: 0.22,
           }}
         />
 
         <div
           style={{
-            position:  'relative',
-            zIndex:    2,
-            maxWidth:  '1440px',
-            margin:    '0 auto',
-            display:   'grid',
+            position: 'relative',
+            zIndex: 2,
+            maxWidth: '1440px',
+            margin: '0 auto',
+            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap:       '3rem',
+            gap: '3rem',
             alignItems: 'center',
           }}
         >
@@ -229,15 +229,15 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
             <div style={{ marginBottom: '1.2rem' }}>
               <span
                 style={{
-                  fontSize:      '0.72rem',
-                  fontWeight:    '700',
+                  fontSize: '0.72rem',
+                  fontWeight: '700',
                   letterSpacing: '0.15em',
                   textTransform: 'uppercase',
-                  color:         '#C9962F',
-                  background:    'rgba(201, 150, 47, 0.14)',
-                  padding:       '0.35rem 0.85rem',
-                  borderRadius:  '4px',
-                  border:        '1px solid rgba(201, 150, 47, 0.35)',
+                  color: '#C9962F',
+                  background: 'rgba(201, 150, 47, 0.14)',
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '4px',
+                  border: '1px solid rgba(201, 150, 47, 0.35)',
                 }}
               >
                 {angle.badge}
@@ -247,12 +247,12 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
             {/* Headline */}
             <h1
               style={{
-                fontFamily:    'var(--font-display)',
-                fontSize:      'clamp(2.4rem, 5vw, 4.2rem)',
-                fontWeight:    '700',
-                lineHeight:    1.08,
-                color:         '#C9962F',
-                marginBottom:  '1.2rem',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.4rem, 5vw, 4.2rem)',
+                fontWeight: '700',
+                lineHeight: 1.08,
+                color: '#C9962F',
+                marginBottom: '1.2rem',
                 textTransform: 'uppercase',
               }}
             >
@@ -262,11 +262,11 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
             {/* Subheadline */}
             <p
               style={{
-                fontSize:     'clamp(1rem, 1.3vw, 1.15rem)',
-                color:        '#FFFFFF',
-                lineHeight:   1.65,
+                fontSize: 'clamp(1rem, 1.3vw, 1.15rem)',
+                color: '#FFFFFF',
+                lineHeight: 1.65,
                 marginBottom: '2rem',
-                maxWidth:     '560px',
+                maxWidth: '560px',
               }}
             >
               {angle.subheadline}
@@ -277,20 +277,20 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
               <button
                 onClick={scrollToForm}
                 style={{
-                  display:       'inline-flex',
-                  alignItems:    'center',
-                  gap:           '0.6rem',
-                  padding:       '1rem 2.2rem',
-                  fontSize:      '0.85rem',
-                  fontWeight:    '700',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.6rem',
+                  padding: '1rem 2.2rem',
+                  fontSize: '0.85rem',
+                  fontWeight: '700',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  color:         '#0D0D0D',
-                  background:    '#C9962F',
-                  border:        'none',
-                  borderRadius:  '6px',
-                  cursor:        'pointer',
-                  boxShadow:     '0 4px 18px rgba(201, 150, 47, 0.35)',
+                  color: '#0D0D0D',
+                  background: '#C9962F',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 18px rgba(201, 150, 47, 0.35)',
                 }}
               >
                 Claim Free Estimate <ArrowRight size={18} />
@@ -299,9 +299,9 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
               <a
                 href="tel:7023341707"
                 style={{
-                  fontSize:      '0.82rem',
-                  fontWeight:    '700',
-                  color:         '#8A8A8A',
+                  fontSize: '0.82rem',
+                  fontWeight: '700',
+                  color: '#8A8A8A',
                   textDecoration: 'none',
                 }}
               >
@@ -312,13 +312,13 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
             {/* Quick Micro-Trust Signals */}
             <div
               style={{
-                display:    'flex',
-                gap:        '1.5rem',
-                marginTop:  '2rem',
+                display: 'flex',
+                gap: '1.5rem',
+                marginTop: '2rem',
                 paddingTop: '1.5rem',
-                borderTop:  '1px solid rgba(255, 255, 255, 0.1)',
-                fontSize:   '0.78rem',
-                color:      '#8A8A8A',
+                borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                fontSize: '0.78rem',
+                color: '#8A8A8A',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -333,12 +333,12 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
           {/* Right Column: Hero Visual Card */}
           <div
             style={{
-              position:     'relative',
+              position: 'relative',
               borderRadius: '10px',
-              overflow:     'hidden',
-              border:       '1px solid rgba(255, 255, 255, 0.12)',
-              boxShadow:    '0 20px 50px rgba(0,0,0,0.7)',
-              maxHeight:    '450px',
+              overflow: 'hidden',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.7)',
+              maxHeight: '450px',
             }}
           >
             <img
@@ -354,7 +354,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
       <section
         style={{
           background: '#141414',
-          padding:    'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
+          padding: 'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
@@ -370,18 +370,18 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
 
           <div
             style={{
-              display:             'grid',
+              display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap:                 '2.5rem',
+              gap: '2.5rem',
             }}
           >
             {/* Common Problems */}
             <div
               style={{
-                background:   '#181818',
-                border:       '1px solid rgba(239, 68, 68, 0.3)',
+                background: '#181818',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
                 borderRadius: '10px',
-                padding:      '2rem',
+                padding: '2rem',
               }}
             >
               <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#EF4444', marginBottom: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -400,11 +400,11 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
             {/* Our Solution */}
             <div
               style={{
-                background:   '#181818',
-                border:       '1px solid #C9962F',
+                background: '#181818',
+                border: '1px solid #C9962F',
                 borderRadius: '10px',
-                padding:      '2rem',
-                boxShadow:    '0 10px 30px rgba(201, 150, 47, 0.15)',
+                padding: '2rem',
+                boxShadow: '0 10px 30px rgba(201, 150, 47, 0.15)',
               }}
             >
               <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#C9962F', marginBottom: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -427,7 +427,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
       <section
         style={{
           background: '#0D0D0D',
-          padding:    'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
+          padding: 'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
@@ -446,9 +446,9 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
 
           <div
             style={{
-              display:             'grid',
+              display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap:                 '2rem',
+              gap: '2rem',
             }}
           >
             {[
@@ -474,11 +474,11 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
               <div
                 key={idx}
                 style={{
-                  background:   '#141414',
-                  border:       '1px solid #262626',
-                  padding:      '2rem',
+                  background: '#141414',
+                  border: '1px solid #262626',
+                  padding: '2rem',
                   borderRadius: '10px',
-                  display:      'flex',
+                  display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                 }}
@@ -510,7 +510,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
       <section
         style={{
           background: '#141414',
-          padding:    'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
+          padding: 'clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
@@ -524,10 +524,10 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
 
           <div
             style={{
-              display:             'grid',
+              display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap:                 '1.5rem',
-              textAlign:           'left',
+              gap: '1.5rem',
+              textAlign: 'left',
             }}
           >
             <div style={{ background: '#181818', border: '1px solid #262626', padding: '1.5rem', borderRadius: '8px' }}>
@@ -565,49 +565,49 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
         id="qualification-form-section"
         style={{
           background: '#0D0D0D',
-          padding:    'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)',
+          padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)',
         }}
       >
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          
+
           {submitted ? (
             /* ── THANK-YOU PAGE STATE (Meta Pixel Lead event fires ONLY here!) ── */
             <div
               style={{
-                background:   '#141414',
-                border:       '2px solid #C9962F',
+                background: '#141414',
+                border: '2px solid #C9962F',
                 borderRadius: '12px',
-                padding:      'clamp(2.5rem, 5vw, 4rem) 2rem',
-                textAlign:    'center',
-                boxShadow:    '0 20px 60px rgba(0,0,0,0.8)',
+                padding: 'clamp(2.5rem, 5vw, 4rem) 2rem',
+                textAlign: 'center',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
               }}
             >
               <CheckCircle size={60} style={{ color: '#C9962F', marginBottom: '1.5rem' }} />
-              
+
               <div style={{ fontSize: '0.78rem', fontWeight: '700', letterSpacing: '0.2em', color: '#C9962F', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
                 QUALIFICATION CONFIRMED
               </div>
-              
+
               <h2
                 style={{
-                  fontFamily:   'var(--font-display)',
-                  fontSize:     'clamp(2.2rem, 4vw, 3.2rem)',
-                  fontWeight:   '700',
-                  color:        '#FFFFFF',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
+                  fontWeight: '700',
+                  color: '#FFFFFF',
                   marginBottom: '1rem',
                   textTransform: 'uppercase',
                 }}
               >
                 Thank You, {form.firstName}!
               </h2>
-              
+
               <p
                 style={{
-                  fontSize:     '1.05rem',
-                  color:        '#CCCCCC',
-                  lineHeight:   1.65,
-                  maxWidth:     '560px',
-                  margin:       '0 auto 2rem auto',
+                  fontSize: '1.05rem',
+                  color: '#CCCCCC',
+                  lineHeight: 1.65,
+                  maxWidth: '560px',
+                  margin: '0 auto 2rem auto',
                 }}
               >
                 Your request for <strong>{form.lookingToDo}</strong> has been prioritized. Master contractor Ahmed will personally review your project details and contact you at <strong>{form.phone}</strong> within 24 hours.
@@ -615,14 +615,14 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
 
               <div
                 style={{
-                  background:   '#181818',
-                  border:       '1px solid #262626',
+                  background: '#181818',
+                  border: '1px solid #262626',
                   borderRadius: '8px',
-                  padding:      '1.5rem',
+                  padding: '1.5rem',
                   marginBottom: '2rem',
-                  textAlign:    'left',
-                  fontSize:     '0.88rem',
-                  color:        '#8A8A8A',
+                  textAlign: 'left',
+                  fontSize: '0.88rem',
+                  color: '#8A8A8A',
                 }}
               >
                 <div style={{ color: '#FFFFFF', fontWeight: '700', marginBottom: '0.5rem' }}>
@@ -639,16 +639,16 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                 <a
                   href={`tel:${BUSINESS_INFO.phoneRaw}`}
                   style={{
-                    display:       'inline-flex',
-                    alignItems:    'center',
-                    gap:            me => '0.5rem',
-                    padding:       '0.9rem 1.8rem',
-                    background:    '#C9962F',
-                    color:         '#0D0D0D',
-                    fontWeight:    '700',
-                    borderRadius:  '6px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: me => '0.5rem',
+                    padding: '0.9rem 1.8rem',
+                    background: '#C9962F',
+                    color: '#0D0D0D',
+                    fontWeight: '700',
+                    borderRadius: '6px',
                     textDecoration: 'none',
-                    fontSize:      '0.85rem',
+                    fontSize: '0.85rem',
                   }}
                 >
                   <Phone size={18} /> Call Directly: 702 334 1707
@@ -659,11 +659,11 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
             /* ── LEAD QUALIFICATION FORM (11-Step Fields) ── */
             <div
               style={{
-                background:   '#141414',
-                border:       '1px solid #262626',
+                background: '#141414',
+                border: '1px solid #262626',
                 borderRadius: '12px',
-                padding:      'clamp(1.8rem, 4vw, 3rem)',
-                boxShadow:    '0 20px 50px rgba(0,0,0,0.6)',
+                padding: 'clamp(1.8rem, 4vw, 3rem)',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
               }}
             >
               <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -679,7 +679,7 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
               </div>
 
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
-                
+
                 {/* 1. First name — text */}
                 <div className="form-field">
                   <label className="form-label" htmlFor="ad-first-name">
@@ -778,18 +778,18 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                             type="button"
                             onClick={() => setDynamicAnswers((prev) => ({ ...prev, [q.id]: opt }))}
                             style={{
-                              padding:      '0.75rem 0.5rem',
+                              padding: '0.75rem 0.5rem',
                               borderRadius: '6px',
-                              border:       dynamicAnswers[q.id] === opt ? '2px solid #C9962F' : '1px solid #333333',
-                              background:   dynamicAnswers[q.id] === opt ? 'rgba(201, 150, 47, 0.15)' : '#181818',
-                              color:        dynamicAnswers[q.id] === opt ? '#C9962F' : '#FFFFFF',
-                              fontWeight:   dynamicAnswers[q.id] === opt ? '700' : '400',
-                              fontFamily:   "'Poppins', sans-serif",
-                              fontSize:     '0.84rem',
-                              cursor:       'pointer',
-                              transition:   'all 0.2s ease',
-                              textAlign:    'center',
-                              lineHeight:   1.3,
+                              border: dynamicAnswers[q.id] === opt ? '2px solid #C9962F' : '1px solid #333333',
+                              background: dynamicAnswers[q.id] === opt ? 'rgba(201, 150, 47, 0.15)' : '#181818',
+                              color: dynamicAnswers[q.id] === opt ? '#C9962F' : '#FFFFFF',
+                              fontWeight: dynamicAnswers[q.id] === opt ? '700' : '400',
+                              fontFamily: "'Poppins', sans-serif",
+                              fontSize: '0.84rem',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s ease',
+                              textAlign: 'center',
+                              lineHeight: 1.3,
                             }}
                           >
                             {opt}
@@ -931,23 +931,23 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                   type="submit"
                   disabled={isSubmitting}
                   style={{
-                    width:          '100%',
-                    marginTop:      '0.6rem',
-                    background:     isSubmitting ? '#8A6B22' : '#C9962F',
-                    color:          '#0D0D0D',
-                    fontWeight:     '700',
-                    fontSize:       '0.95rem',
-                    borderRadius:   '6px',
-                    padding:        '1.05rem',
-                    border:         'none',
-                    cursor:         isSubmitting ? 'not-allowed' : 'pointer',
-                    boxShadow:      '0 4px 14px rgba(201, 150, 47, 0.3)',
-                    transition:     'background 0.2s ease',
-                    display:        'flex',
-                    alignItems:     'center',
+                    width: '100%',
+                    marginTop: '0.6rem',
+                    background: isSubmitting ? '#8A6B22' : '#C9962F',
+                    color: '#0D0D0D',
+                    fontWeight: '700',
+                    fontSize: '0.95rem',
+                    borderRadius: '6px',
+                    padding: '1.05rem',
+                    border: 'none',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 4px 14px rgba(201, 150, 47, 0.3)',
+                    transition: 'background 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'center',
-                    gap:            '0.5rem',
-                    opacity:        isSubmitting ? 0.85 : 1,
+                    gap: '0.5rem',
+                    opacity: isSubmitting ? 0.85 : 1,
                   }}
                   onMouseEnter={(e) => { if (!isSubmitting) e.currentTarget.style.background = '#D9A43B'; }}
                   onMouseLeave={(e) => { if (!isSubmitting) e.currentTarget.style.background = isSubmitting ? '#8A6B22' : '#C9962F'; }}
@@ -965,14 +965,14 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
                 {/* 11. Below the button notice */}
                 <div
                   style={{
-                    textAlign:      'center',
-                    fontSize:       '0.8rem',
-                    color:          '#8A8A8A',
-                    display:        'flex',
-                    alignItems:     'center',
+                    textAlign: 'center',
+                    fontSize: '0.8rem',
+                    color: '#8A8A8A',
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'center',
-                    gap:            '0.4rem',
-                    marginTop:      '0.2rem',
+                    gap: '0.4rem',
+                    marginTop: '0.2rem',
                   }}
                 >
                   <Clock size={15} style={{ color: '#C9962F' }} />
@@ -989,16 +989,16 @@ export default function CampaignLandingPage({ angle: propAngle, onOpenPrivacy, o
       {/* ── META COMPLIANCE FOOTER ── */}
       <footer
         style={{
-          background:   '#080808',
-          borderTop:    '1px solid rgba(255, 255, 255, 0.08)',
-          padding:      '3rem clamp(1.5rem, 5vw, 4rem)',
-          fontSize:     '0.8rem',
-          color:        '#8A8A8A',
-          textAlign:    'center',
+          background: '#080808',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          padding: '3rem clamp(1.5rem, 5vw, 4rem)',
+          fontSize: '0.8rem',
+          color: '#8A8A8A',
+          textAlign: 'center',
         }}
       >
         <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.2rem', alignItems: 'center' }}>
-          
+
           <div style={{ fontWeight: '700', color: '#FFFFFF', fontSize: '0.95rem' }}>
             Elite Tile &amp; Stone LLC · Nevada State Contractors Board Lic #0095105
           </div>
